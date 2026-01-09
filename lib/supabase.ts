@@ -131,7 +131,17 @@ export const supabase = {
           created_by_branch: product.createdByBranch
         }]).select().single();
         if (error) throw error;
-        return data;
+        return {
+          id: data.id,
+          name: data.name,
+          category: data.category,
+          agent: data.agent,
+          defaultPrice: Number(data.default_price || 0),
+          isManual: !!data.is_manual,
+          internalCode: data.internal_code,
+          internationalCode: data.international_code,
+          createdByBranch: data.created_by_branch
+        };
       } catch (e) {
         const newProd = { ...product, id: Math.random().toString(36).substr(2, 9) };
         const offline = JSON.parse(localStorage.getItem(PRODUCTS_KEY) || '[]');

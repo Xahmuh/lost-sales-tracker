@@ -15,13 +15,23 @@ export const ManualProductModal: React.FC<ManualProductModalProps> = ({ isOpen, 
   const [agent, setAgent] = useState('');
   const [category, setCategory] = useState('');
 
+  // Reset fields when opening or name change
+  React.useEffect(() => {
+    if (isOpen) {
+      setName(initialName);
+      setPrice(0);
+      setAgent('');
+      setCategory('');
+    }
+  }, [isOpen, initialName]);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-xl animate-in fade-in duration-500">
       <div className="bg-white w-full max-w-2xl rounded-[3.5rem] p-12 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-white relative overflow-hidden animate-in zoom-in-95 duration-500">
         <div className="absolute top-0 right-0 w-64 h-64 bg-red-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
-        
+
         <div className="flex justify-between items-start mb-12 relative z-10">
           <div className="flex items-center space-x-5">
             <div className="w-16 h-16 bg-[#8B0000] rounded-[1.75rem] flex items-center justify-center text-white shadow-xl shadow-red-200">
@@ -32,8 +42,8 @@ export const ManualProductModal: React.FC<ManualProductModalProps> = ({ isOpen, 
               <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px]">Record Non-Inventory SKU</p>
             </div>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="p-3 bg-slate-100 hover:bg-slate-200 rounded-2xl transition-all"
           >
             <X className="w-6 h-6 text-slate-500" />
@@ -69,19 +79,19 @@ export const ManualProductModal: React.FC<ManualProductModalProps> = ({ isOpen, 
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
-             <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-4">Estimated Local Price (BHD)</label>
-             <div className="relative">
-                <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-[#8B0000]">BHD</span>
-                <input
-                  type="number"
-                  step="0.001"
-                  className="w-full pl-20 bg-slate-50 border border-slate-100 rounded-[1.5rem] p-6 text-2xl font-mono font-black text-slate-800 outline-none focus:ring-8 focus:ring-red-500/5 focus:border-[#8B0000] transition-all"
-                  value={price}
-                  onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
-                />
-             </div>
+            <label className="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-4">Estimated Local Price (BHD)</label>
+            <div className="relative">
+              <span className="absolute left-6 top-1/2 -translate-y-1/2 font-black text-[#8B0000]">BHD</span>
+              <input
+                type="number"
+                step="0.001"
+                className="w-full pl-20 bg-slate-50 border border-slate-100 rounded-[1.5rem] p-6 text-2xl font-mono font-black text-slate-800 outline-none focus:ring-8 focus:ring-red-500/5 focus:border-[#8B0000] transition-all"
+                value={price}
+                onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
+              />
+            </div>
           </div>
         </div>
 
