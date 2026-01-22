@@ -1187,7 +1187,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
               {/* --- Section 2: Macro KPI Grid (Currency Fix Applied) --- */}
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
                 <StrategicKPI label="TOTAL LOSS VALUE" value={aggregateMetrics.totalRevenue.toFixed(3)} icon={<Banknote size={20} />} isCurrency trend="4.2" critical={true} />
-                <StrategicKPI label="LOST CUSTOMERS NO" value={aggregateMetrics.lostCustomersNo} icon={<UserMinus size={20} critical={true} />} tooltip="Number of customer visits where at least one requested item was unavailable." />
+                <StrategicKPI label="LOST CUSTOMERS NO" value={aggregateMetrics.lostCustomersNo} icon={<UserMinus size={20} critical={true} />} />
                 <StrategicKPI label="OUT-OF-STOCK SKUS" value={aggregateMetrics.skuCount} icon={<PackageX size={20} />} critical={true} />
                 <StrategicKPI label="INCIDENT VOL" value={aggregateMetrics.incidentCount} icon={<AlertCircle size={20} />} critical={true} />
                 <StrategicKPI label="AVG LOSS / CUSTOMER" value={aggregateMetrics.avgLossPerCustomer.toFixed(3)} icon={<Wallet size={20} />} isCurrency />
