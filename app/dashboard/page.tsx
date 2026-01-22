@@ -128,13 +128,6 @@ const StrategicKPI: React.FC<{
             }`}>
             {subtext}
           </div>
-        ) : trend ? (
-          <div className={`mt-4 w-fit px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${isPrimary
-            ? 'bg-white/20 text-white'
-            : 'bg-emerald-50 text-emerald-600'
-            }`}>
-            ↑ {trend}% Increased
-          </div>
         ) : null}
       </div>
     </div>
@@ -1187,11 +1180,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
               {/* --- Section 2: Macro KPI Grid (Currency Fix Applied) --- */}
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
                 <StrategicKPI label="TOTAL LOSS VALUE" value={aggregateMetrics.totalRevenue.toFixed(3)} icon={<Banknote size={20} />} isCurrency trend="4.2" critical={true} />
-                <StrategicKPI label="LOST CUSTOMERS NO" value={aggregateMetrics.lostCustomersNo} icon={<UserMinus size={20} critical={true} />} />
-                <StrategicKPI label="OUT-OF-STOCK SKUS" value={aggregateMetrics.skuCount} icon={<PackageX size={20} />} critical={true} />
-                <StrategicKPI label="INCIDENT VOL" value={aggregateMetrics.incidentCount} icon={<AlertCircle size={20} />} critical={true} />
+                <StrategicKPI label="INCIDENT VOLUME" value={aggregateMetrics.incidentCount} icon={<AlertCircle size={20} />} critical={true} />
                 <StrategicKPI label="AVG LOSS / CUSTOMER" value={aggregateMetrics.avgLossPerCustomer.toFixed(3)} icon={<Wallet size={20} />} isCurrency />
+                <StrategicKPI label="LOST CUSTOMERS NO" value={aggregateMetrics.lostCustomersNo} icon={<UserMinus size={20} />} tooltip="Number of customer visits where at least one requested item was unavailable." />
                 <StrategicKPI label="UNIT LOSS VALUE" value={aggregateMetrics.averageOrderLoss.toFixed(3)} icon={<TrendingDown size={20} />} isCurrency />
+                <StrategicKPI label="OUT-OF-STOCK SKUS" value={aggregateMetrics.skuCount} icon={<PackageX size={20} />} critical={true} />
                 <StrategicKPI label="MISSED OPPORTUNITY" value={aggregateMetrics.totalUnits} icon={<Target size={20} />} />
 
                 {/* Category Specific Card */}
@@ -1285,11 +1278,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
                   <table className="w-full text-left">
                     <thead>
                       <tr className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-50">
-                        <th className="pb-4 pl-4">Product / Node</th>
+                        <th className="pb-4 pl-4">Product / Branch</th>
                         <th className="pb-4 text-center">Qty / Vol</th>
                         <th className="pb-4 text-right pr-4">Potential Loss</th>
                         <th className="pb-4 text-center">Status</th>
-                        <th className="pb-4 text-right pr-4">Action</th>
+                        <th className="pb-4 text-center">Action</th>
                       </tr>
                     </thead>
                     <tbody className="text-sm font-bold text-slate-700">
@@ -1314,16 +1307,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
                               {!s.alternativeGiven && !s.internalTransfer && <span className="w-2 h-2 rounded-full bg-red-500" title="No Recovery"></span>}
                             </div>
                           </td>
-                          <td className="py-4 text-right pr-4">
+                          <td className="py-4 text-center">
                             <button
                               onClick={() => {
                                 if (confirm('Remove this lost sale record?')) {
                                   supabase.sales.delete(s.id);
                                 }
                               }}
-                              className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all"
+                              className="w-8 h-8 rounded-lg inline-flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all"
                             >
-                              <Trash2 size={16} />
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trash2 lucide-trash-2" aria-hidden="true"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                             </button>
                           </td>
                         </tr>

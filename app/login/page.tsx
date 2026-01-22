@@ -59,7 +59,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             <span className="text-brand">Lost Sales & Shortage Tracking Portal</span>
           </h1>
           <p className="text-slate-500 text-lg font-medium leading-relaxed mb-10">
-            Official logging system for Tabarak Pharmacy Group. Secure node authentication required for all transactions.
+            Official logging system for Tabarak Pharmacy Group. Secure branch authentication required for all transactions.
           </p>
           <div className="flex flex-col space-y-4">
             <div className="flex items-center space-x-3 text-emerald-600 bg-emerald-50 px-5 py-3 rounded-xl border border-emerald-100 w-fit mx-auto md:mx-0">
