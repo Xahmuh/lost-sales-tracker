@@ -1182,7 +1182,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
                 <StrategicKPI label="TOTAL LOSS VALUE" value={aggregateMetrics.totalRevenue.toFixed(3)} icon={<Banknote size={20} />} isCurrency critical={true} />
                 <StrategicKPI label="LOST CUSTOMERS NO" value={aggregateMetrics.lostCustomersNo} icon={<UserMinus size={20} />} tooltip="Number of customer visits where at least one requested item was unavailable." critical={true} />
                 <StrategicKPI label="INCIDENT VOLUME" value={aggregateMetrics.incidentCount} icon={<AlertCircle size={20} />} critical={true} />
-                <StrategicKPI label="OUT-OF-STOCK SKUS" value={aggregateMetrics.skuCount} icon={<PackageX size={20} />} critical={true} />
+                <StrategicKPI label="OUT-OF-STOCK SKUS" value={aggregateMetrics.skuCount} icon={<PackageX size={20} />} critical={true} unit="SKU" />
                 <StrategicKPI label="AVG LOSS / CUSTOMER" value={aggregateMetrics.avgLossPerCustomer.toFixed(3)} icon={<Wallet size={20} />} isCurrency />
                 <StrategicKPI label="UNIT LOSS VALUE" value={aggregateMetrics.averageOrderLoss.toFixed(3)} icon={<TrendingDown size={20} />} isCurrency />
                 <StrategicKPI label="MISSED OPPORTUNITY" value={aggregateMetrics.totalUnits} icon={<Target size={20} />} />
