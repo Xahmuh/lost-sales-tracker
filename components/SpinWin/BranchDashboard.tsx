@@ -24,7 +24,8 @@ import {
     Download,
     Search,
     Filter,
-    ChevronDown
+    ChevronDown,
+    MessageCircle
 } from 'lucide-react';
 import { formatCurrency } from '../../utils/calculations';
 import { supabaseClient } from '../../lib/supabase';
@@ -465,6 +466,7 @@ export const BranchDashboard: React.FC<BranchDashboardProps> = ({ branch, onBack
                                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Voucher</th>
                                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Timestamp</th>
+                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50">
@@ -508,11 +510,61 @@ export const BranchDashboard: React.FC<BranchDashboardProps> = ({ branch, onBack
                                                 <span className="text-slate-300 uppercase tracking-widest mt-1">{new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                             </div>
                                         </td>
+                                        <td className="px-8 py-6">
+                                            {!s.redeemed_at && (() => {
+                                                const createdDate = new Date(s.created_at);
+                                                const expiryDate = new Date(createdDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                                                const now = new Date();
+                                                const daysLeft = Math.floor((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                                                const isUrgent = daysLeft <= 3 && daysLeft >= 0;
+                                                const isExpired = daysLeft < 0;
+
+                                                if (isExpired) return null;
+
+                                                return (
+                                                    <button
+                                                        onClick={async () => {
+                                                            const phone = s.customer?.phone || '';
+                                                            const voucherCode = s.voucher_code;
+                                                            const message = `*Time is running out!*\nRedeem your Tabarak Pharmacies voucher no ${voucherCode} now and make the most of your savings.\n\n*لا تضيع الفرصة!*\nقسيمتك ${voucherCode} من صيدليات تبارك  بتخلص قريب استعملها الحين واستمتع بأقوى توفير.`;
+
+                                                            try {
+                                                                // Try to fetch and share image with text (Mobile)
+                                                                const response = await fetch('/spin-header-v4.jpg');
+                                                                const blob = await response.blob();
+                                                                const file = new File([blob], 'tabarak-reminder.jpg', { type: 'image/jpeg' });
+
+                                                                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                                                                    await navigator.share({
+                                                                        text: message,
+                                                                        files: [file]
+                                                                    });
+                                                                } else {
+                                                                    // Fallback to WhatsApp text-only (Desktop)
+                                                                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+                                                                }
+                                                            } catch (err) {
+                                                                console.error('Share failed:', err);
+                                                                // Final fallback
+                                                                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+                                                            }
+                                                        }}
+                                                        className={`px-4 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all active:scale-95 flex items-center space-x-2 shadow-lg ${isUrgent
+                                                            ? 'bg-red-600 hover:bg-red-700 text-white shadow-red-200'
+                                                            : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200'
+                                                            }`}
+                                                    >
+                                                        <MessageCircle className="w-3.5 h-3.5" />
+                                                        <span>Remind Customer</span>
+                                                    </button>
+                                                );
+                                            })()}
+                                        </td>
                                     </tr>
                                 ))}
                             {history.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} className="p-12 text-center text-slate-400 font-black uppercase text-[10px] tracking-widest">
+                                    <td colSpan={6} className="p-12 text-center text-slate-400 font-black uppercase text-[10px] tracking-widest">
                                         No activity recorded for this period
                                     </td>
                                 </tr>

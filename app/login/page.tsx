@@ -59,7 +59,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           </div>
           <h1 className="text-5xl font-black text-slate-900 tracking-tighter mb-6 leading-[1.1]">
             Tabarak Pharmacy <br />
-            <span className="text-brand">Lost Sales & Shortage Tracking Portal</span>
+            <span className="text-brand">HUB</span>
           </h1>
           <p className="text-slate-500 text-lg font-medium leading-relaxed mb-10">
             Official logging system for Tabarak Pharmacy Group. Secure branch authentication required for all transactions.
@@ -86,7 +86,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               <input
                 type="text"
                 className="w-full px-6 py-5 rounded-xl border-2 border-slate-100 bg-white text-slate-900 font-bold outline-none focus:border-brand transition-all text-lg placeholder:text-slate-200"
-                placeholder="Ex: B001"
+                placeholder=""
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 required
@@ -98,7 +98,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               <input
                 type="password"
                 className="w-full px-6 py-5 rounded-xl border-2 border-slate-100 bg-white text-slate-900 font-bold outline-none focus:border-brand transition-all text-lg placeholder:text-slate-200"
-                placeholder="••••••••"
+                placeholder=""
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

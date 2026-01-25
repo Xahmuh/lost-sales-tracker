@@ -46,6 +46,7 @@ export const CustomerFlow: React.FC<CustomerFlowProps> = ({ token }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [winningPrize, setWinningPrize] = useState<SpinPrize | null>(null);
     const [hasClickedRate, setHasClickedRate] = useState(false);
+    const [skipRating, setSkipRating] = useState(false);
 
     const countryCodes = [
         { code: '+973', country: 'BH' },
@@ -69,6 +70,12 @@ export const CustomerFlow: React.FC<CustomerFlowProps> = ({ token }) => {
                 const result = await spinWinService.sessions.validate(token);
                 if (result && !result.error) {
                     setSession(result);
+
+                    // Check if skipRating parameter is present (for Talabat customers)
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const shouldSkipRating = urlParams.get('skipRating') === 'true';
+                    setSkipRating(shouldSkipRating);
+
                     setStep('info');
                 } else {
                     const reason = result?.error || 'INVALID_OR_NOT_FOUND';
@@ -130,11 +137,16 @@ export const CustomerFlow: React.FC<CustomerFlowProps> = ({ token }) => {
             }
 
             if (session) {
-                const hasReviewed = await spinWinService.reviews.checkToday(cust.id, session.branchId);
-                if (hasReviewed) {
+                // Skip review step for Talabat customers
+                if (skipRating) {
                     loadPrizes();
                 } else {
-                    setStep('review');
+                    const hasReviewed = await spinWinService.reviews.checkToday(cust.id, session.branchId);
+                    if (hasReviewed) {
+                        loadPrizes();
+                    } else {
+                        setStep('review');
+                    }
                 }
             }
         } catch (err: any) {

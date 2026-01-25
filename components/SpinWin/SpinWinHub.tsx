@@ -39,7 +39,7 @@ export const SpinWinHub: React.FC<SpinWinHubProps> = ({ branch, onBack, userRole
             <div className="text-center mb-16">
                 <div onClick={onBack} className="inline-flex items-center space-x-2 text-slate-400 hover:text-brand cursor-pointer mb-8 transition-colors group">
                     <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em]">Operational hub</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em]">Operational Suite</span>
                 </div>
                 <h2 className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tighter mb-4">
                     Spin & Win <span className="text-brand">Suite</span>

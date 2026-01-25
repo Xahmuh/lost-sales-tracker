@@ -57,20 +57,28 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, onBackToPh
     setMode(newMode);
   };
 
-  const addItem = (product: Product) => {
+  const addItem = (product: Product, initialStatus?: 'Low' | 'Critical' | 'Out of Stock', preferredMode?: 'sales' | 'shortages') => {
+    // If voice command specifies a mode, switch to it automatically
+    if (preferredMode && preferredMode !== mode) {
+      setMode(preferredMode);
+    }
+
+    // Use the effective mode (either current or the one we just switched to)
+    const effectiveMode = preferredMode || mode;
+
     const existingIdx = cart.findIndex(i => i.productId === product.id);
 
-    if (existingIdx !== -1 && mode === 'sales') {
+    if (existingIdx !== -1 && effectiveMode === 'sales') {
       updateQty(existingIdx, (cart[existingIdx].quantity || 1) + 1);
       return;
     }
 
-    if (existingIdx !== -1 && mode === 'shortages') {
+    if (existingIdx !== -1 && effectiveMode === 'shortages') {
       alert("Item already in shortage list");
       return;
     }
 
-    if (mode === 'sales') {
+    if (effectiveMode === 'sales') {
       setCart([{
         branchId: branch.id,
         pharmacistId: pharmacist.id,
@@ -94,12 +102,22 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, onBackToPh
         pharmacistId: pharmacist.id,
         productId: product.isManual ? null : product.id, // null for manual products
         productName: product.name,
-        status: 'Low',
+        status: initialStatus || 'Low',
         pharmacistName: pharmacist.name,
         timestamp: new Date().toISOString(),
         internalCode: product.internalCode,
         notes: ''
       }, ...cart]);
+    }
+  };
+
+  const handleVoiceCommand = (cmd: 'finalize') => {
+    if (cmd === 'finalize') {
+      if (cart.length > 0) {
+        handleCheckout();
+      } else {
+        alert('القائمة فارغة، لا يوجد شيء لتسجيله.');
+      }
     }
   };
 
@@ -212,7 +230,11 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, onBackToPh
       <div className="lg:col-span-8 flex flex-col space-y-8">
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1 w-full relative">
-            <ProductSearch onSelect={addItem} onManual={(q) => { setManualQuery(q); setIsManualModalOpen(true); }} />
+            <ProductSearch
+              onSelect={addItem}
+              onManual={(q) => { setManualQuery(q); setIsManualModalOpen(true); }}
+              onCommand={handleVoiceCommand}
+            />
           </div>
           <button
             onClick={() => setIsScannerOpen(true)}

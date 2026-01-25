@@ -304,17 +304,46 @@ export const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ onBack }) =>
         if (!confirm(`Are you sure you want to ${enabled ? 'ENABLE' : 'DISABLE'} the Spin & Win protocol for ALL branches?`)) return;
 
         setIsSyncing(true);
-        try {
-            const updates = branches
-                .filter(b => b.role === 'branch')
-                .map(b => spinWinService.management.branches.update(b.id, { isSpinEnabled: enabled }));
+        const branchesToUpdate = branches.filter(b => b.role === 'branch');
+        console.log(`🔄 Starting bulk ${enabled ? 'activation' : 'suspension'} for ${branchesToUpdate.length} branches...`);
 
-            await Promise.all(updates);
+        let successCount = 0;
+        let failCount = 0;
+        const errors: any[] = [];
+
+        try {
+            const results = await Promise.allSettled(
+                branchesToUpdate.map(async (b) => {
+                    try {
+                        console.log(`📍 Updating ${b.name} (${b.id}) - Setting isSpinEnabled to: ${enabled}`);
+                        await spinWinService.management.branches.update(b.id, { isSpinEnabled: enabled });
+                        successCount++;
+                        console.log(`✅ Successfully updated ${b.name}`);
+                        return { success: true, branch: b.name };
+                    } catch (error) {
+                        failCount++;
+                        console.error(`❌ Failed to update ${b.name}:`, error);
+                        errors.push({ branch: b.name, error });
+                        throw error;
+                    }
+                })
+            );
+
+            console.log(`📊 Update Summary: ${successCount} succeeded, ${failCount} failed`);
+
+            // Force reload data from database
             await loadData();
-            showNotification('success', `Global Protocol ${enabled ? 'ACTIVATED' : 'SUSPENDED'} Successfully`);
+
+            if (failCount === 0) {
+                showNotification('success', `✓ All ${branchesToUpdate.length} Branches ${enabled ? 'ACTIVATED' : 'SUSPENDED'}`);
+            } else if (successCount > 0) {
+                showNotification('error', `⚠ Partial Update: ${successCount} success, ${failCount} failed`);
+            } else {
+                showNotification('error', `❌ Complete Failure: All updates failed`);
+            }
         } catch (err) {
-            console.error('Bulk update failed', err);
-            showNotification('error', 'Bulk update failed partially or completely');
+            console.error('❌ Critical bulk update error:', err);
+            showNotification('error', 'Critical error during bulk update');
         } finally {
             setIsSyncing(false);
         }
@@ -780,6 +809,7 @@ export const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ onBack }) =>
                                                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Branch Scanned</th>
                                                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
                                                 <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date/Time</th>
+                                                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-50">
@@ -830,6 +860,56 @@ export const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ onBack }) =>
                                                                 <span className="text-slate-900">{new Date(spin.created_at).toLocaleDateString()}</span>
                                                                 <span className="text-slate-300 uppercase tracking-widest mt-1">{new Date(spin.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                                             </div>
+                                                        </td>
+                                                        <td className="px-8 py-6">
+                                                            {!spin.redeemed_at && (() => {
+                                                                const createdDate = new Date(spin.created_at);
+                                                                const expiryDate = new Date(createdDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+                                                                const now = new Date();
+                                                                const daysLeft = Math.floor((expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                                                                const isUrgent = daysLeft <= 3 && daysLeft >= 0;
+                                                                const isExpired = daysLeft < 0;
+
+                                                                if (isExpired) return null;
+
+                                                                return (
+                                                                    <button
+                                                                        onClick={async () => {
+                                                                            const phone = spin.customer?.phone || '';
+                                                                            const voucherCode = spin.voucher_code;
+                                                                            const message = `*Time is running out!*\nRedeem your Tabarak Pharmacies voucher no ${voucherCode} now and make the most of your savings.\n\n*لا تضيع الفرصة!*\nقسيمتك ${voucherCode} من صيدليات تبارك  بتخلص قريب استعملها الحين واستمتع بأقوى توفير.`;
+
+                                                                            try {
+                                                                                // Try to fetch and share image with text (Mobile)
+                                                                                const response = await fetch('/spin-header-v4.jpg');
+                                                                                const blob = await response.blob();
+                                                                                const file = new File([blob], 'tabarak-reminder.jpg', { type: 'image/jpeg' });
+
+                                                                                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                                                                                    await navigator.share({
+                                                                                        text: message,
+                                                                                        files: [file]
+                                                                                    });
+                                                                                } else {
+                                                                                    // Fallback to WhatsApp text-only (Desktop)
+                                                                                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+                                                                                }
+                                                                            } catch (err) {
+                                                                                console.error('Share failed:', err);
+                                                                                // Final fallback
+                                                                                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+                                                                            }
+                                                                        }}
+                                                                        className={`px-4 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all active:scale-95 flex items-center space-x-2 shadow-lg ${isUrgent
+                                                                            ? 'bg-red-600 hover:bg-red-700 text-white shadow-red-200'
+                                                                            : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-200'
+                                                                            }`}
+                                                                    >
+                                                                        <MessageCircle className="w-3.5 h-3.5" />
+                                                                        <span>Remind Customer</span>
+                                                                    </button>
+                                                                );
+                                                            })()}
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -983,18 +1063,22 @@ export const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ onBack }) =>
                                     <p className="text-slate-400 font-medium text-lg">Central hub to manage branch locations and feature permissions.</p>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <div className="flex items-center space-x-2 mr-4">
+                                    <div className="flex items-center space-x-3 mr-4">
                                         <button
                                             onClick={() => handleBulkStatusChange(true)}
-                                            className="px-5 py-3 bg-emerald-50 text-emerald-600 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all border border-emerald-100"
+                                            disabled={isSyncing}
+                                            className="px-6 py-4 bg-emerald-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                                         >
-                                            Enable All
+                                            <CheckCircle2 className="w-4 h-4" />
+                                            <span>Activate All Branches</span>
                                         </button>
                                         <button
                                             onClick={() => handleBulkStatusChange(false)}
-                                            className="px-5 py-3 bg-slate-50 text-slate-400 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all border border-slate-100"
+                                            disabled={isSyncing}
+                                            className="px-6 py-4 bg-red-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-lg shadow-red-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
                                         >
-                                            Disable All
+                                            <X className="w-4 h-4" />
+                                            <span>Suspend All Branches</span>
                                         </button>
                                     </div>
 

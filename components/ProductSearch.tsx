@@ -1,21 +1,28 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Package, X, ChevronRight, Zap, Box, Command, Loader2, Sparkles, Tag } from 'lucide-react';
+import { Search, Plus, Package, X, ChevronRight, Zap, Box, Command, Loader2, Sparkles, Tag, Mic, MicOff } from 'lucide-react';
 import { Product } from '../types';
 import { supabase } from '../lib/supabase';
 import { formatCurrency } from '../utils/calculations';
 
 interface ProductSearchProps {
-  onSelect: (product: Product) => void;
+  onSelect: (product: Product, initialStatus?: 'Low' | 'Critical' | 'Out of Stock', preferredMode?: 'sales' | 'shortages') => void;
   onManual: (query: string) => void;
+  onCommand?: (command: 'finalize') => void;
 }
 
-export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual }) => {
+export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual, onCommand }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Product[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
+
+  // Voice Recognition States
+  const [isListening, setIsListening] = useState(false);
+  const [voiceTranscript, setVoiceTranscript] = useState('');
+  const recognitionRef = useRef<any>(null);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -97,6 +104,146 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // Initialize Voice Recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'ar-SA'; // Broad Arabic, usually works better than ar-BH
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript.toLowerCase();
+          setVoiceTranscript(transcript);
+          processVoiceCommand(transcript);
+        };
+
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setIsListening(false);
+          if (event.error === 'not-allowed') {
+            alert('يرجى السماح بالوصول إلى الميكروفون من إعدادات المتصفح.');
+          } else if (event.error === 'network') {
+            alert('خطأ في الاتصال بالإنترنت. يرجى التحقق من الاتصال.');
+          }
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+      }
+    }
+  }, []);
+
+  // Process Voice Command
+  const processVoiceCommand = async (transcript: string) => {
+    console.log('Voice command received:', transcript);
+    setIsSearching(true);
+
+    try {
+      // 1. Check for Action Commands
+      if (transcript.match(/(finalize|انهاء|إنهاء|خلاص|حفظ|تاكيد|تأكيد)/i)) {
+        onCommand?.('finalize');
+        return;
+      }
+
+      // 2. Extract Intent (Mode)
+      let preferredMode: 'sales' | 'shortages' | undefined = undefined;
+      if (transcript.match(/(lost|لوست|بيع مفقود|طلب مفقود|مفقود)/i)) {
+        preferredMode = 'sales';
+      } else if (transcript.match(/(shortage|شورتاج|نقص|ناقص)/i)) {
+        preferredMode = 'shortages';
+      }
+
+      // 3. Extract Status
+      let detectedStatus: 'Low' | 'Critical' | 'Out of Stock' | undefined = undefined;
+
+      if (transcript.match(/(oos|out of stock|خلص|مخلص|غير متوفر|بح|انتهى)/i)) {
+        detectedStatus = 'Out of Stock';
+      } else if (transcript.match(/(low|ضعيف|قليل|بسيط)/i)) {
+        detectedStatus = 'Low';
+      } else if (transcript.match(/(critical|حرج|خطير|ضروري|اخر علبه|على الرف|آخر علبة|اخر قطعة)/i)) {
+        detectedStatus = 'Critical';
+      }
+
+      // Clean transcript from commands to extract product name
+      const cleanTranscript = transcript
+        .replace(/^(سجل|أضف|ابحث عن|shortage|add|search for)\s+/i, '')
+        .replace(/(oos|out of stock|خلص|مخلص|غير متوفر|بح|انتهى|low|ضعيف|قليل|بسيط|critical|حرج|خطير|ضروري|اخر علبه|على الرف|آخر علبة|اخر قطعة|lost|لوست|بيع مفقود|طلب مفقود|مفقود|شورتاج|ناقص)/gi, '')
+        .trim();
+
+      if (!cleanTranscript) return;
+
+      // 4. Search in DB
+      const matches = await supabase.products.search(cleanTranscript);
+
+      if (matches.length > 0) {
+        // Find high confidence match
+        const exactMatch = matches.find(p =>
+          p.name.toLowerCase() === cleanTranscript.toLowerCase() ||
+          p.internalCode?.toLowerCase() === cleanTranscript.toLowerCase()
+        );
+
+        if (exactMatch) {
+          onSelect(exactMatch, detectedStatus, preferredMode);
+          setQuery('');
+          setIsOpen(false);
+          return;
+        }
+
+        // Show results if no exact match
+        setQuery(cleanTranscript);
+        setResults(matches.slice(0, 8));
+        setIsOpen(true);
+        setActiveIndex(0);
+      } else {
+        // No results, set query for manual add
+        setQuery(cleanTranscript);
+        setIsOpen(true);
+      }
+    } catch (err) {
+      console.error('Voice processing failed:', err);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Start Voice Recognition
+  const startVoiceRecognition = () => {
+    if (!recognitionRef.current) {
+      alert('المتصفح لا يدعم التعرف على الصوت. يرجى استخدام متصفح Google Chrome.');
+      return;
+    }
+
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      alert('التعرف على الصوت يتطلب استخدام اتصال آمن (HTTPS).');
+    }
+
+    try {
+      setVoiceTranscript('');
+      setIsListening(true);
+      recognitionRef.current.start();
+    } catch (error) {
+      console.error('Error starting recognition:', error);
+      setIsListening(false);
+    }
+  };
+
+  // Stop Voice Recognition
+  const stopVoiceRecognition = () => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (e) { }
+    }
+    setIsListening(false);
+  };
+
   return (
     <div ref={containerRef} className="relative w-full">
       <div className="relative group">
@@ -120,20 +267,51 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
         />
 
         <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center space-x-2 md:space-x-4">
+          {/* Voice Recognition Button */}
+          <button
+            onClick={isListening ? stopVoiceRecognition : startVoiceRecognition}
+            className={`p-3 md:p-4 rounded-2xl transition-all flex items-center justify-center shadow-lg ${isListening
+              ? 'bg-rose-500 text-white animate-pulse ring-4 ring-rose-100'
+              : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200'
+              }`}
+            title={isListening ? 'Stop Listening' : 'Voice Search'}
+          >
+            {isListening ? <MicOff className="w-5 h-5 md:w-6 md:h-6" /> : <Mic className="w-5 h-5 md:w-6 md:h-6" />}
+          </button>
+
           {query && (
             <button
               onClick={() => { setQuery(''); inputRef.current?.focus(); }}
-              className="p-2 bg-slate-100 hover:bg-brand hover:text-white rounded-2xl transition-all duration-300 group/close"
+              className="p-2 md:p-3 bg-slate-100 hover:bg-rose-50 hover:text-rose-500 rounded-2xl transition-all duration-300"
             >
               <X className="w-5 h-5" />
             </button>
           )}
-          <div className="hidden sm:flex items-center space-x-2 px-3 py-2 bg-slate-50 rounded-2xl border border-slate-200 text-slate-400 select-none shadow-sm">
+          <div className="hidden sm:flex items-center space-x-2 px-3 py-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-slate-400 select-none shadow-sm">
             <Command className="w-3.5 h-3.5" />
             <span className="text-[11px] font-black tracking-widest">K</span>
           </div>
         </div>
       </div>
+
+      {/* Voice Transcript Display */}
+      {isListening && (
+        <div className="absolute top-full left-0 right-0 mt-3 bg-white/80 backdrop-blur-xl border border-indigo-100 rounded-[1.5rem] p-4 shadow-xl z-[2001] animate-in slide-in-from-top-2">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-3 h-3 bg-rose-500 rounded-full animate-pulse"></div>
+              <div className="absolute inset-0 w-3 h-3 bg-rose-500 rounded-full animate-ping opacity-40"></div>
+            </div>
+            <p className="text-xs font-black text-indigo-900 uppercase tracking-widest leading-none">Listening for Command...</p>
+          </div>
+          {voiceTranscript && (
+            <div className="mt-4 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100/50">
+              <p className="text-lg font-bold text-indigo-700 italic">"{voiceTranscript}"</p>
+            </div>
+          )}
+          <p className="mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-tight">Try saying: "Biolite" or "سجل باندول"</p>
+        </div>
+      )}
 
       {isOpen && (
         <div className="absolute mt-4 w-full bg-white rounded-[2rem] shadow-[0_50px_100px_-20px_rgba(139,0,0,0.15)] border border-slate-100 overflow-hidden z-[2000] animate-in fade-in slide-in-from-top-6 duration-500">

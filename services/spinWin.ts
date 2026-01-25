@@ -639,18 +639,33 @@ export const spinWinService = {
                 })) as Branch[];
             },
             update: async (id: string, updates: Partial<Branch>) => {
+                console.log(`🔧 Branch Update Request for ID: ${id}`, updates);
+
                 // Map to snake_case for DB
                 const dbUpdates: any = {};
                 if (updates.name) dbUpdates.name = updates.name;
                 if (updates.googleMapsLink !== undefined) dbUpdates.google_maps_link = updates.googleMapsLink;
-                if (updates.isSpinEnabled !== undefined) dbUpdates.is_spin_enabled = updates.isSpinEnabled;
+                if (updates.isSpinEnabled !== undefined) {
+                    dbUpdates.is_spin_enabled = updates.isSpinEnabled;
+                    console.log(`🎯 Setting is_spin_enabled to: ${updates.isSpinEnabled} for branch ${id}`);
+                }
                 if (updates.whatsappNumber !== undefined) dbUpdates.whatsapp_number = updates.whatsappNumber;
 
+                console.log('📤 Sending to database:', dbUpdates);
+
+                // Note: RLS policy may not allow SELECT after UPDATE
+                // We just check for errors - if no error, update succeeded
                 const { error } = await supabaseClient
                     .from('branches')
                     .update(dbUpdates)
                     .eq('id', id);
-                if (error) throw error;
+
+                if (error) {
+                    console.error(`❌ Database update failed for branch ${id}:`, error);
+                    throw error;
+                }
+
+                console.log('✅ Database update successful (no errors)');
                 return true;
             },
             create: async (branch: Pick<Branch, 'name' | 'code' | 'role' | 'whatsappNumber' | 'googleMapsLink'>) => {
