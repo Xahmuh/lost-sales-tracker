@@ -32,6 +32,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       if (branch.role === 'admin') {
         if (password === 'admin123') onLogin(branch);
         else setError('Invalid administrator credentials.');
+      } else if (branch.role === 'manager') {
+        if (password === 'admin123') onLogin(branch);
+        else setError('Invalid manager credentials.');
       } else {
         if (password === '1234') onLogin(branch);
         else setError('Invalid branch credentials.');

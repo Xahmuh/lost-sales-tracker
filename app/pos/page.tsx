@@ -161,7 +161,22 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, onBackToPh
     try {
       if (mode === 'sales') {
         for (const item of cart) {
+          // 1. Log the Lost Sale
           await supabase.sales.insert({ ...item, timestamp: commonTimestamp } as any);
+
+          // 2. AUTOMATICALLY Log as Shortage (Out of Stock)
+          // The user requested that any lost sale automatically registers as a shortage
+          await supabase.shortages.create({
+            branchId: item.branchId,
+            pharmacistId: item.pharmacistId,
+            pharmacistName: item.pharmacistName,
+            productId: item.productId,
+            productName: item.productName,
+            status: 'Out of Stock',
+            timestamp: commonTimestamp,
+            internalCode: item.internalCode,
+            notes: `Auto-generated from Lost Sale: ${item.notes || ''}`
+          } as any);
         }
       } else {
         for (const item of cart) {

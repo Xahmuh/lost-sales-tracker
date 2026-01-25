@@ -39,6 +39,7 @@ const SEED_BRANCHES: Branch[] = [
   { id: 'eb8156ab-79e8-40da-8300-1fb08de96a46', code: 'T006', name: 'Tabarak Pharmacy - Juffair branch', role: 'branch' },
   { id: 'eea51a55-f441-4ca4-a70f-2851faf0820a', code: 'T007', name: 'Tabarak Pharmacy - Karana Branch', role: 'branch' },
   { id: 'f42e155a-685b-4789-bed7-c9d419160149', code: 'T009', name: 'Tabarak Pharmacy - Mashtan', role: 'branch' },
+  { id: '99999999-9999-9999-9999-999999999999', code: 'MANAGER', name: 'Tabarak Group Manager', role: 'manager' },
 ];
 
 const SEED_PHARMACISTS: Pharmacist[] = [
@@ -111,6 +112,16 @@ const isUUID = (str: any) => {
   return typeof str === 'string' && regex.test(str);
 };
 
+const generateUUID = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+};
+
 export const supabase = {
   client: supabaseClient,
   auth: {
@@ -132,7 +143,13 @@ export const supabase = {
       try {
         const { data, error } = await supabaseClient.from('branches').select('*');
         if (error) throw error;
-        return data || SEED_BRANCHES;
+        return data?.map(b => ({
+          id: b.id,
+          code: b.code,
+          name: b.name,
+          role: b.role,
+          googleMapsLink: b.google_maps_link
+        })) || SEED_BRANCHES;
       } catch (e) {
         return SEED_BRANCHES;
       }
@@ -141,7 +158,14 @@ export const supabase = {
       try {
         const { data, error } = await supabaseClient.from('branches').select('*').eq('code', code.toUpperCase()).maybeSingle();
         if (error) throw error;
-        return data || SEED_BRANCHES.find(b => b.code === code.toUpperCase());
+        if (data) return {
+          id: data.id,
+          code: data.code,
+          name: data.name,
+          role: data.role,
+          googleMapsLink: data.google_maps_link
+        };
+        return SEED_BRANCHES.find(b => b.code === code.toUpperCase());
       } catch (e) {
         return SEED_BRANCHES.find(b => b.code === code.toUpperCase());
       }
@@ -320,7 +344,7 @@ export const supabase = {
     },
     insert: async (sale: Omit<LostSale, 'id' | 'totalValue' | 'timestamp' | 'lostDate' | 'lostHour'>) => {
       const now = new Date();
-      const id = crypto.randomUUID(); // Consistent UUID strategy
+      const id = generateUUID(); // Consistent UUID strategy
 
       const payload = {
         branch_id: sale.branchId,

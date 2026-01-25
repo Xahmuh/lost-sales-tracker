@@ -7,6 +7,9 @@ export interface Branch {
   code: string;
   name: string;
   role: Role;
+  googleMapsLink?: string;
+  isSpinEnabled?: boolean;
+  whatsappNumber?: string;
 }
 
 export interface Pharmacist {

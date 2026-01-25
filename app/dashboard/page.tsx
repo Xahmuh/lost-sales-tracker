@@ -136,9 +136,10 @@ const StrategicKPI: React.FC<{
 
 interface DashboardPageProps {
   user: Branch;
+  onBack?: () => void;
 }
 
-export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
+export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) => {
   // --- States Management System ---
   const [sales, setSales] = useState<LostSale[]>([]);
   const [allSales, setAllSales] = useState<LostSale[]>([]); // NEW: Store unfiltered sales for historical calculations
@@ -573,8 +574,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
         return;
       }
 
-      // --- TAB 1: LOST SALES ---
-      const worksheet = workbook.addWorksheet('Lost Sales');
+      // --- TAB 1: ALL RECORDS (Raw Data) ---
+      const worksheet = workbook.addWorksheet('All Records');
       worksheet.columns = [
         { header: 'Internal Code', key: 'internal_code', width: 22 },
         { header: 'Product Name', key: 'product_name', width: 45 },
@@ -621,7 +622,59 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
         c.font = { bold: true, size: 12 };
       });
 
-      // --- TAB 2: LOSS BY AGENT ---
+      // --- TAB 2: LOST SALE LIST PER ITEM (Aggregated) ---
+      const aggregatedSheet = workbook.addWorksheet('Lost sale list per item');
+      aggregatedSheet.columns = [
+        { header: 'Internal Code', key: 'internal_code', width: 22 },
+        { header: 'Product Name', key: 'product_name', width: 45 },
+        { header: 'Agent Name', key: 'agent_name', width: 30 },
+        { header: 'Category', key: 'category', width: 20 },
+        { header: 'Total Qty Lost', key: 'quantity', width: 15 },
+        { header: 'Total Value (BHD)', key: 'total_value', width: 20, style: { numFmt: '0.000' } },
+      ];
+
+      const productAggregation: Record<string, {
+        internal_code: string,
+        agent_name: string,
+        category: string,
+        quantity: number,
+        total_value: number
+      }> = {};
+
+      viewData.forEach((s: any) => {
+        const key = s.product_name.trim(); // Group by Name
+        if (!productAggregation[key]) {
+          productAggregation[key] = {
+            internal_code: s.internal_code || 'N/A',
+            agent_name: s.agent_name || 'N/A',
+            category: s.category || 'General',
+            quantity: 0,
+            total_value: 0
+          };
+        }
+        productAggregation[key].quantity += Number(s.quantity || 0);
+        productAggregation[key].total_value += Number(s.total_value || 0);
+      });
+
+      Object.entries(productAggregation)
+        .sort((a, b) => b[1].quantity - a[1].quantity) // Sort by Quantity Descending
+        .forEach(([productName, stats]) => {
+          aggregatedSheet.addRow({
+            internal_code: stats.internal_code,
+            product_name: productName,
+            agent_name: stats.agent_name,
+            category: stats.category,
+            quantity: stats.quantity,
+            total_value: stats.total_value
+          });
+        });
+
+      // Style Header for Tab 2
+      aggregatedSheet.getRow(1).font = { bold: true, size: 11, color: { argb: 'FFFFFFFF' } };
+      aggregatedSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } };
+      aggregatedSheet.getRow(1).alignment = { horizontal: 'center' };
+
+      // --- TAB 3: LOSS BY AGENT ---
       const agentSheet = workbook.addWorksheet('Loss by Agent');
       agentSheet.columns = [
         { header: 'Agent Name', key: 'agentName', width: 40 },
@@ -981,6 +1034,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
             </div>
           </div>
 
+
+
           <div className="flex flex-wrap items-center gap-4">
             {isAdmin && (
               <div className="relative">
@@ -1151,6 +1206,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
                 </div>
               )}
             </div>
+
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="px-6 py-4 bg-white border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all shadow-sm"
+              >
+                Back to Operational Suite
+              </button>
+            )}
           </div>
         </header>
 
@@ -1179,14 +1243,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
             <>
               {/* --- Section 2: Macro KPI Grid (Currency Fix Applied) --- */}
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
-                <StrategicKPI label="TOTAL LOSS VALUE" value={aggregateMetrics.totalRevenue.toFixed(3)} icon={<Banknote size={20} />} isCurrency trend="4.2" critical={true} />
-                <StrategicKPI label="INCIDENT VOLUME" value={aggregateMetrics.incidentCount} icon={<AlertCircle size={20} />} critical={true} />
-                <StrategicKPI label="AVG LOSS / CUSTOMER" value={aggregateMetrics.avgLossPerCustomer.toFixed(3)} icon={<Wallet size={20} />} isCurrency />
-                <StrategicKPI label="LOST CUSTOMERS NO" value={aggregateMetrics.lostCustomersNo} icon={<UserMinus size={20} />} tooltip="Number of customer visits where at least one requested item was unavailable." />
-                <StrategicKPI label="UNIT LOSS VALUE" value={aggregateMetrics.averageOrderLoss.toFixed(3)} icon={<TrendingDown size={20} />} isCurrency />
-                <StrategicKPI label="OUT-OF-STOCK SKUS" value={aggregateMetrics.skuCount} icon={<PackageX size={20} />} critical={true} />
+                <StrategicKPI label="TOTAL LOSS VALUE" value={aggregateMetrics.totalRevenue.toFixed(0)} icon={<Banknote size={20} />} isCurrency critical={true} />
+                <StrategicKPI label="LOST CUSTOMERS NO" value={aggregateMetrics.lostCustomersNo} icon={<UserMinus size={20} />} tooltip="Number of customer visits where at least one requested item was unavailable." critical={true} unit="Customer" />
+                <StrategicKPI label="INCIDENT VOLUME" value={aggregateMetrics.incidentCount} icon={<AlertCircle size={20} />} critical={true} unit="TIME" />
+                <StrategicKPI label="OUT-OF-STOCK SKUS" value={aggregateMetrics.skuCount} icon={<PackageX size={20} />} critical={true} unit="SKU" />
+                <StrategicKPI label="AVG LOSS / CUSTOMER" value={aggregateMetrics.avgLossPerCustomer.toFixed(0)} icon={<Wallet size={20} />} isCurrency />
+                <StrategicKPI label="UNIT LOSS VALUE" value={aggregateMetrics.averageOrderLoss.toFixed(0)} icon={<TrendingDown size={20} />} isCurrency />
                 <StrategicKPI label="MISSED OPPORTUNITY" value={aggregateMetrics.totalUnits} icon={<Target size={20} />} />
-
                 {/* Category Specific Card */}
                 <div className="bg-white p-6 rounded-[2.2rem] border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center group hover:border-brand transition-all duration-500 min-h-[165px] md:min-h-[185px]">
                   <div className="w-12 h-12 md:w-14 md:h-14 bg-slate-900 rounded-[1.2rem] flex items-center justify-center text-white mb-4 group-hover:bg-brand transition-all relative z-10">
@@ -1341,7 +1404,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
                 <StrategicKPI label="Low Stock Items" value={shortageMetrics.lowCount} icon={<Box size={20} />} critical={true} description="stock below Minimum level" unit="SKU" />
                 <StrategicKPI label="Critical Escalations" value={shortageMetrics.criticalCount} icon={<AlertTriangle size={20} />} critical={true} description="last Piece on shelf" unit="SKU" />
-                <StrategicKPI label="Absolute Stockouts" value={shortageMetrics.outOfStockCount} icon={<PackageX size={20} />} critical={true} description="Zero Stock W/O Lost Sale" unit="SKU" />
+                <StrategicKPI label="Absolute Stockouts" value={shortageMetrics.outOfStockCount} icon={<PackageX size={20} />} critical={true} description="Zero Stock" unit="SKU" />
               </section>
 
               {/* --- Section 2.5: Branch Shortages Module (UPPER PRIMARY POSITION) --- */}
@@ -1874,7 +1937,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user }) => {
                           <div className="w-3 h-3 bg-brand rounded-full"></div>
                           <div className="absolute inset-0 bg-brand animate-ping rounded-full"></div>
                         </div>
-                        <span className="text-[9px] font-black text-brand uppercase tracking-[0.2em] font-black">High Risk Load</span>
+                        <span className="text-[9px] font-black text-brand uppercase tracking-[0.2em]">High Risk Load</span>
                       </div>
                     </div>
                     <div className="px-4 py-2 bg-white/5 rounded-xl border border-white/10 flex items-center space-x-3">
