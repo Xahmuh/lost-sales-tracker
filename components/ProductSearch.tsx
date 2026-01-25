@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Plus, Package, X, ChevronRight, Zap, Box, Command, Loader2, Sparkles, Tag, Mic, MicOff } from 'lucide-react';
+import { Search, Plus, Package, X, ChevronRight, Zap, Box, Command, Loader2, Sparkles, Tag, Mic, MicOff, Globe } from 'lucide-react';
 import { Product } from '../types';
 import { supabase } from '../lib/supabase';
 import { formatCurrency } from '../utils/calculations';
@@ -10,6 +10,57 @@ interface ProductSearchProps {
   onManual: (query: string) => void;
   onCommand?: (command: 'finalize') => void;
 }
+
+// Common Pharmacy Arabic-to-English Mapping for Smart Search
+const MEDICINE_TRANSLATION_MAP: Record<string, string> = {
+  'بندول': 'Panadol',
+  'باندول': 'Panadol',
+  'أدول': 'Adol',
+  'ادول': 'Adol',
+  'سولبادين': 'Solpadeine',
+  'بروفين': 'Brufen',
+  'فولتارين': 'Voltaren',
+  'نيكسيوم': 'Nexium',
+  'اموكسيل': 'Amoxyl',
+  'بانتوزول': 'Pantozol',
+  'كونكور': 'Concor',
+  'ليبيدور': 'Lipitor',
+  'دياميكرون': 'Diamicron',
+  'جالفوس': 'Galvus',
+  'جانوميت': 'Janumet',
+  'اوجمنتين': 'Augmentin',
+  'زيرتك': 'Zyrtec',
+  'كلاريتين': 'Claritin',
+  'فنستيل': 'Fenistil',
+  'موتيلات': 'Motilium',
+  'جافيسكون': 'Gaviscon',
+  'كولجيت': 'Colgate',
+  'سنسوداين': 'Sensodyne',
+  'بنسلين': 'Penicillin',
+  'انسولين': 'Insulin',
+  'فياجرا': 'Viagra',
+  'سيدوفاج': 'Glucophage',
+  'جلوكوفاج': 'Glucophage',
+  'فنتولين': 'Ventolin',
+  'سبازموكانيولاز': 'Spasmo-Canulase',
+  'بسكوبان': 'Buscopan',
+  'كحة': 'Cough',
+  'شراب': 'Syrup',
+  'حبوب': 'Tablets',
+  'لوست': 'Lost',
+  'مفقود': 'Lost',
+  'بيع': 'Sale'
+};
+
+const translateArabicToEnglish = (text: string): string => {
+  let processed = text;
+  Object.entries(MEDICINE_TRANSLATION_MAP).forEach(([ar, en]) => {
+    if (processed.includes(ar)) {
+      processed = processed.replace(new RegExp(ar, 'g'), en);
+    }
+  });
+  return processed;
+};
 
 export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual, onCommand }) => {
   const [query, setQuery] = useState('');
@@ -21,6 +72,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
   // Voice Recognition States
   const [isListening, setIsListening] = useState(false);
   const [voiceTranscript, setVoiceTranscript] = useState('');
+  const [voiceLang, setVoiceLang] = useState<'ar-SA' | 'en-US'>('en-US'); // Set English as default
   const recognitionRef = useRef<any>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,7 +163,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
 
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
-        recognition.lang = 'ar-SA'; // Broad Arabic, usually works better than ar-BH
+        recognition.lang = voiceLang; // Use the selected language
         recognition.continuous = false;
         recognition.interimResults = false;
 
@@ -138,48 +190,53 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
         recognitionRef.current = recognition;
       }
     }
-  }, []);
+  }, [voiceLang]); // Re-initialize when language changes
 
   // Process Voice Command
   const processVoiceCommand = async (transcript: string) => {
     console.log('Voice command received:', transcript);
+
+    // SMART TRANSLATION: If we are in Arabic mode or hear Arabic, translate it to English for DB search
+    const translatedTranscript = translateArabicToEnglish(transcript);
+    console.log('Processed transcript:', translatedTranscript);
+
     setIsSearching(true);
 
     try {
-      // 1. Check for Action Commands
-      if (transcript.match(/(finalize|انهاء|إنهاء|خلاص|حفظ|تاكيد|تأكيد)/i)) {
+      // 1. Check for Action Commands (in both languages)
+      if (translatedTranscript.match(/(finalize|انهاء|إنهاء|خلاص|حفظ|تاكيد|تأكيد)/i)) {
         onCommand?.('finalize');
         return;
       }
 
       // 2. Extract Intent (Mode)
       let preferredMode: 'sales' | 'shortages' | undefined = undefined;
-      if (transcript.match(/(lost|لوست|بيع مفقود|طلب مفقود|مفقود)/i)) {
+      if (translatedTranscript.match(/(lost|لوست|بيع مفقود|طلب مفقود|مفقود|sale)/i)) {
         preferredMode = 'sales';
-      } else if (transcript.match(/(shortage|شورتاج|نقص|ناقص)/i)) {
+      } else if (translatedTranscript.match(/(shortage|شورتاج|نقص|ناقص)/i)) {
         preferredMode = 'shortages';
       }
 
       // 3. Extract Status
       let detectedStatus: 'Low' | 'Critical' | 'Out of Stock' | undefined = undefined;
 
-      if (transcript.match(/(oos|out of stock|خلص|مخلص|غير متوفر|بح|انتهى)/i)) {
+      if (translatedTranscript.match(/(oos|out of stock|خلص|مخلص|غير متوفر|بح|انتهى)/i)) {
         detectedStatus = 'Out of Stock';
-      } else if (transcript.match(/(low|ضعيف|قليل|بسيط)/i)) {
+      } else if (translatedTranscript.match(/(low|ضعيف|قليل|بسيط)/i)) {
         detectedStatus = 'Low';
-      } else if (transcript.match(/(critical|حرج|خطير|ضروري|اخر علبه|على الرف|آخر علبة|اخر قطعة)/i)) {
+      } else if (translatedTranscript.match(/(critical|حرج|خطير|ضروري|اخر علبه|على الرف|آخر علبة|اخر قطعة)/i)) {
         detectedStatus = 'Critical';
       }
 
       // Clean transcript from commands to extract product name
-      const cleanTranscript = transcript
-        .replace(/^(سجل|أضف|ابحث عن|shortage|add|search for)\s+/i, '')
-        .replace(/(oos|out of stock|خلص|مخلص|غير متوفر|بح|انتهى|low|ضعيف|قليل|بسيط|critical|حرج|خطير|ضروري|اخر علبه|على الرف|آخر علبة|اخر قطعة|lost|لوست|بيع مفقود|طلب مفقود|مفقود|شورتاج|ناقص)/gi, '')
+      const cleanTranscript = translatedTranscript
+        .replace(/^(سجل|أضف|ابحث عن|shortage|add|search for|record|record item)\s+/i, '')
+        .replace(/(oos|out of stock|خلص|مخلص|غير متوفر|بح|انتهى|low|ضعيف|قليل|بسيط|critical|حرج|خطير|ضروري|اخر علبه|على الرف|آخر علبة|اخر قطعة|lost|لوست|بيع مفقود|طلب مفقود|مفقود|شورتاج|ناقص|sale)/gi, '')
         .trim();
 
       if (!cleanTranscript) return;
 
-      // 4. Search in DB
+      // 4. Search in DB (which primarily contains English names)
       const matches = await supabase.products.search(cleanTranscript);
 
       if (matches.length > 0) {
@@ -202,7 +259,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
         setIsOpen(true);
         setActiveIndex(0);
       } else {
-        // No results, set query for manual add
+        // Fallback: If no DB result, set query to translated text for manual entry
         setQuery(cleanTranscript);
         setIsOpen(true);
       }
@@ -267,6 +324,21 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
         />
 
         <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center space-x-2 md:space-x-4">
+          {/* Language Toggle */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setVoiceLang(prev => prev === 'en-US' ? 'ar-SA' : 'en-US');
+            }}
+            className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all border border-slate-200"
+            title="Switch Voice Language"
+          >
+            <Globe className="w-4 h-4 text-slate-500" />
+            <span className="text-[10px] font-black uppercase text-slate-600">
+              {voiceLang === 'en-US' ? 'EN' : 'AR'}
+            </span>
+          </button>
+
           {/* Voice Recognition Button */}
           <button
             onClick={isListening ? stopVoiceRecognition : startVoiceRecognition}
@@ -309,7 +381,11 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ onSelect, onManual
               <p className="text-lg font-bold text-indigo-700 italic">"{voiceTranscript}"</p>
             </div>
           )}
-          <p className="mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-tight">Try saying: "Biolite" or "سجل باندول"</p>
+          <p className="mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-tight">
+            {voiceLang === 'en-US'
+              ? 'Try saying: "Panadol" or "Finalize"'
+              : 'جرب قول: "باندول" أو "إنهاء التقرير"'}
+          </p>
         </div>
       )}
 
