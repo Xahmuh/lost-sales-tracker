@@ -695,6 +695,49 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
       agentSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } };
       agentSheet.getRow(1).alignment = { horizontal: 'center' };
 
+      // --- TAB 4: RANKING (Branches & Pharmacists) ---
+      const rankingSheet = workbook.addWorksheet('Ranking');
+
+      // Branch Ranking
+      rankingSheet.addRow(['BRANCH RANKING (BY REVENUE LOSS)']).font = { bold: true, size: 12 };
+      rankingSheet.addRow(['Rank', 'Branch Name', 'Frequency', 'Total Value (BHD)']).font = { bold: true };
+
+      const branchStats: Record<string, { count: number, value: number }> = {};
+      viewData.forEach((s: any) => {
+        const bName = s.branch_name || 'Unknown';
+        if (!branchStats[bName]) branchStats[bName] = { count: 0, value: 0 };
+        branchStats[bName].count++;
+        branchStats[bName].value += Number(s.total_value || 0);
+      });
+
+      Object.entries(branchStats)
+        .sort((a, b) => b[1].value - a[1].value)
+        .forEach(([name, stats], idx) => {
+          rankingSheet.addRow([idx + 1, name, stats.count, stats.value.toFixed(3)]);
+        });
+
+      rankingSheet.addRow([]); // Gap
+
+      // Pharmacist Ranking
+      rankingSheet.addRow(['PHARMACIST RANKING (BY ACTIVITY)']).font = { bold: true, size: 12 };
+      rankingSheet.addRow(['Rank', 'Pharmacist Name', 'Branch', 'Incidents', 'Total BHD Recorded']).font = { bold: true };
+
+      const pharmaStats: Record<string, { name: string, branch: string, count: number, value: number }> = {};
+      viewData.forEach((s: any) => {
+        const key = `${s.pharmacist_name}_${s.branch_name}`;
+        if (!pharmaStats[key]) pharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: s.branch_name || 'N/A', count: 0, value: 0 };
+        pharmaStats[key].count++;
+        pharmaStats[key].value += Number(s.total_value || 0);
+      });
+
+      Object.values(pharmaStats)
+        .sort((a, b) => b.count - a.count)
+        .forEach((p, idx) => {
+          rankingSheet.addRow([idx + 1, p.name, p.branch, p.count, p.value.toFixed(3)]);
+        });
+
+      rankingSheet.columns.forEach(col => col.width = 25);
+
       // Finalize Lost Sales Tab
       worksheet.getRow(1).font = { bold: true, size: 11, color: { argb: 'FFFFFFFF' } };
       worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } };
@@ -817,6 +860,46 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
       // TAB 3: GENERAL STORE (Includes explicit general categories + any leftovers just in case?)
       // The user listed specific categories. I will strictly follow the list for the 'General Store' tab.
       if (generalData.length > 0) createSheet('General Store', generalData);
+
+      // TAB 4: RANKING (Branches & Pharmacists)
+      const rankingSheet = workbook.addWorksheet('Ranking');
+
+      // Branch Ranking
+      rankingSheet.addRow(['BRANCH RANKING (BY SHORTAGE REPORTS)']).font = { bold: true, size: 12 };
+      rankingSheet.addRow(['Rank', 'Branch Name', 'Report Count']).font = { bold: true };
+
+      const branchStats: Record<string, number> = {};
+      viewData.forEach((s: any) => {
+        const bName = s.branch_name || 'Unknown';
+        branchStats[bName] = (branchStats[bName] || 0) + 1;
+      });
+
+      Object.entries(branchStats)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([name, count], idx) => {
+          rankingSheet.addRow([idx + 1, name, count]);
+        });
+
+      rankingSheet.addRow([]); // Gap
+
+      // Pharmacist Ranking
+      rankingSheet.addRow(['PHARMACIST RANKING (BY REVEALING SHORTAGES)']).font = { bold: true, size: 12 };
+      rankingSheet.addRow(['Rank', 'Pharmacist Name', 'Branch', 'Report Count']).font = { bold: true };
+
+      const pharmaStats: Record<string, { name: string, branch: string, count: number }> = {};
+      viewData.forEach((s: any) => {
+        const key = `${s.pharmacist_name}_${s.branch_name}`;
+        if (!pharmaStats[key]) pharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: s.branch_name || 'N/A', count: 0 };
+        pharmaStats[key].count++;
+      });
+
+      Object.values(pharmaStats)
+        .sort((a, b) => b.count - a.count)
+        .forEach((p, idx) => {
+          rankingSheet.addRow([idx + 1, p.name, p.branch, p.count]);
+        });
+
+      rankingSheet.columns.forEach(col => col.width = 25);
 
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -997,6 +1080,52 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
       shortageSheet.getRow(1).font = { bold: true, size: 11, color: { argb: 'FFFFFFFF' } };
       shortageSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } };
       shortageSheet.getRow(1).alignment = { horizontal: 'center' };
+
+      // --- TAB 4: RANKING (Branches & Pharmacists) ---
+      const rankingSheet = workbook.addWorksheet('Ranking');
+
+      // Branch Ranking (Combined focus)
+      rankingSheet.addRow(['BRANCH RANKING (COMBINED ACTIVITY)']).font = { bold: true, size: 12 };
+      rankingSheet.addRow(['Rank', 'Branch Name', 'Lost Sales Value', 'Shortage Reports']).font = { bold: true };
+
+      const combinedBranchStats: Record<string, { salesVal: number, shortageCount: number }> = {};
+      salesData.forEach(s => {
+        const b = s.branch_name || 'Unknown';
+        if (!combinedBranchStats[b]) combinedBranchStats[b] = { salesVal: 0, shortageCount: 0 };
+        combinedBranchStats[b].salesVal += Number(s.total_value || 0);
+      });
+      shortagesData.forEach(s => {
+        const b = s.branch_name || 'Unknown';
+        if (!combinedBranchStats[b]) combinedBranchStats[b] = { salesVal: 0, shortageCount: 0 };
+        combinedBranchStats[b].shortageCount++;
+      });
+
+      Object.entries(combinedBranchStats)
+        .sort((a, b) => (b[1].salesVal + b[1].shortageCount) - (a[1].salesVal + a[1].shortageCount)) // Sort by combined weight
+        .forEach(([name, stats], idx) => {
+          rankingSheet.addRow([idx + 1, name, stats.salesVal.toFixed(3), stats.shortageCount]);
+        });
+
+      rankingSheet.addRow([]); // Gap
+
+      // Pharmacist Ranking (Combined focus)
+      rankingSheet.addRow(['PHARMACIST RANKING (COMBINED ACTIVITY)']).font = { bold: true, size: 12 };
+      rankingSheet.addRow(['Rank', 'Pharmacist Name', 'Branch', 'Incidents Reported (Combined)']).font = { bold: true };
+
+      const combinedPharmaStats: Record<string, { name: string, branch: string, count: number }> = {};
+      [...salesData, ...shortagesData].forEach(s => {
+        const key = `${s.pharmacist_name}_${s.branch_name}`;
+        if (!combinedPharmaStats[key]) combinedPharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: s.branch_name || 'N/A', count: 0 };
+        combinedPharmaStats[key].count++;
+      });
+
+      Object.values(combinedPharmaStats)
+        .sort((a, b) => b.count - a.count)
+        .forEach((p, idx) => {
+          rankingSheet.addRow([idx + 1, p.name, p.branch, p.count]);
+        });
+
+      rankingSheet.columns.forEach(col => col.width = 25);
 
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

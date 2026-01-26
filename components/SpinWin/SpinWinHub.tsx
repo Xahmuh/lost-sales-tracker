@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import { Branch } from '../../types';
 import {
     QrCode,
@@ -22,20 +22,27 @@ interface SpinWinHubProps {
 
 export const SpinWinHub: React.FC<SpinWinHubProps> = ({ branch, onBack, userRole }) => {
     const [subTab, setSubTab] = useState<'menu' | 'qr' | 'redeem' | 'dashboard'>('menu');
+    const [isPending, startTransition] = useTransition();
+
+    const handleTabChange = (tab: 'menu' | 'qr' | 'redeem' | 'dashboard') => {
+        startTransition(() => {
+            setSubTab(tab);
+        });
+    };
 
     if (userRole === 'manager' || userRole === 'admin') {
         return <ManagerDashboard onBack={onBack} />;
     }
 
-    if (subTab === 'qr') return <BranchQRGenerator branch={branch} onBack={() => setSubTab('menu')} />;
-    if (subTab === 'redeem') return <VoucherRedeemer branch={branch} onBack={() => setSubTab('menu')} />;
-    if (subTab === 'dashboard') return <BranchDashboard branch={branch} onBack={() => setSubTab('menu')} />;
+    if (subTab === 'qr') return <BranchQRGenerator branch={branch} onBack={() => handleTabChange('menu')} />;
+    if (subTab === 'redeem') return <VoucherRedeemer branch={branch} onBack={() => handleTabChange('menu')} />;
+    if (subTab === 'dashboard') return <BranchDashboard branch={branch} onBack={() => handleTabChange('menu')} />;
 
     const isEnabled = branch.isSpinEnabled !== false; // Default to true if undefined
     const canManage = userRole === 'manager' || userRole === 'admin';
 
     return (
-        <div className="max-w-6xl mx-auto p-4 lg:p-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+        <div className={`max-w-6xl mx-auto p-4 lg:p-12 animate-in fade-in slide-in-from-bottom-8 duration-700 ${isPending ? 'opacity-50 pointer-events-none' : ''}`}>
             <div className="text-center mb-16">
                 <div onClick={onBack} className="inline-flex items-center space-x-2 text-slate-400 hover:text-brand cursor-pointer mb-8 transition-colors group">
                     <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -57,7 +64,7 @@ export const SpinWinHub: React.FC<SpinWinHubProps> = ({ branch, onBack, userRole
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* 1. QR Generator - Disabled if not enabled */}
                 <button
-                    onClick={() => setSubTab('qr')}
+                    onClick={() => handleTabChange('qr')}
                     className={`group p-10 rounded-[3rem] border-2 transition-all duration-700 text-left flex flex-col justify-between h-[400px] active:scale-[0.98] relative overflow-hidden ${isEnabled ? 'bg-white border-slate-50 hover:border-brand shadow-[0_30px_70px_-20px_rgba(0,0,0,0.06)] hover:shadow-brand/20' : 'bg-slate-50 border-slate-100'}`}
                 >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-brand/[0.02] rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
@@ -83,7 +90,7 @@ export const SpinWinHub: React.FC<SpinWinHubProps> = ({ branch, onBack, userRole
 
                 {/* 2. Voucher Redeemer */}
                 <button
-                    onClick={() => setSubTab('redeem')}
+                    onClick={() => handleTabChange('redeem')}
                     className="group bg-slate-900 p-10 rounded-[3rem] border-2 border-slate-800 hover:border-brand shadow-2xl hover:shadow-brand/30 transition-all duration-700 text-left flex flex-col justify-between h-[400px] active:scale-[0.98] relative overflow-hidden"
                 >
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/[0.02] rounded-full -mr-16 -mt-16"></div>
@@ -102,7 +109,7 @@ export const SpinWinHub: React.FC<SpinWinHubProps> = ({ branch, onBack, userRole
 
                 {/* 3. Dashboard Access */}
                 <button
-                    onClick={() => setSubTab('dashboard')}
+                    onClick={() => handleTabChange('dashboard')}
                     className="group bg-white p-10 rounded-[3rem] border-2 border-slate-50 hover:border-emerald-500 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.06)] hover:shadow-emerald-500/20 transition-all duration-700 text-left flex flex-col justify-between h-[400px] active:scale-[0.98] relative overflow-hidden"
                 >
                     <div className="absolute bottom-0 right-0 w-40 h-40 bg-emerald-500/[0.02] rounded-full -mr-20 -mb-20"></div>

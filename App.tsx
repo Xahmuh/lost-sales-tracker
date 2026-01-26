@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import { LoginPage } from './app/login/page';
 import { SelectPharmacistPage } from './app/select-pharmacist/page';
 import { POSPage } from './app/pos/page';
@@ -29,6 +29,13 @@ const App: React.FC = () => {
   const [authState, setAuthState] = useState<AuthState>({ user: null, pharmacist: null });
   const [activeTab, setActiveTab] = useState<'pos' | 'dashboard' | 'selector' | 'spin-win' | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [isPending, startTransition] = useTransition();
+
+  const handleTabChange = (tab: 'pos' | 'dashboard' | 'selector' | 'spin-win' | null) => {
+    startTransition(() => {
+      setActiveTab(tab);
+    });
+  };
 
   const [customerToken] = useState(() => {
     const params = new URLSearchParams(window.location.search);
@@ -61,9 +68,9 @@ const App: React.FC = () => {
     supabase.auth.setSession(newState);
 
     if (branch.role === 'admin') {
-      setActiveTab('dashboard');
+      handleTabChange('dashboard');
     } else {
-      setActiveTab('selector');
+      handleTabChange('selector');
     }
   };
 
@@ -71,7 +78,7 @@ const App: React.FC = () => {
     const newState = { ...authState, pharmacist };
     setAuthState(newState);
     supabase.auth.setSession(newState);
-    setActiveTab('selector');
+    handleTabChange('selector');
   };
 
   const logout = () => {
@@ -83,7 +90,7 @@ const App: React.FC = () => {
     const newState = { ...authState, pharmacist: null };
     setAuthState(newState);
     supabase.auth.setSession(newState);
-    setActiveTab(null);
+    handleTabChange(null);
   };
 
   if (customerToken) {
@@ -112,8 +119,8 @@ const App: React.FC = () => {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center relative overflow-hidden font-sans">
         {/* Subtle background detail */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand/[0.02] rounded-full blur-[120px] -mr-96 -mt-96 pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand/[0.01] rounded-full blur-[100px] -ml-72 -mb-72 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand/[0.02] rounded-full blur-[60px] -mr-96 -mt-96 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand/[0.01] rounded-full blur-[40px] -ml-72 -mb-72 pointer-events-none"></div>
 
         <div className="flex-1 w-full flex items-center justify-center p-6 lg:p-12">
           <div className="max-w-5xl w-full relative z-10">
@@ -136,11 +143,11 @@ const App: React.FC = () => {
             <div className={`grid grid-cols-1 ${isManager ? 'md:grid-cols-2' : 'md:grid-cols-2'} gap-12`}>
               {/* CARD 1: DASHBOARD / POS */}
               <button
-                onClick={() => setActiveTab(isManager ? 'dashboard' : 'pos')}
+                onClick={() => handleTabChange(isManager ? 'dashboard' : 'pos')}
                 className={`group p-12 rounded-[3.5rem] border-2 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${isManager
                   ? 'bg-slate-900 border-slate-800 hover:border-brand shadow-2xl hover:shadow-brand/30'
                   : 'bg-white border-slate-50 hover:border-brand shadow-[0_30px_70px_-20px_rgba(0,0,0,0.06)] hover:shadow-brand/20'
-                  }`}
+                  } ${isPending ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-brand/[0.02] rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
 
@@ -170,8 +177,8 @@ const App: React.FC = () => {
 
               {!isManager && (
                 <button
-                  onClick={() => setActiveTab('dashboard')}
-                  className="group bg-slate-900 p-12 rounded-[3.5rem] border-2 border-slate-800 hover:border-brand shadow-2xl hover:shadow-brand/30 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden"
+                  onClick={() => handleTabChange('dashboard')}
+                  className={`group bg-slate-900 p-12 rounded-[3.5rem] border-2 border-slate-800 hover:border-brand shadow-2xl hover:shadow-brand/30 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${isPending ? 'opacity-50 pointer-events-none' : ''}`}
                 >
                   <div className="absolute bottom-0 right-0 w-48 h-48 bg-white/[0.03] rounded-full -mr-24 -mb-24 blur-3xl"></div>
                   <div className="w-20 h-20 bg-white/5 rounded-3xl flex items-center justify-center text-white/30 group-hover:bg-brand group-hover:text-white transition-all duration-500 relative z-10 ring-1 ring-white/10">
@@ -190,8 +197,8 @@ const App: React.FC = () => {
 
               {/* CARD 2: SPIN & WIN CONTROL */}
               <button
-                onClick={() => setActiveTab('spin-win')}
-                className={`group bg-brand p-12 rounded-[3.5rem] border-2 border-brand/20 hover:border-white shadow-2xl hover:shadow-brand/50 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${!isManager ? 'md:col-span-2' : ''}`}
+                onClick={() => handleTabChange('spin-win')}
+                className={`group bg-brand p-12 rounded-[3.5rem] border-2 border-brand/20 hover:border-white shadow-2xl hover:shadow-brand/50 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${!isManager ? 'md:col-span-2' : ''} ${isPending ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/5 rounded-full -ml-16 -mb-16"></div>
@@ -247,7 +254,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-brand/10">
       <header className="bg-white/80 backdrop-blur-xl border-b border-slate-100 sticky top-0 z-[100] h-24 shadow-sm">
         <div className="max-w-[1600px] mx-auto px-10 h-full flex items-center justify-between">
-          <div className="flex items-center space-x-6 cursor-pointer" onClick={() => setActiveTab(authState.user?.role === 'admin' ? 'dashboard' : 'selector')}>
+          <div className="flex items-center space-x-6 cursor-pointer" onClick={() => handleTabChange(authState.user?.role === 'admin' ? 'dashboard' : 'selector')}>
             <div className="w-14 h-14 bg-brand rounded-2xl flex items-center justify-center shadow-xl shadow-brand/20 overflow-hidden">
               <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
             </div>
@@ -263,17 +270,17 @@ const App: React.FC = () => {
           {authState.user?.role === 'branch' && activeTab !== 'spin-win' && (
             <nav className="flex items-center bg-slate-100 p-1.5 rounded-full border border-slate-200">
               <button
-                onClick={() => setActiveTab('pos')}
+                onClick={() => handleTabChange('pos')}
                 className={`flex items-center space-x-3 px-10 py-3.5 rounded-full font-black text-[10px] tracking-widest transition-all ${activeTab === 'pos' ? 'bg-brand text-white shadow-lg shadow-brand/20' : 'text-slate-400 hover:text-slate-900'
-                  }`}
+                  } ${isPending ? 'opacity-50' : ''}`}
               >
                 <ShoppingCart className="w-4 h-4" />
                 <span>ITEMS ENTRY</span>
               </button>
               <button
-                onClick={() => setActiveTab('dashboard')}
+                onClick={() => handleTabChange('dashboard')}
                 className={`flex items-center space-x-3 px-10 py-3.5 rounded-full font-black text-[10px] tracking-widest transition-all ${activeTab === 'dashboard' ? 'bg-brand text-white shadow-lg shadow-brand/20' : 'text-slate-400 hover:text-slate-900'
-                  }`}
+                  } ${isPending ? 'opacity-50' : ''}`}
               >
                 <LayoutDashboard className="w-4 h-4" />
                 <span>DASHBOARD & KPIs</span>
@@ -309,13 +316,13 @@ const App: React.FC = () => {
         ) : activeTab === 'spin-win' ? (
           <SpinWinHub
             branch={authState.user!}
-            onBack={() => setActiveTab('selector')}
+            onBack={() => handleTabChange('selector')}
             userRole={authState.user?.role || 'branch'}
           />
         ) : (
           <DashboardPage
             user={authState.user!}
-            onBack={authState.user.role !== 'admin' ? () => setActiveTab('selector') : undefined}
+            onBack={authState.user.role !== 'admin' ? () => handleTabChange('selector') : undefined}
           />
         )}
       </main>
