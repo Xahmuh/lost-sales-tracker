@@ -1364,6 +1364,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
             >
               Inventory Shortages
             </button>
+            {(user.role === 'admin' || user.role === 'manager') && (
+              <></>
+            )}
           </div>
         </div>
 

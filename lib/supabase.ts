@@ -125,9 +125,10 @@ const generateUUID = () => {
 export const supabase = {
   client: supabaseClient,
   auth: {
-    getSession: (): AuthState | null => {
+    getSession: async () => {
       const session = localStorage.getItem(AUTH_KEY);
-      return session ? JSON.parse(session) : null;
+      const parsed = session ? JSON.parse(session) : null;
+      return { data: { session: parsed }, error: null };
     },
     setSession: (session: AuthState) => {
       localStorage.setItem(AUTH_KEY, JSON.stringify(session));
@@ -493,6 +494,32 @@ export const supabase = {
       localStorage.setItem('tabarak_offline_shortages', JSON.stringify(offline.filter((s: any) => s.id !== id)));
       window.dispatchEvent(new CustomEvent('tabarak_shortages_updated'));
       return true;
+    }
+  },
+
+  hrRequests: {
+    create: async (request: any) => {
+      // For now, using LocalStorage as the primary "database" for this new feature 
+      // to ensure it works immediately without SQL migrations on the user's end.
+      const offline = JSON.parse(localStorage.getItem('tabarak_hr_requests') || '[]');
+      const newRequest = { ...request, id: generateUUID(), timestamp: new Date().toISOString(), status: 'Pending' };
+      offline.push(newRequest);
+      localStorage.setItem('tabarak_hr_requests', JSON.stringify(offline));
+      return newRequest;
+    },
+    list: async () => {
+      const offline = JSON.parse(localStorage.getItem('tabarak_hr_requests') || '[]');
+      return offline.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    },
+    updateStatus: async (id: string, status: string) => {
+      const offline = JSON.parse(localStorage.getItem('tabarak_hr_requests') || '[]');
+      const idx = offline.findIndex((r: any) => r.id === id);
+      if (idx !== -1) {
+        offline[idx].status = status;
+        localStorage.setItem('tabarak_hr_requests', JSON.stringify(offline));
+        return offline[idx];
+      }
+      return null;
     }
   }
 };

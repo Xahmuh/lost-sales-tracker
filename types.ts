@@ -140,3 +140,23 @@ export interface VoucherShare {
   branchId: string;
   sharedAt: string;
 }
+
+export interface HRRequest {
+  id: string;
+  refNum: string;
+  employeeName: string;
+  cpr: string;
+  docTypes: string[];
+  docReason: string;
+  reqDate: string;
+  deliveryMethod: string;
+  status: 'Pending' | 'Approved' | 'Rejected' | 'Completed';
+  timestamp: string;
+  email?: string;
+  passport?: string;
+  passportName?: string;
+  license?: string;
+  sponsor?: string;
+  joinDate?: string;
+  salary?: string; // Monthly salary in BHD
+}
