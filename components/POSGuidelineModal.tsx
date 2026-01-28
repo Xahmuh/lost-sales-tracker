@@ -23,7 +23,7 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
                     </div>
 
                     {/* Header Title & Close */}
-                    <div className="flex justify-between items-start mb-8 relative z-10">
+                    <div className="flex justify-between items-start mb-6 relative z-10">
                         <h3 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Attention / تنبيه</h3>
                         <button
                             onClick={onClose}
@@ -33,12 +33,24 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
                         </button>
                     </div>
 
+                    {/* Illustrative Toggle Switch (based on user image) */}
+                    <div className="flex justify-center mb-10 relative z-10">
+                        <div className="bg-slate-100/10 backdrop-blur-md p-1.5 rounded-[2rem] flex items-center shadow-inner border border-white/10">
+                            <div className="bg-white px-8 py-3 rounded-[1.5rem] shadow-xl flex items-center justify-center">
+                                <span className="text-[#b81c1d] font-black text-sm tracking-widest uppercase">Lost Sales</span>
+                            </div>
+                            <div className="px-8 py-3 flex items-center justify-center opacity-60">
+                                <span className="text-white font-black text-sm tracking-widest uppercase">Shortage</span>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Content Section (Optimized for Landscape Layout) */}
                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
                         {/* Arabic Section (Right Side on Wide Screens) */}
                         <div className="text-right space-y-6 lg:order-2">
-                            <h4 className="text-2xl font-bold text-white leading-tight">عزيزي الصيدلي،</h4>
+                            <h4 className="text-2xl font-bold text-white leading-tight">عزيزي الصيدلي</h4>
                             <p className="text-xl font-bold leading-relaxed text-white" dir="rtl">
                                 برجاء الانتباه جيدًا إلى الفرق بين تسجيل الأصناف كـ Lost Sales وتسجيلها كـ Shortage، وذلك لتجنب تسجيل بيانات غير دقيقة.
                             </p>
@@ -65,7 +77,7 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
 
                         {/* English Section (Left Side on Wide Screens) */}
                         <div className="text-left space-y-6 lg:order-1">
-                            <h4 className="text-xl font-bold text-white leading-tight">Dear Pharmacist,</h4>
+                            <h4 className="text-xl font-bold text-white leading-tight">Dear Pharmacist</h4>
                             <p className="text-lg font-bold leading-relaxed text-white">
                                 Please pay close attention to the difference between recording items as Lost Sales and recording them as Shortages, in order to avoid inaccurate data entry.
                             </p>
@@ -95,9 +107,9 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
                     <div className="flex items-center">
                         <button
                             onClick={onClose}
-                            className="px-16 py-4 bg-[#c00f37] hover:bg-[#a00c2e] text-white font-bold text-2xl transition-all rounded-md active:scale-95 shadow-lg min-w-[240px]"
+                            className="px-16 py-4 bg-[#b81c1d] hover:bg-[#8b1516] text-white font-bold text-2xl transition-all rounded-md active:scale-95 shadow-lg min-w-[240px]"
                         >
-                            Acknowledged / تم الإطلاع علي التنبيه 
+                            Acknowledged / تم الإطلاع علي التنبيه
                         </button>
                     </div>
                 </div>
