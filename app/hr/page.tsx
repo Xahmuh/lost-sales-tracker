@@ -26,8 +26,11 @@ import {
     HelpCircle,
     ChevronDown,
     Bell,
-    UserCircle2
+    UserCircle2,
+    CalendarDays,
+    FileText as FileTextIcon
 } from 'lucide-react';
+import { VacationRequestFlow } from './VacationRequestFlow';
 import Swal from 'sweetalert2';
 import confetti from 'canvas-confetti';
 
@@ -143,7 +146,7 @@ const translations = {
 };
 
 type Language = 'en' | 'ar';
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3 | 4 | 5;
 
 interface HRPortalPageProps {
     onBack?: () => void;
@@ -152,6 +155,7 @@ interface HRPortalPageProps {
 export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
     const [lang, setLang] = useState<Language>('en');
     const [step, setStep] = useState<Step>(1);
+    const [selectedService, setSelectedService] = useState<'documents' | 'vacation' | null>(null);
     const [cpr, setCpr] = useState('');
     const [employee, setEmployee] = useState({ name: '', cpr: '', role: 'Employee' });
     const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -403,25 +407,75 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                             </div>
                         </div>
                     </div>
+                ) : selectedService === 'vacation' ? (
+                    <div className="h-full overflow-y-auto">
+                        <VacationRequestFlow
+                            employee={employee}
+                            onBack={() => { setSelectedService(null); setStep(2); }}
+                            onComplete={() => window.location.reload()}
+                        />
+                    </div>
                 ) : (
                     // FOCUSED FORM FLOW
                     <div className="max-w-4xl mx-auto py-20 px-8 animate-in fade-in duration-1000">
 
-                        {/* STEP PROGRESSION */}
-                        <div className="flex items-center justify-center gap-4 mb-24">
-                            {[2, 3, 4].map(idx => (
-                                <React.Fragment key={idx}>
-                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-black transition-all duration-700 shadow-sm ${step >= idx ? 'bg-brand text-white scale-110 shadow-lg shadow-brand/20' : 'bg-white border border-slate-100 text-slate-200'}`}>
-                                        {idx - 1}
-                                    </div>
-                                    {idx < 4 && <div className={`w-16 h-0.5 rounded-full transition-all duration-1000 ${step > idx ? 'bg-brand' : 'bg-slate-100'}`}></div>}
-                                </React.Fragment>
-                            ))}
-                        </div>
+                        {/* STEP 2: SERVICE SELECTION */}
+                        {step === 2 && (
+                            <div className="space-y-12 animate-in slide-in-from-bottom-8 duration-700">
+                                <div className="text-center">
+                                    <h2 className="text-3xl font-black text-slate-900 mb-4">{t.service_title}</h2>
+                                    <p className="text-slate-500 font-medium">Select the type of request you wish to submit.</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <button
+                                        onClick={() => { setSelectedService('documents'); setStep(3); }}
+                                        className="group relative p-8 bg-white rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl hover:border-blue-500/50 hover:-translate-y-1 transition-all text-left overflow-hidden"
+                                    >
+                                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
+                                            <FileTextIcon className="w-32 h-32 text-blue-900" />
+                                        </div>
+                                        <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                            <FileTextIcon className="w-8 h-8" />
+                                        </div>
+                                        <h3 className="text-xl font-black text-slate-900 mb-2">Internal Documents</h3>
+                                        <p className="text-sm text-slate-500 font-medium leading-relaxed">Request salary certificates, employment letters, and other official HR documentation.</p>
+                                    </button>
+
+                                    <button
+                                        onClick={() => { setSelectedService('vacation'); }}
+                                        className="group relative p-8 bg-white rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-2xl hover:border-emerald-500/50 hover:-translate-y-1 transition-all text-left overflow-hidden"
+                                    >
+                                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform">
+                                            <CalendarDays className="w-32 h-32 text-emerald-900" />
+                                        </div>
+                                        <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                            <CalendarDays className="w-8 h-8" />
+                                        </div>
+                                        <h3 className="text-xl font-black text-slate-900 mb-2">Vacation Request</h3>
+                                        <p className="text-sm text-slate-500 font-medium leading-relaxed">Submit a new leave request, view policies, and manage your vacation schedule.</p>
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* STEP PROGRESSION (Only for Documents) */}
+                        {step > 2 && (
+                            <div className="flex items-center justify-center gap-4 mb-24">
+                                {[3, 4, 5].map(idx => (
+                                    <React.Fragment key={idx}>
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-black transition-all duration-700 shadow-sm ${step >= idx ? 'bg-brand text-white scale-110 shadow-lg shadow-brand/20' : 'bg-white border border-slate-100 text-slate-200'}`}>
+                                            {idx - 2}
+                                        </div>
+                                        {idx < 5 && <div className={`w-16 h-0.5 rounded-full transition-all duration-1000 ${step > idx ? 'bg-brand' : 'bg-slate-100'}`}></div>}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        )}
 
                         <form className="space-y-20">
-                            {/* STEP 2: DOCUMENTS & REASONS */}
-                            {step === 2 && (
+                            {/* STEP 3: DOCUMENTS & REASONS */}
+                            {step === 3 && (
                                 <div className="space-y-20 animate-in slide-in-from-bottom-12 duration-700">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-2">
@@ -570,7 +624,13 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-end pt-12 border-t border-slate-100">
+                                    <div className="flex justify-between pt-12 border-t border-slate-100">
+                                        <button
+                                            onClick={() => setStep(2)}
+                                            className="px-8 py-4 rounded-xl font-bold text-slate-500 hover:bg-slate-100 transition-all"
+                                        >
+                                            Back to Menu
+                                        </button>
                                         <button
                                             type="button"
                                             onClick={() => {
@@ -586,7 +646,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                                     showToast(isRtl ? "يرجى إدخال الراتب" : "Please enter salary", 'warning');
                                                     return;
                                                 }
-                                                setStep(3);
+                                                setStep(4);
                                             }}
                                             className="px-16 py-7 bg-slate-900 text-white rounded-[2.5rem] font-black uppercase text-xs tracking-[0.4em] shadow-2xl hover:bg-brand hover:scale-105 active:scale-95 transition-all flex items-center gap-5"
                                         >
@@ -597,8 +657,8 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                 </div>
                             )}
 
-                            {/* STEP 3: DISPATCH DETAILS */}
-                            {step === 3 && (
+                            {/* STEP 4: DISPATCH DETAILS */}
+                            {step === 4 && (
                                 <div className="space-y-8 animate-in slide-in-from-right-12 duration-700">
                                     {/* Date & Email Row */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -702,14 +762,14 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                     <div className="flex items-center gap-6 pt-8">
                                         <button
                                             type="button"
-                                            onClick={() => setStep(2)}
+                                            onClick={() => setStep(3)}
                                             className="flex-1 h-14 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all shadow-sm"
                                         >
                                             {isRtl ? 'رجوع' : 'Back'}
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setStep(4)}
+                                            onClick={() => setStep(5)}
                                             className="flex-1 h-14 bg-[#0F172A] text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20"
                                         >
                                             {isRtl ? 'مراجعة الطلب' : 'Submit Request'}
@@ -718,8 +778,8 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                 </div>
                             )}
 
-                            {/* STEP 4: FORMAL REVIEW */}
-                            {step === 4 && (
+                            {/* STEP 5: FORMAL REVIEW */}
+                            {step === 5 && (
                                 <div className="space-y-20 animate-in zoom-in-95 duration-700">
                                     <div className="text-center">
                                         <h2 className="text-5xl font-black text-slate-900 tracking-tighter uppercase mb-6">{t.review_title}</h2>
@@ -781,7 +841,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                     </div>
 
                                     <div className="flex justify-between items-center pt-20 border-t border-slate-100">
-                                        <button type="button" onClick={() => setStep(3)} className="h-20 px-10 rounded-[2rem] text-[11px] font-black uppercase text-slate-400 hover:text-slate-900 transition-all flex items-center gap-4">
+                                        <button type="button" onClick={() => setStep(4)} className="h-20 px-10 rounded-[2rem] text-[11px] font-black uppercase text-slate-400 hover:text-slate-900 transition-all flex items-center gap-4">
                                             <ChevronLeft className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} /> {t.btn_back}
                                         </button>
                                         <button

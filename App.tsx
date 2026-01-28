@@ -150,6 +150,7 @@ const App: React.FC = () => {
   }
 
   const isManager = authState.user.role === 'admin' || authState.user.role === 'manager';
+  const isAdmin01 = authState.user.code?.toUpperCase() === 'ADMIN01';
 
   if (!authState.pharmacist && !isManager) {
     return <SelectPharmacistPage branch={authState.user!} onSelect={handleSelectPharmacist} onLogout={logout} />;
@@ -248,7 +249,7 @@ const App: React.FC = () => {
             )}
 
             {/* 2b. Manager Item (Top Right for Manager) - HR Admin */}
-            {isManager && (
+            {isManager && !isAdmin01 && (
               <button
                 onClick={() => handleTabChange('hr-manager')}
                 className={`group bg-white p-12 rounded-[3.5rem] border-2 border-slate-50 hover:border-blue-500 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.06)] hover:shadow-blue-500/20 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${isPending ? 'opacity-50 pointer-events-none' : ''}`}
@@ -290,40 +291,42 @@ const App: React.FC = () => {
             )}
 
             {/* 4. Spin & Win (Bottom Right) - ALWAYS VISIBLE */}
-            <button
-              onClick={() => handleTabChange('spin-win')}
-              className={`group bg-brand p-12 rounded-[3.5rem] border-2 border-brand/20 hover:border-white shadow-2xl hover:shadow-brand/50 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${isPending ? 'opacity-50 pointer-events-none' : ''}`}
-            >
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/5 rounded-full -ml-16 -mb-16"></div>
+            {!isAdmin01 && (
+              <button
+                onClick={() => handleTabChange('spin-win')}
+                className={`group bg-brand p-12 rounded-[3.5rem] border-2 border-brand/20 hover:border-white shadow-2xl hover:shadow-brand/50 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${isPending ? 'opacity-50 pointer-events-none' : ''}`}
+              >
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/5 rounded-full -ml-16 -mb-16"></div>
 
-              <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center text-white group-hover:bg-white group-hover:text-brand transition-all duration-500 relative z-10 ring-1 ring-white/20">
-                <QrCode className="w-10 h-10" />
-              </div>
-
-              <div className="relative z-10">
-                <div className="flex items-center space-x-3 mb-4">
-                  <h3 className="text-4xl font-black text-white tracking-tighter">
-                    {isManager ? 'Main Reward Control' : 'SPIN & WIN'}
-                  </h3>
-                  <span className="bg-white/20 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md">Engagement Portal</span>
+                <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center text-white group-hover:bg-white group-hover:text-brand transition-all duration-500 relative z-10 ring-1 ring-white/20">
+                  <QrCode className="w-10 h-10" />
                 </div>
-                <p className="text-white/80 font-medium text-lg leading-relaxed">
-                  {isManager
-                    ? 'Override branch permissions, manage the prize pool, and audit global customer engagement results.'
-                    : 'Deploy interactive customer reward systems. Generate one-time QR tokens to unlock the lucky wheel.'}
-                </p>
-              </div>
 
-              <div className="flex items-center justify-between relative z-10">
-                <div className="flex items-center space-x-4">
-                  <div className="h-0.5 bg-white w-8 group-hover:w-16 transition-all duration-500"></div>
-                  <span className="text-white font-black text-[10px] uppercase tracking-[0.4em]">
-                    {isManager ? 'Executive Console' : 'Initialize Reward Protocol'}
-                  </span>
+                <div className="relative z-10">
+                  <div className="flex items-center space-x-3 mb-4">
+                    <h3 className="text-4xl font-black text-white tracking-tighter">
+                      {isManager ? 'Main Reward Control' : 'SPIN & WIN'}
+                    </h3>
+                    <span className="bg-white/20 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md">Engagement Portal</span>
+                  </div>
+                  <p className="text-white/80 font-medium text-lg leading-relaxed">
+                    {isManager
+                      ? 'Override branch permissions, manage the prize pool, and audit global customer engagement results.'
+                      : 'Deploy interactive customer reward systems. Generate one-time QR tokens to unlock the lucky wheel.'}
+                  </p>
                 </div>
-              </div>
-            </button>
+
+                <div className="flex items-center justify-between relative z-10">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-0.5 bg-white w-8 group-hover:w-16 transition-all duration-500"></div>
+                    <span className="text-white font-black text-[10px] uppercase tracking-[0.4em]">
+                      {isManager ? 'Executive Console' : 'Initialize Reward Protocol'}
+                    </span>
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
 
           <div className="mt-20 text-center animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">

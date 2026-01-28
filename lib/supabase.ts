@@ -237,7 +237,7 @@ export const supabase = {
         const { data } = await supabaseClient
           .from('products')
           .select('*')
-          .or(`name.ilike.%${q}%,internal_code.ilike.${q}%,international_code.eq.${q}`)
+          .or(`name.ilike.%${q}%,internal_code.ilike.%${q}%,international_code.eq.${q}`)
           .limit(20);
 
         if (data && data.length > 0) return data.map(p => ({
@@ -258,7 +258,7 @@ export const supabase = {
 
         return allLocal.filter(p =>
           p.name.toLowerCase().includes(q) ||
-          p.internalCode?.toLowerCase().startsWith(q) ||
+          p.internalCode?.toLowerCase().includes(q) ||
           p.internationalCode === q
         ).slice(0, 20); // Limit results
       }

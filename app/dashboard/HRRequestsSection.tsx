@@ -104,17 +104,26 @@ export const HRRequestsSection: React.FC = () => {
                                             <div className="text-xs font-medium text-slate-400">CPR: {req.cpr}</div>
                                         </td>
                                         <td className="p-6">
-                                            <div className="flex flex-wrap gap-1">
-                                                {req.docTypes.map((type, idx) => (
-                                                    <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
-                                                        {type}
+                                            {req.type === 'Vacation Request' ? (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-purple-50 text-purple-600 border border-purple-100 w-fit">
+                                                        Vacation: {req.leaveType}
                                                     </span>
-                                                ))}
-                                            </div>
+                                                    <span className="text-[10px] font-bold text-slate-400">{req.daysCount} Days</span>
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-wrap gap-1">
+                                                    {req.docTypes.map((type, idx) => (
+                                                        <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                                                            {type}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </td>
                                         <td className="p-6">
-                                            <div className="font-bold text-slate-700 text-sm">{req.reqDate}</div>
-                                            <div className="text-xs text-slate-400 font-medium">{req.deliveryMethod}</div>
+                                            <div className="font-bold text-slate-700 text-sm">{req.reqDate || req.holidayFrom}</div>
+                                            <div className="text-xs text-slate-400 font-medium">{req.deliveryMethod || '—'}</div>
                                         </td>
                                         <td className="p-6">
                                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold capitalize
@@ -132,13 +141,15 @@ export const HRRequestsSection: React.FC = () => {
                                         </td>
                                         <td className="p-6 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    onClick={() => generateWordDocument(req)}
-                                                    className="p-2 hover:bg-blue-100 rounded-lg text-blue-600 transition-all"
-                                                    title="Download Word Template"
-                                                >
-                                                    <FileTextIcon className="w-4 h-4" />
-                                                </button>
+                                                {req.type !== 'Vacation Request' && (
+                                                    <button
+                                                        onClick={() => generateWordDocument(req)}
+                                                        className="p-2 hover:bg-blue-100 rounded-lg text-blue-600 transition-all"
+                                                        title="Download Word Template"
+                                                    >
+                                                        <FileTextIcon className="w-4 h-4" />
+                                                    </button>
+                                                )}
                                                 {req.status === 'Pending' && (
                                                     <>
                                                         <button

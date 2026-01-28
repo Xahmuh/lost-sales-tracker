@@ -146,10 +146,11 @@ export interface HRRequest {
   refNum: string;
   employeeName: string;
   cpr: string;
+  type?: 'Document' | 'Vacation Request';
   docTypes: string[];
-  docReason: string;
-  reqDate: string;
-  deliveryMethod: string;
+  docReason?: string;
+  reqDate?: string;
+  deliveryMethod?: string;
   status: 'Pending' | 'Approved' | 'Rejected' | 'Completed';
   timestamp: string;
   email?: string;
@@ -158,5 +159,17 @@ export interface HRRequest {
   license?: string;
   sponsor?: string;
   joinDate?: string;
-  salary?: string; // Monthly salary in BHD
+  salary?: string;
+
+  // Vacation Fields
+  leaveType?: string;
+  holidayFrom?: string;
+  holidayTo?: string;
+  daysCount?: number;
+  flightOut?: string;
+  flightReturn?: string;
+  jobTitle?: string;
+  department?: string;
+  location?: string;
+  mobile?: string;
 }
