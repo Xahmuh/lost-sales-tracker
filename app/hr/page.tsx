@@ -300,7 +300,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                     title: t.submission_success,
                     html: `<div class="p-6 bg-red-50 border border-red-100 rounded-3xl mt-4"><p class="text-[10px] font-black uppercase text-red-400 mb-2">${t.reference_id}</p><h2 class="text-4xl font-black text-slate-900 tracking-tighter">${refNum}</h2></div>`,
                     confirmButtonColor: '#b91c1c',
-                    confirmButtonText: isRtl ? 'حسناً' : 'Okay'
+                    confirmButtonText: isRtl ? 'تم الإطلاع علي التنبيه' : 'Acknowledged'
                 }).then(() => {
                     if (onBack) onBack(); else window.location.reload();
                 });

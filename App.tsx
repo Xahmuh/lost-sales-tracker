@@ -30,6 +30,7 @@ import { ManagerDashboard } from './components/SpinWin/ManagerDashboard';
 import { HRPortalPage } from './app/hr/page';
 // Import the HR Requests component
 import { HRRequestsSection } from './app/dashboard/HRRequestsSection';
+import { POSGuidelineModal } from './components/POSGuidelineModal';
 
 const App: React.FC = () => {
   const [authState, setAuthState] = useState<AuthState>({ user: null, pharmacist: null });
@@ -37,8 +38,12 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'pos' | 'dashboard' | 'selector' | 'spin-win' | 'hr' | 'hr-manager' | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isPending, startTransition] = useTransition();
+  const [showPOSGuideline, setShowPOSGuideline] = useState(false);
 
   const handleTabChange = (tab: 'pos' | 'dashboard' | 'selector' | 'spin-win' | 'hr' | 'hr-manager' | null) => {
+    if (tab === 'pos') {
+      setShowPOSGuideline(true);
+    }
     startTransition(() => {
       setActiveTab(tab);
     });
@@ -439,6 +444,11 @@ const App: React.FC = () => {
       <div className="print:hidden">
         <Footer />
       </div>
+
+      <POSGuidelineModal
+        isOpen={showPOSGuideline}
+        onClose={() => setShowPOSGuideline(false)}
+      />
     </div>
   );
 };
