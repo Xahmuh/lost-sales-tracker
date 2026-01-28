@@ -81,7 +81,7 @@ The employee must maintain communication with management during the leave period
     ar: {
         policy_title: "سياسة الإجازات",
         policy_desc: "يرجى قراءة اللوائح التالية بعناية قبل المتابعة.",
-        policy_header: "السياسات واللوائح الخاصة بالفشل في العودة من الإجازة في الوقت المحدد",
+        policy_header: "السياسات واللوائح المتعلقة بعدم العودة من الإجازة في موعدها:",
         policy_ack: "لقد قرأت وفهمت لوائح السياسة.",
         btn_cancel: "إلغاء",
         btn_proceed: "متابعة",
@@ -123,8 +123,7 @@ The employee must maintain communication with management during the leave period
         print_system_footer: "أنظمة تبارك المتكاملة",
         print_official_doc: "مستند رسمي للموارد البشرية",
         print_page: "صفحة",
-        policy_text: `السياسات واللوائح المتعلقة بعدم العودة من الإجازة في موعدها:
-
+        policy_text: `
 حرصاً على انتظام العمل وضمان سيره بالشكل المطلوب، تلتزم الشركة بتنظيم آلية واضحة للتعامل مع حالات تأخر الموظف عن العودة من الإجازة بعد انتهائها، وذلك على النحو التالي:
 
 1. الإخطار المسبق
