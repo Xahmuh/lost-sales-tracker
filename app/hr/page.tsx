@@ -411,6 +411,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                     <div className="h-full overflow-y-auto">
                         <VacationRequestFlow
                             employee={employee}
+                            lang={lang}
                             onBack={() => { setSelectedService(null); setStep(2); }}
                             onComplete={() => window.location.reload()}
                         />

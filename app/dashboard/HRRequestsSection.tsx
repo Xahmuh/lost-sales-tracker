@@ -86,8 +86,8 @@ export const HRRequestsSection: React.FC = () => {
                             <tr className="bg-slate-50 border-b border-slate-100">
                                 <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Reference</th>
                                 <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Employee</th>
-                                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Document Type</th>
-                                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Requested Date</th>
+                                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Details</th>
+                                <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Vacation Info</th>
                                 <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
                                 <th className="p-6 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Actions</th>
                             </tr>
@@ -105,11 +105,14 @@ export const HRRequestsSection: React.FC = () => {
                                         </td>
                                         <td className="p-6">
                                             {req.type === 'Vacation Request' ? (
-                                                <div className="flex flex-col gap-1">
+                                                <div className="space-y-1">
                                                     <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-purple-50 text-purple-600 border border-purple-100 w-fit">
                                                         Vacation: {req.leaveType}
                                                     </span>
-                                                    <span className="text-[10px] font-bold text-slate-400">{req.daysCount} Days</span>
+                                                    <div className="text-[10px] font-bold text-slate-400 flex flex-col">
+                                                        <span>Last Vac: {req.lastVacationDate || 'N/A'}</span>
+                                                        <span>Return Date: {req.holidayTo}</span>
+                                                    </div>
                                                 </div>
                                             ) : (
                                                 <div className="flex flex-wrap gap-1">
@@ -122,8 +125,26 @@ export const HRRequestsSection: React.FC = () => {
                                             )}
                                         </td>
                                         <td className="p-6">
-                                            <div className="font-bold text-slate-700 text-sm">{req.reqDate || req.holidayFrom}</div>
-                                            <div className="text-xs text-slate-400 font-medium">{req.deliveryMethod || '—'}</div>
+                                            {req.type === 'Vacation Request' ? (
+                                                <div className="space-y-1">
+                                                    <div className="font-bold text-slate-700 text-xs">
+                                                        {req.holidayFrom} → {req.holidayTo}
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-[10px] font-black text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">{req.daysCount} DAYS</span>
+                                                    </div>
+                                                    {req.notes && (
+                                                        <div className="text-[10px] font-medium text-slate-500 bg-amber-50 p-1.5 rounded-lg border border-amber-100 mt-1 max-w-[200px] italic">
+                                                            "{req.notes}"
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <div className="font-bold text-slate-700 text-sm">{req.reqDate}</div>
+                                                    <div className="text-xs text-slate-400 font-medium">{req.deliveryMethod || '—'}</div>
+                                                </div>
+                                            )}
                                         </td>
                                         <td className="p-6">
                                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold capitalize

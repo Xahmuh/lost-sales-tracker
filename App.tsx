@@ -346,7 +346,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col selection:bg-brand/10">
-      <header className="bg-white/80 backdrop-blur-xl border-b border-slate-100 sticky top-0 z-[100] h-24 shadow-sm">
+      <header className="bg-white/80 backdrop-blur-xl border-b border-slate-100 sticky top-0 z-[100] h-24 shadow-sm print:hidden">
         <div className="max-w-[1600px] mx-auto px-10 h-full flex items-center justify-between">
           <div className="flex items-center space-x-6 cursor-pointer" onClick={() => handleTabChange(authState.user?.role === 'admin' ? 'selector' : 'selector')}>
             <div className="w-14 h-14 bg-brand rounded-2xl flex items-center justify-center shadow-xl shadow-brand/20 overflow-hidden">
@@ -436,7 +436,9 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <Footer />
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </div>
   );
 };

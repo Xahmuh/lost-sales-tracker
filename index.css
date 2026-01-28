@@ -27,3 +27,35 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(185, 28, 28, 0.2);
 }
+
+/* HIGH RELIABILITY PRINTING SYSTEM */
+@media print {
+  /* Step 1: Hide everything on screen and standard layout */
+  body, html {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* Use a class to identify the print wrapper */
+  .force-print-root {
+    visibility: visible !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    background: white !important;
+    z-index: 9999999 !important;
+  }
+
+  /* Deep force visibility for children */
+  .force-print-root, .force-print-root * {
+    visibility: visible !important;
+  }
+
+  /* Explicitly hide the rest of the body content if needed, 
+     but usually hidden print:block + this visibility fix is enough */
+  .print-hidden-legacy {
+    display: none !important;
+  }
+}

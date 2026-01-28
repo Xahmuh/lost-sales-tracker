@@ -172,4 +172,6 @@ export interface HRRequest {
   department?: string;
   location?: string;
   mobile?: string;
+  notes?: string;
+  lastVacationDate?: string;
 }
