@@ -56,8 +56,7 @@ const translations = {
         print_system_footer: "Tabarak Hub Integrated Systems",
         print_official_doc: "Official Human Resources Document",
         print_page: "Page",
-        policy_text: `Policies and Regulations Regarding Failure to Return from Leave on Time:
-
+        policy_text: `
 In the interest of ensuring work regularity and smooth operations, the company is committed to organizing a clear mechanism for handling cases where employees fail to return from leave after its expiration, as follows:
 
 1. Prior Notification
