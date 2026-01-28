@@ -150,7 +150,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
   const [branches, setBranches] = useState<Branch[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<string>(user.role === 'admin' ? 'all' : user.id);
-  const [dateType, setDateType] = useState<'all' | 'today' | '7d' | 'month' | 'custom'>('7d');
+  const [dateType, setDateType] = useState<'all' | 'today' | 'yesterday' | '7d' | 'month' | 'custom'>('today');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -206,6 +206,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
         const threshold = new Date(); threshold.setHours(0, 0, 0, 0);
         rawData = rawData.filter(s => new Date(s.timestamp) >= threshold);
         rawShortages = rawShortages.filter(s => new Date(s.timestamp) >= threshold);
+      } else if (dateType === 'yesterday') {
+        const start = new Date(); start.setDate(start.getDate() - 1); start.setHours(0, 0, 0, 0);
+        const end = new Date(); end.setDate(end.getDate() - 1); end.setHours(23, 59, 59, 999);
+        const filterFn = (ts: string) => {
+          const d = new Date(ts);
+          return d >= start && d <= end;
+        };
+        rawData = rawData.filter(s => filterFn(s.timestamp));
+        rawShortages = rawShortages.filter(s => filterFn(s.timestamp));
       } else if (dateType === '7d') {
         const threshold = new Date(); threshold.setDate(referenceDate.getDate() - 7);
         rawData = rawData.filter(s => new Date(s.timestamp) >= threshold);
@@ -398,6 +407,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
     if (dateType === 'today') {
       trendStartDate = new Date(now);
       trendStartDate.setDate(now.getDate() - 1);
+    } else if (dateType === 'yesterday') {
+      trendStartDate = new Date(now);
+      trendStartDate.setDate(now.getDate() - 2);
+      trendEndDate = new Date(now);
+      trendEndDate.setDate(now.getDate() - 1);
     } else if (dateType === '7d') {
       trendStartDate = new Date(now);
       trendStartDate.setDate(now.getDate() - 6);
@@ -548,6 +562,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
       if (dateType === 'today') {
         const threshold = new Date(); threshold.setHours(0, 0, 0, 0);
         query = query.gte('timestamp', threshold.toISOString());
+      } else if (dateType === 'yesterday') {
+        const start = new Date(); start.setDate(referenceDate.getDate() - 1); start.setHours(0, 0, 0, 0);
+        const end = new Date(); end.setDate(referenceDate.getDate() - 1); end.setHours(23, 59, 59, 999);
+        query = query.gte('timestamp', start.toISOString()).lte('timestamp', end.toISOString());
       } else if (dateType === '7d') {
         const threshold = new Date(); threshold.setDate(referenceDate.getDate() - 7);
         query = query.gte('timestamp', threshold.toISOString());
@@ -775,6 +793,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
       if (dateType === 'today') {
         const threshold = new Date(); threshold.setHours(0, 0, 0, 0);
         query = query.gte('timestamp', threshold.toISOString());
+      } else if (dateType === 'yesterday') {
+        const start = new Date(); start.setDate(referenceDate.getDate() - 1); start.setHours(0, 0, 0, 0);
+        const end = new Date(); end.setDate(referenceDate.getDate() - 1); end.setHours(23, 59, 59, 999);
+        query = query.gte('timestamp', start.toISOString()).lte('timestamp', end.toISOString());
       } else if (dateType === '7d') {
         const threshold = new Date(); threshold.setDate(referenceDate.getDate() - 7);
         query = query.gte('timestamp', threshold.toISOString());
@@ -930,6 +952,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
       if (dateType === 'today') {
         const threshold = new Date(); threshold.setHours(0, 0, 0, 0);
         startFilter = threshold.toISOString();
+      } else if (dateType === 'yesterday') {
+        const start = new Date(); start.setDate(referenceDate.getDate() - 1); start.setHours(0, 0, 0, 0);
+        const end = new Date(); end.setDate(referenceDate.getDate() - 1); end.setHours(23, 59, 59, 999);
+        startFilter = start.toISOString();
+        endFilter = end.toISOString();
       } else if (dateType === '7d') {
         const threshold = new Date(); threshold.setDate(referenceDate.getDate() - 7);
         startFilter = threshold.toISOString();
@@ -1191,7 +1218,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
               <button onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
                 className="flex items-center gap-3 px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-700 hover:bg-white hover:border-red-200 transition-all">
                 <CalendarDays size={16} className="text-red-600" />
-                <span>{dateType === 'today' ? 'Today' : dateType === '7d' ? 'Last 7 Days' : dateType === 'month' ? 'Last Month' : dateType === 'custom' ? 'Custom Period' : 'Archive View'}</span>
+                <span>{dateType === 'today' ? 'Today' : dateType === 'yesterday' ? 'Yesterday' : dateType === '7d' ? 'Last 7 Days' : dateType === 'month' ? 'Last Month' : dateType === 'custom' ? 'Custom Period' : 'Archive View'}</span>
                 <ChevronDown size={14} />
               </button>
               {isDatePickerOpen && (
@@ -1201,6 +1228,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
                       {[
                         { id: 'all', label: 'All Time', sub: 'Total Historical Archive' },
                         { id: 'today', label: 'Today', sub: 'Active Duty Records' },
+                        { id: 'yesterday', label: 'Yesterday', sub: 'Previous Day Performance' },
                         { id: '7d', label: 'Last 7 Days', sub: 'Weekly Performance' },
                         { id: 'month', label: 'Last Month', sub: '30-Day Fiscal Cycle' },
                         { id: 'custom', label: 'Choose Period', sub: 'Manual Calendar Protocol' }

@@ -56,24 +56,27 @@ const translations = {
         print_system_footer: "Tabarak Hub Integrated Systems",
         print_official_doc: "Official Human Resources Document",
         print_page: "Page",
-        policy_text: `Policies and Regulations for Failing to Return from Leave on Time:
-1. Prior Notification:
-- An employee who is unable to return to work on time after their leave must immediately notify the management before the scheduled return date at least 15 days from his return.
-- Justifiable and approved reasons for the delay must be provided.
-2. Corrective Actions:
-- If the employee does not provide prior notification or the reasons given are not justified, corrective actions will be taken, starting with a written warning will be issued and placed in the employee's personal file.
-3. Impact on Salary:
-- Days of delay may be deducted from the employee's salary if the extended leave is not approved or justified.
-- Days of delay can be counted as unpaid leave if they exceed the entitled paid leave.
-4. Disciplinary Actions:
-- In case of repeated failure to return on time without justified reasons, disciplinary actions may be taken, including suspension or termination of employment.
-- Each case will be individually assessed based on the surrounding circumstances.
-5. Coordination with Management:
-- The employee must coordinate with management to arrange the return and confirm the final return date.
-- Medical reports or supporting documents should be provided in the case of extended medical leave.
-6. Communication and Follow-up:
-- The employee must maintain open communication channels with management during the leave period and report any changes in return plans.
-- An employee will be designated to communicate with management to follow up on the situation and ensure compliance with company policies.`
+        policy_text: `Policies and Regulations Regarding Failure to Return from Leave on Time:
+
+In the interest of ensuring work regularity and smooth operations, the company is committed to organizing a clear mechanism for handling cases where employees fail to return from leave after its expiration, as follows:
+
+1. Prior Notification
+In the event that an employee is unable to return to work on the scheduled date after their leave ends, they must notify the management in advance, at least (15) days before the scheduled return date, explaining the reasons and providing supporting evidence, provided the reasons are acceptable and approved by management.
+
+2. Corrective Actions
+In the event that the employee fails to provide prior notification, or if the reasons provided are found to be unjustified, management reserves the right to take appropriate corrective actions, starting with a written warning to be added to the employee's personnel file.
+
+3. Financial Impact
+Failure to approve a leave extension will result in the deduction of the delay days from the employee's salary. These days may also be considered unpaid leave if the employee's entitled leave balance is exceeded.
+
+4. Disciplinary Actions
+In the event of repeated failure to return on time without acceptable justifications, management reserves the right to take progressive disciplinary actions, which may reach suspension or termination of employment, taking into account an individual assessment of each case according to its circumstances.
+
+5. Coordination with Management
+The employee is committed to continuous coordination with Area Managers to organize return procedures and confirm the final return date, with the necessity of providing medical reports or supporting documents if a sick leave extension is requested.
+
+6. Coordination and Follow-up
+The employee must maintain communication with management during the leave period and notify them immediately of any updates or changes that may affect the return date.`
     },
     ar: {
         policy_title: "سياسة الإجازات",
@@ -120,23 +123,27 @@ const translations = {
         print_system_footer: "أنظمة تبارك المتكاملة",
         print_official_doc: "مستند رسمي للموارد البشرية",
         print_page: "صفحة",
-        policy_text: `السياسات واللوائح الخاصة بعدم العودة من الإجازة في موعدها:
-1. الإخطار المسبق:
-- الموظف الذي لا يستطيع العودة إلى العمل في الوقت المحدد له بعد انتهاء إجازته، يجب عليه إبلاغ الإدارة فوراً وقبل تاريخ العودة بما لا يقل عن 15 يوماً.
-- يجب تقديم أسباب مبررة ومعتمدة لهذا التأخير.
-2. الإجراءات التصحيحية:
-- إذا لم يقم الموظف بالإخطار المسبق أو كانت الأسباب غير مبررة، سيتم اتخاذ إجراءات تصحيحية تبدأ بتوجيه إنذار كتابي يوضع في الملف الشخصي.
-3. التأثير على الراتب:
-- قد يتم خصم أيام التأخير من راتب الموظف إذا لم يتم اعتماد التمديد.
-- يمكن اعتبار أيام التأخير إجازة غير مدفوعة الأجر إذا تجاوزت رصيد الإجازات المستحقة.
-4. الإجراءات التأديبية:
-- في حال تكرار التأخر دون أسباب مبررة، قد يتم اتخاذ إجراءات تأديبية قد تصل إلى الإيقاف أو إنهاء الخدمة.
-- يتم تقييم كل حالة بشكل فردي بناءً على الظروف المحيطة.
-5. التنسيق مع الإدارة:
-- يجب على الموظف التنسيق مع الإدارة لترتيب العودة وتأكيد موعد العودة النهائي.
-- يجب تقديم تقارير طبية أو مستندات داعمة في حالة تمديد الإجازة المرضية.
-6. التواصل والمتابعة:
-- يجب على الموظف الحفاظ على قنوات تواصل مفتوحة مع الإدارة خلال فترة الإجازة والإبلاغ عن أي تغيير في الخطط.`
+        policy_text: `السياسات واللوائح المتعلقة بعدم العودة من الإجازة في موعدها:
+
+حرصاً على انتظام العمل وضمان سيره بالشكل المطلوب، تلتزم الشركة بتنظيم آلية واضحة للتعامل مع حالات تأخر الموظف عن العودة من الإجازة بعد انتهائها، وذلك على النحو التالي:
+
+1. الإخطار المسبق
+في حال تعذّر عودة الموظف إلى العمل في الموعد المحدد بعد انتهاء إجازته، يجب عليه إخطار الإدارة بشكل مسبق، وبمدة لا تقل عن (15) يوماً قبل تاريخ العودة المقرر، مع توضيح الأسباب وتقديم ما يثبت ذلك، على أن تكون الأسباب مقبولة ومعتمدة من الإدارة.
+
+2. الإجراءات التصحيحية
+في حال عدم قيام الموظف بالإخطار المسبق، أو إذا تبين أن الأسباب المقدمة غير مبررة، يحق للإدارة اتخاذ الإجراءات التصحيحية المناسبة، والتي تبدأ بتوجيه إنذار كتابي يُضاف إلى الملف الوظيفي للموظف.
+
+3. الأثر المالي
+يترتب على عدم اعتماد تمديد الإجازة خصم أيام التأخير من راتب الموظف، كما يجوز اعتبار هذه الأيام إجازة غير مدفوعة الأجر في حال تجاوز رصيد الإجازات المستحق.
+
+4. الإجراءات التأديبية
+في حال تكرار التأخر عن العودة دون مبررات مقبولة، تحتفظ الإدارة بحق اتخاذ إجراءات تأديبية تصاعدية قد تصل إلى الإيقاف عن العمل أو إنهاء الخدمة، مع مراعاة تقييم كل حالة على حدة وفقاً لظروفها.
+
+5. التنسيق مع الإدارة
+يلتزم الموظف بالتنسيق المستمر مع مديري المناطق لتنظيم إجراءات العودة وتأكيد تاريخ العودة النهائي، مع ضرورة تقديم التقارير الطبية أو المستندات الداعمة في حال طلب تمديد الإجازة المرضية.
+
+6. التواصل والمتابعة
+يتوجب على الموظف الحفاظ على التواصل مع الإدارة خلال فترة الإجازة، وإبلاغها فوراً بأي مستجدات أو تغييرات قد تؤثر على موعد العودة.`
     }
 };
 
@@ -215,7 +222,6 @@ export const VacationRequestFlow: React.FC<VacationRequestFlowProps> = ({ employ
             return;
         }
 
-        // Mandatory Fields Validation
         const mandatoryFields = [
             'jobTitle', 'passport', 'department', 'location',
             'joinDate', 'holidayFrom', 'holidayTo', 'lastVacationDate'
@@ -246,7 +252,6 @@ export const VacationRequestFlow: React.FC<VacationRequestFlowProps> = ({ employ
         }).then(() => onComplete());
     };
 
-    // --- REFINED PRINT HANDLER ---
     const handlePrint = useReactToPrint({
         contentRef: printRef,
         documentTitle: `Vacation_Request_${employee.name}`,
@@ -369,134 +374,153 @@ export const VacationRequestFlow: React.FC<VacationRequestFlowProps> = ({ employ
 
             {/* --- REFINED PRINT VIEW (FOR REACT-TO-PRINT) --- */}
             <div className="hidden">
-                <div ref={printRef} className="print-root" dir={isRtl ? 'rtl' : 'ltr'}>
+                <div ref={printRef} dir={isRtl ? 'rtl' : 'ltr'}>
                     <style>{`
                     @media print {
                       @page {
                         size: A4;
-                        margin: 15mm;
+                        margin: 0;
                       }
                       body {
                         -webkit-print-color-adjust: exact;
                         print-color-adjust: exact;
+                        margin: 0;
+                        padding: 0;
                       }
-                      .print-root {
-                        font-family: ${isRtl ? "'Arial', serif" : "'Arial', sans-serif"};
-                        color: #000;
-                        direction: ${isRtl ? 'rtl' : 'ltr'};
-                        padding: 20px;
+                      .print-page {
+                        width: 210mm;
+                        height: 297mm;
+                        padding: 15mm;
+                        box-sizing: border-box;
+                        page-break-after: always;
+                        display: flex;
+                        flex-direction: column;
+                        background: white;
+                        position: relative;
+                        overflow: hidden;
+                      }
+                      .print-page:last-child {
+                        page-break-after: avoid;
                       }
                     }
                   `}</style>
 
-                    {/* Header Logo/Title Section */}
-                    <div className={`flex items-center justify-between border-b-4 border-black pb-6 mb-8 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
-                        <div className={`flex items-center gap-4 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
-                            <div className="w-14 h-14 bg-black text-white rounded-xl flex items-center justify-center">
-                                <ShieldCheck className="w-9 h-9" />
-                            </div>
-                            <div className={isRtl ? 'text-right' : 'text-left'}>
-                                <h1 className="text-2xl font-black uppercase text-black">{isRtl ? 'صيدلية تبارك' : 'Tabarak Pharmacy'}</h1>
-                                <p className="text-[9px] font-bold text-gray-500 tracking-[0.2em] uppercase">HR Management System</p>
-                            </div>
-                        </div>
-                        <div className={isRtl ? 'text-left' : 'text-right'} dir="ltr">
-                            <p className="text-[10px] font-bold text-gray-400">{t.print_date} {new Date().toLocaleDateString()}</p>
-                            <p className="text-xs font-black text-black">{t.print_ref}{new Date().getFullYear()}</p>
-                        </div>
-                    </div>
-
-                    {/* Main Form Title */}
-                    <div className="text-center mb-10">
-                        <h2 className="text-2xl font-black border-2 border-black inline-block px-12 py-3 uppercase tracking-widest bg-gray-50">
-                            {t.print_form_title}
-                        </h2>
-                    </div>
-
-                    {/* Employee Block */}
-                    <div className="grid grid-cols-2 gap-x-12 gap-y-6 mb-8 p-8 border border-gray-100 rounded-[2rem] bg-gray-50/30">
-                        <PrintItem label={t.lbl_emp_name} value={employee.name} isRtl={isRtl} />
-                        <PrintItem label={t.lbl_cpr} value={employee.cpr} isRtl={isRtl} />
-                        <PrintItem label={t.lbl_job_title} value={formData.jobTitle} isRtl={isRtl} />
-                        <PrintItem label={t.lbl_dept} value={formData.department} isRtl={isRtl} />
-                        <PrintItem label={t.lbl_last_vac_date} value={formData.lastVacationDate} isRtl={isRtl} />
-                    </div>
-
-                    {/* Leave Reason Grid */}
-                    <div className="mb-8">
-                        <div className="text-[10px] font-black bg-black text-white p-2 mb-4 tracking-widest text-center uppercase">{t.print_reason_section}</div>
-                        <div className="grid grid-cols-3 gap-6 p-4">
-                            {['Annual', 'Sick', 'Emergency', 'Special', 'Final', 'Other'].map(type => (
-                                <div key={type} className={`flex items-center gap-3 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
-                                    <div className={`w-5 h-5 border-2 border-black flex items-center justify-center text-sm font-bold ${formData.leaveType === type ? 'bg-black text-white' : ''}`}>
-                                        {formData.leaveType === type ? 'X' : ''}
+                    {/* --- PAGE 1: REQUEST DETAILS --- */}
+                    <div className="print-page">
+                        <div className="flex-grow">
+                            {/* Header Logo/Title Section */}
+                            <div className={`flex items-center justify-between border-b-4 border-black pb-4 mb-6 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+                                <div className={`flex items-center gap-4 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+                                    <div className="w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center bg-white border border-gray-100">
+                                        <img src="/logo.jpg" alt="Company Logo" className="w-full h-full object-contain" />
                                     </div>
-                                    <span className="text-sm font-bold text-gray-800">{isRtl ? (type === 'Annual' ? 'سنوية' : type === 'Sick' ? 'مرضية' : type === 'Emergency' ? 'طارئة' : type === 'Special' ? 'خاصة' : type === 'Final' ? 'نهائية' : 'أخرى') : type}</span>
+                                    <div className={isRtl ? 'text-right' : 'text-left'}>
+                                        <h1 className="text-xl font-black uppercase text-black">{isRtl ? 'صيدلية تبارك' : 'Tabarak Pharmacy'}</h1>
+                                        <p className="text-[8px] font-bold text-gray-500 tracking-[0.2em] uppercase">HR Management System</p>
+                                    </div>
                                 </div>
-                            ))}
+                                <div className={isRtl ? 'text-left' : 'text-right'} dir="ltr">
+                                    <p className="text-[9px] font-bold text-gray-400">{t.print_date} {new Date().toLocaleDateString()}</p>
+                                    <p className="text-xs font-black text-black">{t.print_ref}{new Date().getFullYear()}</p>
+                                </div>
+                            </div>
+
+                            {/* Main Form Title */}
+                            <div className="text-center mb-6">
+                                <h2 className="text-xl font-black border-2 border-black inline-block px-10 py-2 uppercase tracking-widest bg-gray-50">
+                                    {t.print_form_title}
+                                </h2>
+                            </div>
+
+                            {/* Employee Block */}
+                            <div className="grid grid-cols-2 gap-x-8 gap-y-4 mb-6 p-6 border border-gray-100 rounded-[1.5rem] bg-gray-50/30">
+                                <PrintItem label={t.lbl_emp_name} value={employee.name} isRtl={isRtl} />
+                                <PrintItem label={t.lbl_cpr} value={employee.cpr} isRtl={isRtl} />
+                                <PrintItem label={t.lbl_job_title} value={formData.jobTitle} isRtl={isRtl} />
+                                <PrintItem label={t.lbl_dept} value={formData.department} isRtl={isRtl} />
+                                <PrintItem label={t.lbl_last_vac_date} value={formData.lastVacationDate} isRtl={isRtl} />
+                                <PrintItem label={t.lbl_passport} value={formData.passport} isRtl={isRtl} />
+                            </div>
+
+                            {/* Leave Reason Grid */}
+                            <div className="mb-6">
+                                <div className="text-[9px] font-black bg-black text-white p-2 mb-3 tracking-widest text-center uppercase">{t.print_reason_section}</div>
+                                <div className="grid grid-cols-3 gap-4 p-2">
+                                    {['Annual', 'Sick', 'Emergency', 'Special', 'Final', 'Other'].map(type => (
+                                        <div key={type} className={`flex items-center gap-3 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+                                            <div className={`w-4 h-4 border-2 border-black flex items-center justify-center text-xs font-bold ${formData.leaveType === type ? 'bg-black text-white' : ''}`}>
+                                                {formData.leaveType === type ? 'X' : ''}
+                                            </div>
+                                            <span className="text-xs font-bold text-gray-800">{isRtl ? (type === 'Annual' ? 'سنوية' : type === 'Sick' ? 'مرضية' : type === 'Emergency' ? 'طارئة' : type === 'Special' ? 'خاصة' : type === 'Final' ? 'نهائية' : 'أخرى') : type}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Leave Details Block */}
+                            <div className="mb-6">
+                                <div className="text-[9px] font-black bg-black text-white p-2 mb-3 tracking-widest text-center uppercase">{t.print_details_section}</div>
+                                <div className="grid grid-cols-3 gap-6 p-2">
+                                    <PrintItem label={t.lbl_from_date} value={formData.holidayFrom} isRtl={isRtl} />
+                                    <PrintItem label={t.lbl_to_date} value={formData.holidayTo} isRtl={isRtl} />
+                                    <PrintItem label={t.lbl_days} value={String(formData.daysCount)} isRtl={isRtl} />
+                                </div>
+                            </div>
+
+                            {/* Signature Section */}
+                            <div className="mt-8 grid grid-cols-2 gap-16">
+                                <div className="border-t-2 border-black pt-2">
+                                    <p className="text-center font-black text-black mb-10 italic text-sm">{t.print_emp_sig}</p>
+                                    <p className="text-[8px] text-gray-400 text-center uppercase font-bold tracking-widest">Employee Signature</p>
+                                </div>
+                                <div className="border-t-2 border-black pt-2">
+                                    <p className="text-center font-black text-black mb-10 italic text-sm">{t.print_mgmt_sig}</p>
+                                    <p className="text-[8px] text-gray-400 text-center uppercase font-bold tracking-widest">Management Approval</p>
+                                </div>
+                            </div>
+
+                            {/* Notes Section in Print */}
+                            {formData.notes && (
+                                <div className="mt-6 p-4 border border-gray-200 rounded-xl bg-gray-50/50">
+                                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2">{t.lbl_notes}</span>
+                                    <p className="text-xs font-medium text-gray-700 italic">"{formData.notes}"</p>
+                                </div>
+                            )}
                         </div>
+                        <PrintFooter t={t} isRtl={isRtl} pageNum={1} />
                     </div>
 
-                    {/* Leave Details Block */}
-                    <div className="mb-10">
-                        <div className="text-[10px] font-black bg-black text-white p-2 mb-4 tracking-widest text-center uppercase">{t.print_details_section}</div>
-                        <div className="grid grid-cols-3 gap-8 p-4">
-                            <PrintItem label={t.lbl_from_date} value={formData.holidayFrom} isRtl={isRtl} />
-                            <PrintItem label={t.lbl_to_date} value={formData.holidayTo} isRtl={isRtl} />
-                            <PrintItem label={t.lbl_days} value={String(formData.daysCount)} isRtl={isRtl} />
-                        </div>
-                    </div>
+                    {/* --- PAGE 2: POLICY --- */}
+                    <div className="print-page">
+                        <div className="flex-grow pt-8">
+                            <div className="text-center mb-8 border-b-2 border-black pb-4">
+                                <h2 className="text-xl font-black uppercase tracking-widest text-black">{t.print_policy_ack_title}</h2>
+                                <p className="text-[9px] text-gray-500 font-bold uppercase mt-1">Management Leave Policies & Regulations</p>
+                            </div>
 
-                    {/* Signature Section */}
-                    <div className="mt-16 grid grid-cols-2 gap-20">
-                        <div className="border-t-2 border-black pt-4">
-                            <p className="text-center font-black text-black mb-12 italic">{t.print_emp_sig}</p>
-                            <p className="text-[9px] text-gray-400 text-center uppercase font-bold tracking-widest">Employee Signature</p>
-                        </div>
-                        <div className="border-t-2 border-black pt-4">
-                            <p className="text-center font-black text-black mb-12 italic">{t.print_mgmt_sig}</p>
-                            <p className="text-[9px] text-gray-400 text-center uppercase font-bold tracking-widest">Management Approval</p>
-                        </div>
-                    </div>
+                            <div className={`text-xs leading-relaxed text-black whitespace-pre-wrap mb-8 ${isRtl ? 'text-right' : 'text-left'}`} dir={isRtl ? 'rtl' : 'ltr'}>
+                                {t.policy_text}
+                            </div>
 
-                    {/* Notes Section in Print */}
-                    {formData.notes && (
-                        <div className="mt-8 p-4 border border-gray-200 rounded-xl bg-gray-50/50">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-2">{t.lbl_notes}</span>
-                            <p className="text-sm font-medium text-gray-700 italic">"{formData.notes}"</p>
-                        </div>
-                    )}
-
-                    {/* Policy Page Break */}
-                    <div style={{ pageBreakBefore: 'always' }} className="pt-10">
-                        <div className="text-center mb-8 border-b-2 border-black pb-4">
-                            <h2 className="text-xl font-black uppercase tracking-widest">{t.print_policy_ack_title}</h2>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase mt-1">Management Leave Policies</p>
-                        </div>
-                        <div className={`text-[12px] ${isRtl ? 'leading-[2]' : 'leading-loose'} text-justify text-gray-800 italic`} dir={isRtl ? 'rtl' : 'ltr'}>
-                            {t.policy_text}
-                        </div>
-
-                        <div className="mt-12 p-8 border-2 border-dashed border-gray-300 rounded-3xl">
-                            <p className={`font-black text-sm text-black mb-8 leading-relaxed ${isRtl ? 'text-right' : 'text-left'}`}>
-                                {isRtl
-                                    ? `أنا الموقع أدناه، ${employee.name}، أقر بأنني قرأت وفهمت التعليمات المذكورة أعلاه وألتزم بالعودة للعمل في الموعد المحدد.`
-                                    : `I, the undersigned ${employee.name}, acknowledge that I have read and understood the above instructions and commit to returning to work on the scheduled date.`}
-                            </p>
-                            <div className="grid grid-cols-2 gap-10">
-                                <div className={`border-b border-gray-400 pb-2 ${isRtl ? 'text-right' : 'text-left'}`}>{isRtl ? 'التوقيع:' : 'Signature:'}</div>
-                                <div className={`border-b border-gray-400 pb-2 ${isRtl ? 'text-right' : 'text-left'}`}>{isRtl ? 'التاريخ:' : 'Date:'} {new Date().toLocaleDateString()}</div>
+                            <div className="p-8 border-2 border-black rounded-2xl bg-gray-50/50">
+                                <p className={`font-black text-sm text-black mb-8 leading-relaxed ${isRtl ? 'text-right' : 'text-left'}`}>
+                                    {isRtl
+                                        ? `أنا الموظف الموقع أدناه، ${employee.name}، أقر بأنني قرأت وفهمت التعليمات المذكورة أعلاه وألتزم بالعودة للعمل في الموعد المحدد.`
+                                        : `I, the undersigned employee ${employee.name}, acknowledge that I have read and understood the above regulations and commit to returning to work on the scheduled date.`}
+                                </p>
+                                <div className="grid grid-cols-2 gap-16">
+                                    <div className={`border-b-2 border-black pb-3 ${isRtl ? 'text-right' : 'text-left'}`}>
+                                        <span className="text-[9px] font-black uppercase text-gray-400 block mb-1">{isRtl ? 'توقيع الموظف' : 'Employee Signature'}</span>
+                                        <div className="h-6"></div>
+                                    </div>
+                                    <div className={`border-b-2 border-black pb-3 ${isRtl ? 'text-right' : 'text-left'}`}>
+                                        <span className="text-[9px] font-black uppercase text-gray-400 block mb-1">{isRtl ? 'التاريخ' : 'Date'}</span>
+                                        <div className="font-bold text-black text-sm">{new Date().toLocaleDateString()}</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Fixed Document Footer */}
-                    <div className="fixed bottom-0 left-0 right-0 p-8">
-                        <div className={`flex justify-between items-center text-[8px] font-black text-gray-300 uppercase tracking-[0.3em] border-t border-gray-100 pt-4 ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
-                            <span>{t.print_system_footer}</span>
-                            <span>{t.print_official_doc}</span>
-                            <span>{t.print_page} 1 / 2</span>
-                        </div>
+                        <PrintFooter t={t} isRtl={isRtl} pageNum={2} />
                     </div>
                 </div>
             </div>
@@ -504,10 +528,21 @@ export const VacationRequestFlow: React.FC<VacationRequestFlowProps> = ({ employ
     );
 };
 
-// --- PRIVATE PRINT ITEM ---
+// --- PRIVATE HELPERS ---
+
 const PrintItem = ({ label, value, isRtl }: { label: string, value: string, isRtl: boolean }) => (
     <div className={`space-y-1 ${isRtl ? 'text-right' : 'text-left'}`}>
         <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest block">{label}</span>
         <span className="text-lg font-black text-black block border-b-2 border-gray-100 pb-1">{value || '---'}</span>
+    </div>
+);
+
+const PrintFooter = ({ t, isRtl, pageNum }: any) => (
+    <div className="mt-auto pt-4 border-t border-gray-100 px-10 pb-6">
+        <div className={`flex justify-between items-center text-[8px] font-black text-gray-300 uppercase tracking-[0.3em] ${isRtl ? 'flex-row-reverse' : 'flex-row'}`}>
+            <span>{t.print_system_footer}</span>
+            <span>{t.print_official_doc}</span>
+            <span className="text-gray-400">PAGE {pageNum} OF 2</span>
+        </div>
     </div>
 );
