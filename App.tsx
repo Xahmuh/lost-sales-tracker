@@ -4,6 +4,7 @@ import { LoginPage } from './app/login/page';
 import { SelectPharmacistPage } from './app/select-pharmacist/page';
 import { POSPage } from './app/pos/page';
 import { DashboardPage } from './app/dashboard/page';
+import { WorkforcePage } from './app/workforce/page';
 import { Branch, Pharmacist, AuthState } from './types';
 import { supabase } from './lib/supabase';
 import {
@@ -35,12 +36,12 @@ import { POSGuidelineModal } from './components/POSGuidelineModal';
 const App: React.FC = () => {
   const [authState, setAuthState] = useState<AuthState>({ user: null, pharmacist: null });
   // Added 'hr-manager' to activeTab
-  const [activeTab, setActiveTab] = useState<'pos' | 'dashboard' | 'selector' | 'spin-win' | 'hr' | 'hr-manager' | null>(null);
+  const [activeTab, setActiveTab] = useState<'pos' | 'dashboard' | 'selector' | 'spin-win' | 'hr' | 'hr-manager' | 'workforce' | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isPending, startTransition] = useTransition();
   const [showPOSGuideline, setShowPOSGuideline] = useState(false);
 
-  const handleTabChange = (tab: 'pos' | 'dashboard' | 'selector' | 'spin-win' | 'hr' | 'hr-manager' | null) => {
+  const handleTabChange = (tab: 'pos' | 'dashboard' | 'selector' | 'spin-win' | 'hr' | 'hr-manager' | 'workforce' | null) => {
     if (tab === 'pos') {
       setShowPOSGuideline(true);
     }
@@ -295,6 +296,27 @@ const App: React.FC = () => {
               </button>
             )}
 
+            {/* 3b. Workforce Management (Bottom Left) - Manager only */}
+            {authState.user?.role === 'manager' && (
+              <button
+                onClick={() => handleTabChange('workforce')}
+                className={`group bg-white p-12 rounded-[3.5rem] border-2 border-slate-50 hover:border-emerald-500 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.06)] hover:shadow-emerald-500/20 transition-all duration-700 text-left flex flex-col justify-between h-[420px] active:scale-[0.98] relative overflow-hidden ${isPending ? 'opacity-50 pointer-events-none' : ''}`}
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/[0.02] rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000"></div>
+                <div className="w-20 h-20 bg-slate-50 rounded-3xl flex items-center justify-center text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500 relative z-10">
+                  <Users className="w-10 h-10" />
+                </div>
+                <div className="relative z-10">
+                  <h3 className="text-4xl font-black text-slate-900 mb-4 tracking-tighter">Workforce Analytics</h3>
+                  <p className="text-slate-500 opacity-80 font-medium text-lg leading-relaxed">Optimize staffing levels, calculate relief requirements, and analyze coverage ratios.</p>
+                </div>
+                <div className="flex items-center space-x-4 relative z-10">
+                  <div className="h-0.5 bg-emerald-500 w-8 group-hover:w-16 transition-all duration-500"></div>
+                  <span className="text-emerald-500 font-black text-[10px] uppercase tracking-[0.4em]">Launch Planner</span>
+                </div>
+              </button>
+            )}
+
             {/* 4. Spin & Win (Bottom Right) - ALWAYS VISIBLE */}
             {!isAdmin01 && (
               <button
@@ -433,6 +455,8 @@ const App: React.FC = () => {
             </div>
             <HRRequestsSection />
           </div>
+        ) : activeTab === 'workforce' ? (
+          <WorkforcePage onBack={() => handleTabChange('selector')} />
         ) : (
           <DashboardPage
             user={authState.user!}
