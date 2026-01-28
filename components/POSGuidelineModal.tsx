@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, AlertTriangle } from 'lucide-react';
 
 interface POSGuidelineModalProps {
     isOpen: boolean;
@@ -17,9 +17,9 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
 
                 {/* Red Header & Content Section */}
                 <div className="bg-[#b81c1d] p-8 md:p-12 relative overflow-hidden">
-                    {/* Background Watermark 'X' */}
+                    {/* Background Watermark - Warning Sign */}
                     <div className="absolute top-0 right-0 -mr-16 -mt-16 opacity-10 pointer-events-none">
-                        <X size={400} className="text-white rotate-12" strokeWidth={3} />
+                        <AlertTriangle size={400} className="text-white rotate-12" strokeWidth={3} />
                     </div>
 
                     {/* Header Title & Close */}
