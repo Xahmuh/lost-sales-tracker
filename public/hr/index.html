@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabarak HR Portal</title>
-    
+
     <!-- FONTS & ICONS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- TAILWIND CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- LIBRARIES -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -28,7 +31,7 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], arabic: ['Tajawal', 'sans-serif'] },
                     colors: {
-                        brand: { 50:'#fef2f2', 100:'#fee2e2', 500:'#ef4444', 600:'#dc2626', 700:'#b91c1c', 900:'#7f1d1d' }
+                        brand: { 50: '#fef2f2', 100: '#fee2e2', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c', 900: '#7f1d1d' }
                     },
                     animation: { 'fade-in': 'fadeIn 0.5s ease-out forwards' },
                     keyframes: { fadeIn: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } } }
@@ -39,53 +42,84 @@
 
     <style>
         /* Styles Overrides */
-        body.font-arabic { font-family: 'Tajawal', sans-serif !important; }
-        .select2-container .select2-selection--single, .select2-container .select2-selection--multiple {
-            border-color: #e5e7eb !important; padding: 0.5rem !important; height: auto !important; border-radius: 0.75rem !important;
+        body.font-arabic {
+            font-family: 'Tajawal', sans-serif !important;
         }
+
+        .select2-container .select2-selection--single,
+        .select2-container .select2-selection--multiple {
+            border-color: #e5e7eb !important;
+            padding: 0.5rem !important;
+            height: auto !important;
+            border-radius: 0.75rem !important;
+        }
+
         .select2-container--default .select2-selection--multiple .select2-selection__choice {
-            background-color: #fef2f2 !important; border: 1px solid #fee2e2 !important; color: #b91c1c !important; border-radius: 6px !important;
+            background-color: #fef2f2 !important;
+            border: 1px solid #fee2e2 !important;
+            color: #b91c1c !important;
+            border-radius: 6px !important;
         }
+
         /* Skeleton Animation */
         .skeleton {
             background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-            background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 6px;
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 6px;
         }
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 text-slate-800 h-screen overflow-hidden flex font-sans antialiased" dir="ltr">
 
     <!-- LEFT SIDEBAR -->
     <div class="hidden lg:flex w-5/12 bg-slate-900 text-white flex-col justify-between p-12 relative overflow-hidden">
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-brand-600/20 blur-3xl"></div>
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-blue-600/10 blur-3xl"></div>
-        
+
         <div class="z-10 relative">
             <!-- LOGO CONTAINER (FIXED) -->
-            <div class="w-20 h-20 bg-brand-600 rounded-2xl flex items-center justify-center mb-8 shadow-2xl shadow-brand-900/50 p-2">
-                <img src="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NiA1NiI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fS5jbHMtMntmaWxsOiNkOWQ5ZDk7fTwvc3R5bGU+PC9kZWZzPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMyLjU5LDM1LjY1YTcuMyw3LjMsMCwwLDEsMS40OSw3LjgxSDMyLjYzWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQ0Ljg3LDQwLjIxbDAsMy4yMS01LjczLDAtMy42MSwwYTcuNjIsNy42MiwwLDAsMCwuMy0uODhBOC43OCw4Ljc4LDAsMCwwLDMyLjU4LDMzdjBBMjIuMTMsMjIuMTMsMCwwLDEsMzMsMjguNzJhMTcuOTMsMTcuOTMsMCwwLDEsMy40OS03LjI4LDIwLjY5LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExLDIuMTksMi41Mi4wNi4wNmExNy4wOCwxNy4wOCwwLDAsMC04LDkuMzMsMjAuNzksMjAuNzksMCwwLDAtLjY1LDdoMy43MVYzMS4xMWgwbDMuODIsMCwwLDcuMjVIMzYuNjdjMCwuNjMsMCwxLjI1LDAsMS44N2g4LjE1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2LjI1LDMwYy0xLjQ1LS44Mi0zLTEuNjMtNC41My0yLjQ5YTE3LjI5LDE3LjI9LDAsMCwwLTcuOC04LjhoMGwyLjIzLTIuNTcuMjUuMTFhMjEuMDcsMjEuMDcsMCwwLDEsNi4yMSw1LjM1QTE3Ljc5LDE3Ljc5LDAsMCwxLDI2LDI4LjcyQzI2LjEyLDI5LjEzLDI2LjE5LDI5LjU0LDI2LjI1LDMwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE5LjcxLDQzLjc5aDBsNi43MSwwLDAtMTAtMy45NS0xLjk1YTM0LjQxLDM0LjQxLDAsMCwxLDAsMy41MmgwbC0uMTYsMy4zMmgwYzAsLjYzLDAsMS4yNSwwLDEuODdIMTQuMThsMCwzLjIyaDUuNTVaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuNzgsNDUuMTdhNS4wNiw1LjA2LDAsMCwxLTQuMDksMi40OCwxLjY0LDEuNjQsMCwwLDEtMS4wNi0uNzJBMS4zMiwxLjMyLDAsMCwxLDI2LDQ1LjM1QzI3LjIxLDQ0LjIzLDI5LjIyLDQ0LjQ3LDMwLjc4LDQ1LjE3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMxLjQ0LDQxLjUxYTcuNzYsNy43NiwwLDAsMS0uNjYsMy4zOUE3LjM5LDcuMzksMCwwLDAsMjksNDQuMzNjLTEuNzEtLjM1LTQuMjUuMTUtNC4xOCwyLjA3YTEuNzIsMS43MiwwLDAsMCwuOTIsMS4zMkgyMC4zMVY0NC40OWg0LjQ1cTMsMCwzLTMuNjRWMzEuMkwzMS40MSwzMFY0MC44OUMzMS40Myw0MS4xLDMxLjQ0LDQxLjMxLDMxLjQ0LDQxLjUxWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE0LjcsMzQuODVhMi44LDIuOCwwLDAsMSwuNjQtLjgyLDMuMjUsMy4yNSwwLDAsMSwyLjE0LS43N2gxLjd2MS41SDE3LjZhMS40NywxLjQ3LDAsMCwwLS44OS4yOC45My45MywwLDAsMC0uMzguOHYuOGgyLjg1djEuNTloLTQuN1YzNS44NEEyLjI0LDIuMjQsMCwwLDEsMTQuNywzNC44NVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOS4wNiwxNS41NGE1LjY4LDUuNjgsMCwwLDAsMi4yMywzLjI5QTM2LjUzLDM2LjUzLDAsMCwwLDI1LDIxYTUuNzYsNS43NiwwLDAsMSwyLjExLDIuNTIsMTguNDgsMTguNDgsMCwwLDEsLjkzLDYuODRsMy0xLjA2YTEzLjA2LDEzLjA2LDAsMCwxLC42OS01Ljc4QTUuNjcsNS42NywwLDAsMSwzMy44LDIxYTM2LjUzLDM2LjUzLDAsMCwwLDMuNzItMi4xMiw1Ljc1LDUuNzUsMCwwLDAsMi4yNC0zLjI5Wk0zOCwxNy43YTYuMzgsNi4zOCwwLDAsMS0yLjU1LDEuNjQsMTEuODgsMTEuODgsMCwwLDEtMi4zNC43MS4wOC4wOCwwLDAsMS0uMDYtLjE1LDcsNywwLDAsMCwzLjQ4LTMuMjUsNC43MSw0LjcxLDAsMCwwLC4yNS0uNzUuMDguMDgsMCwwLDEsLjA4LS4wNmgyYy4wNiwwLC4xLDAsLjA4LjA5QTQuMjgsNC4yOCwwLDAsMSwzOCwxNy43WiIvPjxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iMTkuMDUiIHk9IjE0LjA3IiB3aWR0aD0iMjAuNyIgaGVpZ2h0PSIxLjE3Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDUuMDcsMTguNmExNi43MywxNi43MywwLDAsMC00LjIzLjcsMTUuNTIsMTUuNTIsMCwwLDAtMi40MywxLDEyLjg4LDEyLjg4LDAsMCwwLTEuOSwxLjE3LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQ0Ljg5LDQzLjQybC01LjczLDBhMjguODYsMjguODYsMCwwLDAsMy0xLjQ2LDI4LjI1LDI4LjI1LDAsMCwwLDIuNzMtMS43N1oiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xOS43MSw0My43OWEyNy4xMSwyNy4xMSwwLDAsMS0yLjkzLTEuNDksMjUuNzksMjUuNzksMCwwLDEtMi41OS0xLjc1aDBsMCwzLjIyaDUuNTVaIi8+PGcgaWQ9IlNOQUtFIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zNS45NCw0My4wNWE3LDcsMCwwLDEtMi4zNSwzLjcsNy44Niw3Ljg2LDAsMCwwLS43OC0uODVjMy0yLjkzLDIuMzMtOC4xNS0xLjEyLTEwLjYzVjMyLjg5QTguNzQsOC43NCwwLDAsMSwzNS45NCw0My4wNVoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0zMy43Miw0Ny44NGE1LDUsMCwwLDAtLjUzLS44NSw2LjU0LDYuNTQsMCwwLDAtLjc0LS44NCw3LjMzLDcuMzMsMCwwLDAtMy41My0xLjgxLDUuNDcsNS40NywwLDAsMC0xLjcyLS4wNmgtLjA3Yy0xLjI0LjE5LTIuMzQuODMtMi4zLDIuMTJhMS43MywxLjczLDAsMCwwLC44OSwxLjMxLDMuNzMsMy43MywwLDAsMCwuNzIuMzYsNi4xMyw2LjEzLDAsMCwwLDIuMjYuMzEsOC4wNiw4LjA2LDAsMCwwLDQuMi0xLjE5QTcsNywwLDAsMSwzNCw1MC4wNiwyLjc4LDIuNzgsMCwwLDAsMzMuNzIsNDcuODRabS02LjEsMGEyLjQ2LDIuNDYsMCwwLDEtMi4xNy0uODcsMS4zNSwxLjM1LDAsMCwxLC4zNi0xLjU4YzEuNjUtMS41Niw0Ljc3LS40OSw2LjE4Ljc5bC4yMS4yQTcuNDgsNy40OCwwLDAsMSwyNy42Miw0Ny44MVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zMC41OSwxMS43NmMtLjI0LTIuNDctMS44Ni01LjI4LTQuOTQtNS4zNkMxMywzLjQ3LDMuNTQsMTUuMSwxMi4yNSwyNC40NmMzLjU2LDQuMzcsMTAsNywxNS4xNSw5LjU4di0zLjJjLS40NS0uMjgtLjkyLS41NS0xLjQtLjgzLTQuMjctMi40My05LjM5LTQuNzEtMTIuMTYtOC40OGwtLjEyLS4xN2MtMi41My0zLjgzLTIuMjYtNy41NCwxLjY1LTEwLjQxYTkuMTgsOS4xOCwwLDAsMSw2LjE2LTEuNjZoLjM3bC40NiwwYy43My4xOCwxLDEsMS42MSwxLjQuOTEuNjIsNC45MSwyLjgxLDYuMjIsMi4xYS41Ny41NywwLDAsMCwuMTMtLjA4QTEsMSwwLDAsMCwzMC41OSwxMS43NlpNMjguNzIsOS4zOGEuNDUuNDUsMCwwLDEtLjUyLjI5Yy0uMjYsMC0uNDQtLjIxLS40MS0uNEEuNDQuNDQsMCwwLDEsMjguMzEsOUMyOC41Niw5LDI4Ljc1LDkuMTksMjguNzIsOS4zOFoiLz48L2c+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuMiwxMi40MmExLDEsMCwwLDAsLjE2LjM3LjMuMywwLDAsMCwuMTQuMTEuOC44LDAsMCwwLC4yLjA2bC4xMywwYS4yOS4yOSwwLDAsMSwuMTIuMS4zMi4zMiwwLDAsMSwuMDUuMjYuODIuODIsMCwwLDEtLjI1LjM4LDIuMTgsMi4xOCwwLDAsMCwuMDgtLjQuMjYuMjYsMCwwLDAsMC0uMTQuMzEuMzEsMCwwLDAtLjE1LS4wNiwxLDEsMCwwLDEtLjI0LS4xLjQxLjQxLDAsMCwxLS4xOC0uMTlBLjUyLjUyLDAsMCwxLDMwLjIsMTIuNDJaIi8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSI0MC43OSIgeT0iMjQuMjMiIHdpZHRoPSIyLjgyIiBoZWlnaHQ9IjIuNDUiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik00My42MSwyNC4yM3YyLjQ1SDQwLjc5YTUuMzIsNS4zMiwwLDAsMCwxLjgyLTEuMTEsNC44OCw0Ljg4LDAsMCwwLDEtMS4zM1oiLz48cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjQwLjk2IiB5PSI0NS4wMyIgd2lkdGg9IjIuODIiIGhlaWdodD0iMi40NSIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQzLjc5LDQ1djIuNDVINDFhNS40Niw1LjQ2LDAsMCwwLDEuODItMS4xMSw0Ljc3LDQuNzcsMCwwLDAsMS0xLjM0WiIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iNDAuNzkiIHk9IjI3LjI1IiB3aWR0aD0iMi44MiIgaGVpZ2h0PSIyLjQ1Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDMuNjEsMjcuMjVWMjkuN0g0MC43OWE1LjMyLDUuMzIsMCwwLDAsMS44Mi0xLjExLDQuODgsNC44OCwwLDAsMCwxLTEuMzNaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjYsMzBjLTIuNTgtLjc2LTkuNDgtMi45NC0xMy4wOC03LjQ2QTExLjIyLDExLjIyLDAsMCwxLDEwLjA3LDE2YTcuNzYsNy43NiwwLDAsMSwuNzItMy41Miw3LjY2LDcuNjYsMCwwLDEsNC42My00LDguMzEsOC4zMSwwLDAsMSw2LjQ4Ljg1aC0uMzdBOS4xOCw5LjE4LDAsMCwwLDE1LjM3LDExYy0zLjkxLDIuODctNC4xOCw2LjU4LTEuNjUsMTAuNDFsLjEyLjE3QzE2LjYxLDI1LjMsMjEuNzMsMjcuNTgsMjYsMzBaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjIuNjMsMjEuNTRhMTQuOSwxNC45LDAsMCwwLTEuNzktMS4wOCwxNi42NCwxNi42NCwwLDAsMC0yLjYyLTEuMDYsMTgsMTgsMCwwLDAtNC4yOC0uNzVsMi4yMy0yLjU3LjI1LjExQTIxLjA3LDIxLjA3LDAsMCwxLDIyLjYzLDIxLjU0WiIvPjwvc3ZnPg==" alt="Tabarak Logo" class="w-full h-full object-contain">
+            <div
+                class="w-20 h-20 bg-brand-600 rounded-2xl flex items-center justify-center mb-8 shadow-2xl shadow-brand-900/50 p-2">
+                <img src="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NiA1NiI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fS5jbHMtMntmaWxsOiNkOWQ5ZDk7fTwvc3R5bGU+PC9kZWZzPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMyLjU5LDM1LjY1YTcuMyw3LjMsMCwwLDEsMS40OSw3LjgxSDMyLjYzWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQ0Ljg3LDQwLjIxbDAsMy4yMS01LjczLDAtMy42MSwwYTcuNjIsNy42MiwwLDAsMCwuMy0uODhBOC43OCw4Ljc4LDAsMCwwLDMyLjU4LDMzdjBBMjIuMTMsMjIuMTMsMCwwLDEsMzMsMjguNzJhMTcuOTMsMTcuOTMsMCwwLDEsMy40OS03LjI4LDIwLjY5LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExLDIuMTksMi41Mi4wNi4wNmExNy4wOCwxNy4wOCwwLDAsMC04LDkuMzMsMjAuNzksMjAuNzksMCwwLDAtLjY1LDdoMy43MVYzMS4xMWgwbDMuODIsMCwwLDcuMjVIMzYuNjdjMCwuNjMsMCwxLjI1LDAsMS44N2g4LjE1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2LjI1LDMwYy0xLjQ1LS44Mi0zLTEuNjMtNC41My0yLjQ5YTE3LjI5LDE3LjI9LDAsMCwwLTcuOC04LjhoMGwyLjIzLTIuNTcuMjUuMTFhMjEuMDcsMjEuMDcsMCwwLDEsNi4yMSw1LjM1QTE3Ljc5LDE3Ljc5LDAsMCwxLDI2LDI4LjcyQzI2LjEyLDI5LjEzLDI2LjE5LDI5LjU0LDI2LjI1LDMwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE5LjcxLDQzLjc5aDBsNi43MSwwLDAtMTAtMy45NS0xLjk1YTM0LjQxLDM0LjQxLDAsMCwxLDAsMy41MmgwbC0uMTYsMy4zMmgwYzAsLjYzLDAsMS4yNSwwLDEuODdIMTQuMThsMCwzLjIyaDUuNTVaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuNzgsNDUuMTdhNS4wNiw1LjA2LDAsMCwxLTQuMDksMi40OCwxLjY0LDEuNjQsMCwwLDEtMS4wNi0uNzJBMS4zMiwxLjMyLDAsMCwxLDI2LDQ1LjM1QzI3LjIxLDQ0LjIzLDI5LjIyLDQ0LjQ3LDMwLjc4LDQ1LjE3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMxLjQ0LDQxLjUxYTcuNzYsNy43NiwwLDAsMS0uNjYsMy4zOUE3LjM5LDcuMzksMCwwLDAsMjksNDQuMzNjLTEuNzEtLjM1LTQuMjUuMTUtNC4xOCwyLjA3YTEuNzIsMS43MiwwLDAsMCwuOTIsMS4zMkgyMC4zMVY0NC40OWg0LjQ1cTMsMCwzLTMuNjRWMzEuMkwzMS40MSwzMFY0MC44OUMzMS40Myw0MS4xLDMxLjQ0LDQxLjMxLDMxLjQ0LDQxLjUxWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE0LjcsMzQuODVhMi44LDIuOCwwLDAsMSwuNjQtLjgyLDMuMjUsMy4yNSwwLDAsMSwyLjE0LS43N2gxLjd2MS41SDE3LjZhMS40NywxLjQ3LDAsMCwwLS44OS4yOC45My45MywwLDAsMC0uMzguOHYuOGgyLjg1djEuNTloLTQuN1YzNS44NEEyLjI0LDIuMjQsMCwwLDEsMTQuNywzNC44NVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOS4wNiwxNS41NGE1LjY4LDUuNjgsMCwwLDAsMi4yMywzLjI5QTM2LjUzLDM2LjUzLDAsMCwwLDI1LDIxYTUuNzYsNS43NiwwLDAsMSwyLjExLDIuNTIsMTguNDgsMTguNDgsMCwwLDEsLjkzLDYuODRsMy0xLjA2YTEzLjA2LDEzLjA2LDAsMCwxLC42OS01Ljc4QTUuNjcsNS42NywwLDAsMSwzMy44LDIxYTM2LjUzLDM2LjUzLDAsMCwwLDMuNzItMi4xMiw1Ljc1LDUuNzUsMCwwLDAsMi4yNC0zLjI5Wk0zOCwxNy43YTYuMzgsNi4zOCwwLDAsMS0yLjU1LDEuNjQsMTEuODgsMTEuODgsMCwwLDEtMi4zNC43MS4wOC4wOCwwLDAsMS0uMDYtLjE1LDcsNywwLDAsMCwzLjQ4LTMuMjUsNC43MSw0LjcxLDAsMCwwLC4yNS0uNzUuMDguMDgsMCwwLDEsLjA4LS4wNmgyYy4wNiwwLC4xLDAsLjA4LjA5QTQuMjgsNC4yOCwwLDAsMSwzOCwxNy43WiIvPjxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iMTkuMDUiIHk9IjE0LjA3IiB3aWR0aD0iMjAuNyIgaGVpZ2h0PSIxLjE3Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDUuMDcsMTguNmExNi43MywxNi43MywwLDAsMC00LjIzLjcsMTUuNTIsMTUuNTIsMCwwLDAtMi40MywxLDEyLjg4LDEyLjg4LDAsMCwwLTEuOSwxLjE3LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQ0Ljg5LDQzLjQybC01LjczLDBhMjguODYsMjguODYsMCwwLDAsMy0xLjQ2LDI4LjI1LDI4LjI1LDAsMCwwLDIuNzMtMS43N1oiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xOS43MSw0My43OWEyNy4xMSwyNy4xMSwwLDAsMS0yLjkzLTEuNDksMjUuNzksMjUuNzksMCwwLDEtMi41OS0xLjc1aDBsMCwzLjIyaDUuNTVaIi8+PGcgaWQ9IlNOQUtFIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zNS45NCw0My4wNWE3LDcsMCwwLDEtMi4zNSwzLjcsNy44Niw3Ljg2LDAsMCwwLS43OC0uODVjMy0yLjkzLDIuMzMtOC4xNS0xLjEyLTEwLjYzVjMyLjg5QTguNzQsOC43NCwwLDAsMSwzNS45NCw0My4wNVoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0zMy43Miw0Ny44NGE1LDUsMCwwLDAtLjUzLS44NSw2LjU0LDYuNTQsMCwwLDAtLjc0LS44NCw3LjMzLDcuMzMsMCwwLDAtMy41My0xLjgxLDUuNDcsNS40NywwLDAsMC0xLjcyLS4wNmgtLjA3Yy0xLjI0LjE5LTIuMzQuODMtMi4zLDIuMTJhMS43MywxLjczLDAsMCwwLC44OSwxLjMxLDMuNzMsMy43MywwLDAsMCwuNzIuMzYsNi4xMyw2LjEzLDAsMCwwLDIuMjYuMzEsOC4wNiw4LjA2LDAsMCwwLDQuMi0xLjE5QTcsNywwLDAsMSwzNCw1MC4wNiwyLjc4LDIuNzgsMCwwLDAsMzMuNzIsNDcuODRabS02LjEsMGEyLjQ2LDIuNDYsMCwwLDEtMi4xNy0uODcsMS4zNSwxLjM1LDAsMCwxLC4zNi0xLjU4YzEuNjUtMS41Niw0Ljc3LS40OSw2LjE4Ljc5bC4yMS4yQTcuNDgsNy40OCwwLDAsMSwyNy42Miw0Ny44MVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zMC41OSwxMS43NmMtLjI0LTIuNDctMS44Ni01LjI4LTQuOTQtNS4zNkMxMywzLjQ3LDMuNTQsMTUuMSwxMi4yNSwyNC40NmMzLjU2LDQuMzcsMTAsNywxNS4xNSw5LjU4di0zLjJjLS40NS0uMjgtLjkyLS41NS0xLjQtLjgzLTQuMjctMi40My05LjM5LTQuNzEtMTIuMTYtOC40OGwtLjEyLS4xN2MtMi41My0zLjgzLTIuMjYtNy41NCwxLjY1LTEwLjQxYTkuMTgsOS4xOCwwLDAsMSw2LjE2LTEuNjZoLjM3bC40NiwwYy43My4xOCwxLDEsMS42MSwxLjQuOTEuNjIsNC45MSwyLjgxLDYuMjIsMi4xYS41Ny41NywwLDAsMCwuMTMtLjA4QTEsMSwwLDAsMCwzMC41OSwxMS43NlpNMjguNzIsOS4zOGEuNDUuNDUsMCwwLDEtLjUyLjI5Yy0uMjYsMC0uNDQtLjIxLS40MS0uNEEuNDQuNDQsMCwwLDEsMjguMzEsOUMyOC41Niw5LDI4Ljc1LDkuMTksMjguNzIsOS4zOFoiLz48L2c+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuMiwxMi40MmExLDEsMCwwLDAsLjE2LjM3LjMuMywwLDAsMCwuMTQuMTEuOC44LDAsMCwwLC4yLjA2bC4xMywwYS4yOS4yOSwwLDAsMSwuMTIuMS4zMi4zMiwwLDAsMSwuMDUuMjYuODIuODIsMCwwLDEtLjI1LjM4LDIuMTgsMi4xOCwwLDAsMCwuMDgtLjQuMjYuMjYsMCwwLDAsMC0uMTQuMzEuMzEsMCwwLDAtLjE1LS4wNiwxLDEsMCwwLDEtLjI0LS4xLjQxLjQxLDAsMCwxLS4xOC0uMTlBLjUyLjUyLDAsMCwxLDMwLjIsMTIuNDJaIi8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSI0MC43OSIgeT0iMjQuMjMiIHdpZHRoPSIyLjgyIiBoZWlnaHQ9IjIuNDUiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik00My42MSwyNC4yM3YyLjQ1SDQwLjc5YTUuMzIsNS4zMiwwLDAsMCwxLjgyLTEuMTEsNC44OCw0Ljg4LDAsMCwwLDEtMS4zM1oiLz48cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjQwLjk2IiB5PSI0NS4wMyIgd2lkdGg9IjIuODIiIGhlaWdodD0iMi40NSIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQzLjc5LDQ1djIuNDVINDFhNS40Niw1LjQ2LDAsMCwwLDEuODItMS4xMSw0Ljc3LDQuNzcsMCwwLDAsMS0xLjM0WiIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iNDAuNzkiIHk9IjI3LjI1IiB3aWR0aD0iMi44MiIgaGVpZ2h0PSIyLjQ1Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDMuNjEsMjcuMjVWMjkuN0g0MC43OWE1LjMyLDUuMzIsMCwwLDAsMS44Mi0xLjExLDQuODgsNC44OCwwLDAsMCwxLTEuMzNaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjYsMzBjLTIuNTgtLjc2LTkuNDgtMi45NC0xMy4wOC03LjQ2QTExLjIyLDExLjIyLDAsMCwxLDEwLjA3LDE2YTcuNzYsNy43NiwwLDAsMSwuNzItMy41Miw3LjY2LDcuNjYsMCwwLDEsNC42My00LDguMzEsOC4zMSwwLDAsMSw2LjQ4Ljg1aC0uMzdBOS4xOCw5LjE4LDAsMCwwLDE1LjM3LDExYy0zLjkxLDIuODctNC4xOCw2LjU4LTEuNjUsMTAuNDFsLjEyLjE3QzE2LjYxLDI1LjMsMjEuNzMsMjcuNTgsMjYsMzBaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjIuNjMsMjEuNTRhMTQuOSwxNC45LDAsMCwwLTEuNzktMS4wOCwxNi42NCwxNi42NCwwLDAsMC0yLjYyLTEuMDYsMTgsMTgsMCwwLDAtNC4yOC0uNzVsMi4yMy0yLjU3LjI1LjExQTIxLjA3LDIxLjA3LDAsMCwxLDIyLjYzLDIxLjU0WiIvPjwvc3ZnPg=="
+                    alt="Tabarak Logo" class="w-full h-full object-contain">
             </div>
 
-            <h1 class="text-5xl font-bold tracking-tight mb-4 leading-tight" data-i18n="brand_title">Tabarak<br>Pharmacy</h1>
+            <h1 class="text-5xl font-bold tracking-tight mb-4 leading-tight" data-i18n="brand_title">Tabarak<br>Pharmacy
+            </h1>
             <p class="text-slate-400 text-lg font-light" data-i18n="brand_subtitle">Advanced HR Self-Service Portal</p>
         </div>
-        <div class="z-10 relative"><p class="text-xs text-slate-600">© 2025 Tabarak Pharmacy. HR Secure System by AME.</p></div>
+        <div class="z-10 relative">
+            <p class="text-xs text-slate-600">© 2025 Tabarak Pharmacy. HR Secure System by AME.</p>
+        </div>
     </div>
 
     <!-- RIGHT SIDE -->
     <div class="w-full lg:w-7/12 h-full flex flex-col relative overflow-y-auto bg-white">
-        
+
         <!-- Navbar -->
         <div class="p-5 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0 z-20">
             <div class="flex items-center gap-3 lg:hidden">
                 <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center p-2 shadow-lg">
-                    <img src="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NiA1NiI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fS5jbHMtMntmaWxsOiNkOWQ5ZDk7fTwvc3R5bGU+PC9kZWZzPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMyLjU5LDM1LjY1YTcuMyw3LjMsMCwwLDEsMS40OSw3LjgxSDMyLjYzWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQ0Ljg3LDQwLjIxbDAsMy4yMS01LjczLDAtMy42MSwwYTcuNjIsNy42MiwwLDAsMCwuMy0uODhBOC43OCw4Ljc4LDAsMCwwLDMyLjU4LDMzdjBBMjIuMTMsMjIuMTMsMCwwLDEsMzMsMjguNzJhMTcuOTMsMTcuOTMsMCwwLDEsMy40OS03LjI4LDIwLjY5LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExLDIuMTksMi41Mi4wNi4wNmExNy4wOCwxNy4wOCwwLDAsMC04LDkuMzMsMjAuNzksMjAuNzksMCwwLDAtLjY1LDdoMy43MVYzMS4xMWgwbDMuODIsMCwwLDcuMjVIMzYuNjdjMCwuNjMsMCwxLjI1LDAsMS44N2g4LjE1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2LjI1LDMwYy0xLjQ1LS44Mi0zLTEuNjMtNC41My0yLjQ5YTE3LjI5LDE3LjI5LDAsMCwwLTcuOC04LjhoMGwyLjIzLTIuNTcuMjUuMTFhMjEuMDcsMjEuMDcsMCwwLDEsNi4yMSw1LjM1QTE3Ljc5LDE3Ljc5LDAsMCwxLDI2LDI4LjcyQzI2LjEyLDI5LjEzLDI2LjE5LDI5LjU0LDI2LjI1LDMwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE5LjcxLDQzLjc5aDBsNi43MSwwLDAtMTAtMy45NS0xLjk1YTM0LjQxLDM0LjQxLDAsMCwxLDAsMy41MmgwbC0uMTYsMy4zMmgwYzAsLjYzLDAsMS4yNSwwLDEuODdIMTQuMThsMCwzLjIyaDUuNTVaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuNzgsNDUuMTdhNS4wNiw1LjA2LDAsMCwxLTQuMDksMi40OCwxLjY0LDEuNjQsMCwwLDEtMS4wNi0uNzJBMS4zMiwxLjMyLDAsMCwxLDI2LDQ1LjM1QzI3LjIxLDQ0LjIzLDI5LjIyLDQ0LjQ3LDMwLjc4LDQ1LjE3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMxLjQ0LDQxLjUxYTcuNzYsNy43NiwwLDAsMS0uNjYsMy4zOUE3LjM5LDcuMzksMCwwLDAsMjksNDQuMzNjLTEuNzEtLjM1LTQuMjUuMTUtNC4xOCwyLjA3YTEuNzIsMS43MiwwLDAsMCwuOTIsMS4zMkgyMC4zMVY0NC40OWg0LjQ1cTMsMCwzLTMuNjRWMzEuMkwzMS40MSwzMFY0MC44OUMzMS40Myw0MS4xLDMxLjQ0LDQxLjMxLDMxLjQ0LDQxLjUxWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE0LjcsMzQuODVhMi44LDIuOCwwLDAsMSwuNjQtLjgyLDMuMjUsMy4yNSwwLDAsMSwyLjE0LS43N2gxLjd2MS41SDE3LjZhMS40NywxLjQ3LDAsMCwwLS44OS4yOC45My45MywwLDAsMC0uMzguOHYuOGgyLjg1djEuNTloLTQuN1YzNS44NEEyLjI0LDIuMjQsMCwwLDEsMTQuNywzNC44NVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOS4wNiwxNS41NGE1LjY4LDUuNjgsMCwwLDAsMi4yMywzLjI5QTM2LjUzLDM2LjUzLDAsMCwwLDI1LDIxYTUuNzYsNS43NiwwLDAsMSwyLjExLDIuNTIsMTguNDgsMTguNDgsMCwwLDEsLjkzLDYuODRsMy0xLjA2YTEzLjA2LDEzLjA2LDAsMCwxLC42OS01Ljc4QTUuNjcsNS42NywwLDAsMSwzMy44LDIxYTM2LjUzLDM2LjUzLDAsMCwwLDMuNzItMi4xMiw1Ljc1LDUuNzUsMCwwLDAsMi4yNC0zLjI5Wk0zOCwxNy43YTYuMzgsNi4zOCwwLDAsMS0yLjU1LDEuNjQsMTEuODgsMTEuODgsMCwwLDEtMi4zNC43MS4wOC4wOCwwLDAsMS0uMDYtLjE1LDcsNywwLDAsMCwzLjQ4LTMuMjUsNC43MSw0LjcxLDAsMCwwLC4yNS0uNzUuMDguMDgsMCwwLDEsLjA4LS4wNmgyYy4wNiwwLC4xLDAsLjA4LjA5QTQuMjgsNC4yOCwwLDAsMSwzOCwxNy43WiIvPjxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iMTkuMDUiIHk9IjE0LjA3IiB3aWR0aD0iMjAuNyIgaGVpZ2h0PSIxLjE3Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDUuMDcsMTguNmExNi43MywxNi43MywwLDAsMC00LjIzLjcsMTUuNTIsMTUuNTIsMCwwLDAtMi40MywxLDEyLjg4LDEyLjg4LDAsMCwwLTEuOSwxLjE3LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQ0Ljg5LDQzLjQybC01LjczLDBhMjguODYsMjguODYsMCwwLDAsMy0xLjQ2LDI4LjI1LDI4LjI1LDAsMCwwLDIuNzMtMS43N1oiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xOS43MSw0My43OWEyNy4xMSwyNy4xMSwwLDAsMS0yLjkzLTEuNDksMjUuNzksMjUuNzksMCwwLDEtMi41OS0xLjc1aDBsMCwzLjIyaDUuNTVaIi8+PGcgaWQ9IlNOQUtFIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zNS45NCw0My4wNWE3LDcsMCwwLDEtMi4zNSwzLjcsNy44Niw3Ljg2LDAsMCwwLS43OC0uODVjMy0yLjkzLDIuMzMtOC4xNS0xLjEyLTEwLjYzVjMyLjg5QTguNzQsOC43NCwwLDAsMSwzNS45NCw0My4wNVoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0zMy43Miw0Ny44NGE1LDUsMCwwLDAtLjUzLS44NSw2LjU0LDYuNTQsMCwwLDAtLjc0LS44NCw3LjMzLDcuMzMsMCwwLDAtMy41My0xLjgxLDUuNDcsNS40NywwLDAsMC0xLjcyLS4wNmgtLjA3Yy0xLjI0LjE5LTIuMzQuODMtMi4zLDIuMTJhMS43MywxLjczLDAsMCwwLC44OSwxLjMxLDMuNzMsMy43MywwLDAsMCwuNzIuMzYsNi4xMyw2LjEzLDAsMCwwLDIuMjYuMzEsOC4wNiw4LjA2LDAsMCwwLDQuMi0xLjE5QTcsNywwLDAsMSwzNCw1MC4wNiwyLjc4LDIuNzgsMCwwLDAsMzMuNzIsNDcuODRabS02LjEsMGEyLjQ2LDIuNDYsMCwwLDEtMi4xNy0uODcsMS4zNSwxLjM1LDAsMCwxLC4zNi0xLjU4YzEuNjUtMS41Niw0Ljc3LS40OSw2LjE4Ljc5bC4yMS4yQTcuNDgsNy40OCwwLDAsMSwyNy42Miw0Ny44MVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zMC41OSwxMS43NmMtLjI0LTIuNDctMS44Ni01LjI4LTQuOTQtNS4zNkMxMywzLjQ3LDMuNTQsMTUuMSwxMi4yNSwyNC40NmMzLjU2LDQuMzcsMTAsNywxNS4xNSw5LjU4di0zLjJjLS40NS0uMjgtLjkyLS41NS0xLjQtLjgzLTQuMjctMi40My05LjM5LTQuNzEtMTIuMTYtOC40OGwtLjEyLS4xN2MtMi41My0zLjgzLTIuMjYtNy41NCwxLjY1LTEwLjQxYTkuMTgsOS4xOCwwLDAsMSw2LjE2LTEuNjZoLjM3bC40NiwwYy43My4xOCwxLDEsMS42MSwxLjQuOTEuNjIsNC45MSwyLjgxLDYuMjIsMi4xYS41Ny41NywwLDAsMCwuMTMtLjA4QTEsMSwwLDAsMCwzMC41OSwxMS43NlpNMjguNzIsOS4zOGEuNDUuNDUsMCwwLDEtLjUyLjI5Yy0uMjYsMC0uNDQtLjIxLS40MS0uNEEuNDQuNDQsMCwwLDEsMjguMzEsOUMyOC41Niw5LDI4Ljc1LDkuMTksMjguNzIsOS4zOFoiLz48L2c+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuMiwxMi40MmExLDEsMCwwLDAsLjE2LjM3LjMuMywwLDAsMCwuMTQuMTEuOC44LDAsMCwwLC4yLjA2bC4xMywwYS4yOS4yOSwwLDAsMSwuMTIuMS4zMi4zMiwwLDAsMSwuMDUuMjYuODIuODIsMCwwLDEtLjI1LjM4LDIuMTgsMi4xOCwwLDAsMCwuMDgtLjQuMjYuMjYsMCwwLDAsMC0uMTQuMzEuMzEsMCwwLDAtLjE1LS4wNiwxLDEsMCwwLDEtLjI0LS4xLjQxLjQxLDAsMCwxLS4xOC0uMTlBLjUyLjUyLDAsMCwxLDMwLjIsMTIuNDJaIi8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSI0MC43OSIgeT0iMjQuMjMiIHdpZHRoPSIyLjgyIiBoZWlnaHQ9IjIuNDUiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik00My42MSwyNC4yM3YyLjQ1SDQwLjc5YTUuMzIsNS4zMiwwLDAsMCwxLjgyLTEuMTEsNC44OCw0Ljg4LDAsMCwwLDEtMS4zM1oiLz48cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjQwLjk2IiB5PSI0NS4wMyIgd2lkdGg9IjIuODIiIGhlaWdodD0iMi40NSIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQzLjc5LDQ1djIuNDVINDFhNS40Niw1LjQ2LDAsMCwwLDEuODItMS4xMSw0Ljc3LDQuNzcsMCwwLDAsMS0xLjM0WiIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iNDAuNzkiIHk9IjI3LjI1IiB3aWR0aD0iMi44MiIgaGVpZ2h0PSIyLjQ1Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDMuNjEsMjcuMjVWMjkuN0g0MC43OWE1LjMyLDUuMzIsMCwwLDAsMS44Mi0xLjExLDQuODgsNC44OCwwLDAsMCwxLTEuMzNaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjYsMzBjLTIuNTgtLjc2LTkuNDgtMi45NC0xMy4wOC03LjQ2QTExLjIyLDExLjIyLDAsMCwxLDEwLjA3LDE2YTcuNzYsNy43NiwwLDAsMSwuNzItMy41Miw3LjY2LDcuNjYsMCwwLDEsNC42My00LDguMzEsOC4zMSwwLDAsMSw2LjQ4Ljg1aC0uMzdBOS4xOCw5LjE4LDAsMCwwLDE1LjM3LDExYy0zLjkxLDIuODctNC4xOCw2LjU4LTEuNjUsMTAuNDFsLjEyLjE3QzE2LjYxLDI1LjMsMjEuNzMsMjcuNTgsMjYsMzBaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjIuNjMsMjEuNTRhMTQuOSwxNC45LDAsMCwwLTEuNzktMS4wOCwxNi42NCwxNi42NCwwLDAsMC0yLjYyLTEuMDYsMTgsMTgsMCwwLDAtNC4yOC0uNzVsMi4yMy0yLjU3LjI1LjExQTIxLjA3LDIxLjA3LDAsMCwxLDIyLjYzLDIxLjU0WiIvPjwvc3ZnPg==" alt="Tabarak Logo" class="w-full h-full object-contain">
+                    <img src="data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NiA1NiI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fS5jbHMtMntmaWxsOiNkOWQ5ZDk7fTwvc3R5bGU+PC9kZWZzPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMyLjU5LDM1LjY1YTcuMyw3LjMsMCwwLDEsMS40OSw3LjgxSDMyLjYzWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQ0Ljg3LDQwLjIxbDAsMy4yMS01LjczLDAtMy42MSwwYTcuNjIsNy42MiwwLDAsMCwuMy0uODhBOC43OCw4Ljc4LDAsMCwwLDMyLjU4LDMzdjBBMjIuMTMsMjIuMTMsMCwwLDEsMzMsMjguNzJhMTcuOTMsMTcuOTMsMCwwLDEsMy40OS03LjI4LDIwLjY5LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExLDIuMTksMi41Mi4wNi4wNmExNy4wOCwxNy4wOCwwLDAsMC04LDkuMzMsMjAuNzksMjAuNzksMCwwLDAtLjY1LDdoMy43MVYzMS4xMWgwbDMuODIsMCwwLDcuMjVIMzYuNjdjMCwuNjMsMCwxLjI1LDAsMS44N2g4LjE1WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTI2LjI1LDMwYy0xLjQ1LS44Mi0zLTEuNjMtNC41My0yLjQ5YTE3LjI5LDE3LjI5LDAsMCwwLTcuOC04LjhoMGwyLjIzLTIuNTcuMjUuMTFhMjEuMDcsMjEuMDcsMCwwLDEsNi4yMSw1LjM1QTE3Ljc5LDE3Ljc5LDAsMCwxLDI2LDI4LjcyQzI2LjEyLDI5LjEzLDI2LjE5LDI5LjU0LDI2LjI1LDMwWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE5LjcxLDQzLjc5aDBsNi43MSwwLDAtMTAtMy45NS0xLjk1YTM0LjQxLDM0LjQxLDAsMCwxLDAsMy41MmgwbC0uMTYsMy4zMmgwYzAsLjYzLDAsMS4yNSwwLDEuODdIMTQuMThsMCwzLjIyaDUuNTVaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuNzgsNDUuMTdhNS4wNiw1LjA2LDAsMCwxLTQuMDksMi40OCwxLjY0LDEuNjQsMCwwLDEtMS4wNi0uNzJBMS4zMiwxLjMyLDAsMCwxLDI2LDQ1LjM1QzI3LjIxLDQ0LjIzLDI5LjIyLDQ0LjQ3LDMwLjc4LDQ1LjE3WiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMxLjQ0LDQxLjUxYTcuNzYsNy43NiwwLDAsMS0uNjYsMy4zOUE3LjM5LDcuMzksMCwwLDAsMjksNDQuMzNjLTEuNzEtLjM1LTQuMjUuMTUtNC4xOCwyLjA3YTEuNzIsMS43MiwwLDAsMCwuOTIsMS4zMkgyMC4zMVY0NC40OWg0LjQ1cTMsMCwzLTMuNjRWMzEuMkwzMS40MSwzMFY0MC44OUMzMS40Myw0MS4xLDMxLjQ0LDQxLjMxLDMxLjQ0LDQxLjUxWiIvPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE0LjcsMzQuODVhMi44LDIuOCwwLDAsMSwuNjQtLjgyLDMuMjUsMy4yNSwwLDAsMSwyLjE0LS43N2gxLjd2MS41SDE3LjZhMS40NywxLjQ3LDAsMCwwLS44OS4yOC45My45MywwLDAsMC0uMzguOHYuOGgyLjg1djEuNTloLTQuN1YzNS44NEEyLjI0LDIuMjQsMCwwLDEsMTQuNywzNC44NVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOS4wNiwxNS41NGE1LjY4LDUuNjgsMCwwLDAsMi4yMywzLjI5QTM2LjUzLDM2LjUzLDAsMCwwLDI1LDIxYTUuNzYsNS43NiwwLDAsMSwyLjExLDIuNTIsMTguNDgsMTguNDgsMCwwLDEsLjkzLDYuODRsMy0xLjA2YTEzLjA2LDEzLjA2LDAsMCwxLC42OS01Ljc4QTUuNjcsNS42NywwLDAsMSwzMy44LDIxYTM2LjUzLDM2LjUzLDAsMCwwLDMuNzItMi4xMiw1Ljc1LDUuNzUsMCwwLDAsMi4yNC0zLjI5Wk0zOCwxNy43YTYuMzgsNi4zOCwwLDAsMS0yLjU1LDEuNjQsMTEuODgsMTEuODgsMCwwLDEtMi4zNC43MS4wOC4wOCwwLDAsMS0uMDYtLjE1LDcsNywwLDAsMCwzLjQ4LTMuMjUsNC43MSw0LjcxLDAsMCwwLC4yNS0uNzUuMDguMDgsMCwwLDEsLjA4LS4wNmgyYy4wNiwwLC4xLDAsLjA4LjA5QTQuMjgsNC4yOCwwLDAsMSwzOCwxNy43WiIvPjxyZWN0IGNsYXNzPSJjbHMtMiIgeD0iMTkuMDUiIHk9IjE0LjA3IiB3aWR0aD0iMjAuNyIgaGVpZ2h0PSIxLjE3Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDUuMDcsMTguNmExNi43MywxNi43MywwLDAsMC00LjIzLjcsMTUuNTIsMTUuNTIsMCwwLDAtMi40MywxLDEyLjg4LDEyLjg4LDAsMCwwLTEuOSwxLjE3LDIwLjY5LDIwLjY5LDAsMCwxLDYuMTMtNS4yNWwuMjQtLjExWiIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQ0Ljg5LDQzLjQybC01LjczLDBhMjguODYsMjguODYsMCwwLDAsMy0xLjQ2LDI4LjI1LDI4LjI1LDAsMCwwLDIuNzMtMS43N1oiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0xOS43MSw0My43OWEyNy4xMSwyNy4xMSwwLDAsMS0yLjkzLTEuNDksMjUuNzksMjUuNzksMCwwLDEtMi41OS0xLjc1aDBsMCwzLjIyaDUuNTVaIi8+PGcgaWQ9IlNOQUtFIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zNS45NCw0My4wNWE3LDcsMCwwLDEtMi4zNSwzLjcsNy44Niw3Ljg2LDAsMCwwLS43OC0uODVjMy0yLjkzLDIuMzMtOC4xNS0xLjEyLTEwLjYzVjMyLjg5QTguNzQsOC43NCwwLDAsMSwzNS45NCw0My4wNVoiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0zMy43Miw0Ny44NGE1LDUsMCwwLDAtLjUzLS44NSw2LjU0LDYuNTQsMCwwLDAtLjc0LS44NCw3LjMzLDcuMzMsMCwwLDAtMy41My0xLjgxLDUuNDcsNS40NywwLDAsMC0xLjcyLS4wNmgtLjA3Yy0xLjI0LjE5LTIuMzQuODMtMi4zLDIuMTJhMS43MywxLjczLDAsMCwwLC44OSwxLjMxLDMuNzMsMy43MywwLDAsMCwuNzIuMzYsNi4xMyw2LjEzLDAsMCwwLDIuMjYuMzEsOC4wNiw4LjA2LDAsMCwwLDQuMi0xLjE5QTcsNywwLDAsMSwzNCw1MC4wNiwyLjc4LDIuNzgsMCwwLDAsMzMuNzIsNDcuODRabS02LjEsMGEyLjQ2LDIuNDYsMCwwLDEtMi4xNy0uODcsMS4zNSwxLjM1LDAsMCwxLC4zNi0xLjU4YzEuNjUtMS41Niw0Ljc3LS40OSw2LjE4Ljc5bC4yMS4yQTcuNDgsNy40OCwwLDAsMSwyNy42Miw0Ny44MVoiLz48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0zMC41OSwxMS43NmMtLjI0LTIuNDctMS44Ni01LjI4LTQuOTQtNS4zNkMxMywzLjQ3LDMuNTQsMTUuMSwxMi4yNSwyNC40NmMzLjU2LDQuMzcsMTAsNywxNS4xNSw5LjU4di0zLjJjLS40NS0uMjgtLjkyLS41NS0xLjQtLjgzLTQuMjctMi40My05LjM5LTQuNzEtMTIuMTYtOC40OGwtLjEyLS4xN2MtMi41My0zLjgzLTIuMjYtNy41NCwxLjY1LTEwLjQxYTkuMTgsOS4xOCwwLDAsMSw2LjE2LTEuNjZoLjM3bC40NiwwYy43My4xOCwxLDEsMS42MSwxLjQuOTEuNjIsNC45MSwyLjgxLDYuMjIsMi4xYS41Ny41NywwLDAsMCwuMTMtLjA4QTEsMSwwLDAsMCwzMC41OSwxMS43NlpNMjguNzIsOS4zOGEuNDUuNDUsMCwwLDEtLjUyLjI5Yy0uMjYsMC0uNDQtLjIxLS40MS0uNEEuNDQuNDQsMCwwLDEsMjguMzEsOUMyOC41Niw5LDI4Ljc1LDkuMTksMjguNzIsOS4zOFoiLz48L2c+PHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzAuMiwxMi40MmExLDEsMCwwLDAsLjE2LjM3LjMuMywwLDAsMCwuMTQuMTEuOC44LDAsMCwwLC4yLjA2bC4xMywwYS4yOS4yOSwwLDAsMSwuMTIuMS4zMi4zMiwwLDAsMSwuMDUuMjYuODIuODIsMCwwLDEtLjI1LjM4LDIuMTgsMi4xOCwwLDAsMCwuMDgtLjQuMjYuMjYsMCwwLDAsMC0uMTQuMzEuMzEsMCwwLDAtLjE1LS4wNiwxLDEsMCwwLDEtLjI0LS4xLjQxLjQxLDAsMCwxLS4xOC0uMTlBLjUyLjUyLDAsMCwxLDMwLjIsMTIuNDJaIi8+PHJlY3QgY2xhc3M9ImNscy0xIiB4PSI0MC43OSIgeT0iMjQuMjMiIHdpZHRoPSIyLjgyIiBoZWlnaHQ9IjIuNDUiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik00My42MSwyNC4yM3YyLjQ1SDQwLjc5YTUuMzIsNS4zMiwwLDAsMCwxLjgyLTEuMTEsNC44OCw0Ljg4LDAsMCwwLDEtMS4zM1oiLz48cmVjdCBjbGFzcz0iY2xzLTEiIHg9IjQwLjk2IiB5PSI0NS4wMyIgd2lkdGg9IjIuODIiIGhlaWdodD0iMi40NSIvPjxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTQzLjc5LDQ1djIuNDVINDFhNS40Niw1LjQ2LDAsMCwwLDEuODItMS4xMSw0Ljc3LDQuNzcsMCwwLDAsMS0xLjM0WiIvPjxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iNDAuNzkiIHk9IjI3LjI1IiB3aWR0aD0iMi44MiIgaGVpZ2h0PSIyLjQ1Ii8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNNDMuNjEsMjcuMjVWMjkuN0g0MC43OWE1LjMyLDUuMzIsMCwwLDAsMS44Mi0xLjExLDQuODgsNC44OCwwLDAsMCwxLTEuMzNaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjYsMzBjLTIuNTgtLjc2LTkuNDgtMi45NC0xMy4wOC03LjQ2QTExLjIyLDExLjIyLDAsMCwxLDEwLjA3LDE2YTcuNzYsNy43NiwwLDAsMSwuNzItMy41Miw3LjY2LDcuNjYsMCwwLDEsNC42My00LDguMzEsOC4zMSwwLDAsMSw2LjQ4Ljg1aC0uMzdBOS4xOCw5LjE4LDAsMCwwLDE1LjM3LDExYy0zLjkxLDIuODctNC4xOCw2LjU4LTEuNjUsMTAuNDFsLjEyLjE3QzE2LjYxLDI1LjMsMjEuNzMsMjcuNTgsMjYsMzBaIi8+PHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMjIuNjMsMjEuNTRhMTQuOSwxNC45LDAsMCwwLTEuNzktMS4wOCwxNi42NCwxNi42NCwwLDAsMC0yLjYyLTEuMDYsMTgsMTgsMCwwLDAtNC4yOC0uNzVsMi4yMy0yLjU3LjI1LjExQTIxLjA3LDIxLjA3LDAsMCwxLDIyLjYzLDIxLjU0WiIvPjwvc3ZnPg=="
+                        alt="Tabarak Logo" class="w-full h-full object-contain">
                 </div>
                 <span class="font-bold text-lg text-slate-800">Tabarak HR Portal</span>
             </div>
             <div class="ml-auto flex items-center">
-                <button onclick="toggleLanguage()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold hover:bg-gray-50 hover:text-brand-600 transition-colors">
+                <button onclick="toggleLanguage()"
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold hover:bg-gray-50 hover:text-brand-600 transition-colors">
                     <i class="fa-solid fa-globe"></i> <span id="langLabel">العربية</span>
                 </button>
             </div>
@@ -94,53 +128,72 @@
         <!-- Content -->
         <div class="flex-1 p-6 lg:p-16 flex justify-center items-start">
             <div class="w-full max-w-2xl transition-all duration-300 relative" id="mainContainer">
-                
+
                 <!-- 1. LOGIN -->
                 <div id="view-auth" class="animate-fade-in py-4">
                     <div class="mb-10 text-center lg:text-start">
-                        <h2 class="text-3xl font-bold text-slate-900 mb-2" data-i18n="login_title">HR Request Portal</h2>
-                        <p class="text-slate-500" data-i18n="login_desc">Please verify your identity to access the HR self-service.</p>
+                        <h2 class="text-3xl font-bold text-slate-900 mb-2" data-i18n="login_title">HR Request Portal
+                        </h2>
+                        <p class="text-slate-500" data-i18n="login_desc">Please verify your identity to access the HR
+                            self-service.</p>
                     </div>
                     <div class="bg-white p-1 rounded-2xl">
-                        <label class="block text-sm font-semibold text-slate-700 mb-2 ml-1" data-i18n="cpr_label">CPR Number</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2 ml-1" data-i18n="cpr_label">CPR
+                            Number</label>
                         <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none group-focus-within:text-brand-600 rtl:left-auto rtl:right-0 rtl:pl-0 rtl:pr-4">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none group-focus-within:text-brand-600 rtl:left-auto rtl:right-0 rtl:pl-0 rtl:pr-4">
                                 <i class="fa-regular fa-id-card text-slate-400"></i>
                             </div>
-                            <input type="text" id="cprInput" class="block w-full pl-11 pr-4 rtl:pl-4 rtl:pr-11 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all outline-none font-medium text-lg placeholder-gray-400" placeholder="Example: 901234567">
+                            <input type="text" id="cprInput"
+                                class="block w-full pl-11 pr-4 rtl:pl-4 rtl:pr-11 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all outline-none font-medium text-lg placeholder-gray-400"
+                                placeholder="Example: 901234567">
                         </div>
-                        <button onclick="handleLogin()" id="loginBtn" class="mt-8 w-full flex justify-center items-center gap-2 py-4 px-6 rounded-xl shadow-lg shadow-brand-600/20 text-white bg-brand-600 hover:bg-brand-700 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 font-semibold text-lg">
-                            <span data-i18n="btn_continue">Continue Securely</span> <i class="fa-solid fa-arrow-right text-sm rtl:rotate-180"></i>
+                        <button onclick="handleLogin()" id="loginBtn"
+                            class="mt-8 w-full flex justify-center items-center gap-2 py-4 px-6 rounded-xl shadow-lg shadow-brand-600/20 text-white bg-brand-600 hover:bg-brand-700 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 font-semibold text-lg">
+                            <span data-i18n="btn_continue">Continue Securely</span> <i
+                                class="fa-solid fa-arrow-right text-sm rtl:rotate-180"></i>
                         </button>
                     </div>
 
                     <div class="mt-8 text-center">
-                        <p class="text-xs text-slate-400"><i class="fa-solid fa-lock mr-1"></i> End-to-end encrypted connection</p>
+                        <p class="text-xs text-slate-400"><i class="fa-solid fa-lock mr-1"></i> End-to-end encrypted
+                            connection</p>
                     </div>
-                    
+
                 </div>
 
                 <!-- 2. LOADING -->
                 <div id="view-loading" class="hidden py-10 space-y-8">
                     <div class="flex items-center gap-4 border-b border-gray-100 pb-6">
                         <div class="w-16 h-16 rounded-full skeleton"></div>
-                        <div class="space-y-3 flex-1"><div class="h-5 w-48 skeleton"></div><div class="h-4 w-32 skeleton"></div></div>
+                        <div class="space-y-3 flex-1">
+                            <div class="h-5 w-48 skeleton"></div>
+                            <div class="h-4 w-32 skeleton"></div>
+                        </div>
                     </div>
-                    <div class="h-14 w-full skeleton"></div><div class="h-32 w-full skeleton"></div>
+                    <div class="h-14 w-full skeleton"></div>
+                    <div class="h-32 w-full skeleton"></div>
                 </div>
 
                 <!-- 3. FORM -->
                 <div id="view-form" class="hidden animate-fade-in pb-20">
                     <!-- User Header -->
-                    <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100 bg-white sticky top-0 z-10 pt-2">
+                    <div
+                        class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100 bg-white sticky top-0 z-10 pt-2">
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-full bg-brand-50 text-brand-700 flex items-center justify-center text-xl font-bold border border-brand-200"><span id="avatarInitial">A</span></div>
+                            <div
+                                class="w-14 h-14 rounded-full bg-brand-50 text-brand-700 flex items-center justify-center text-xl font-bold border border-brand-200">
+                                <span id="avatarInitial">A</span></div>
                             <div>
-                                <h3 class="text-lg font-bold text-slate-900 leading-none mb-1" id="userNameDisplay">Employee</h3>
-                                <div class="flex items-center gap-2 text-sm text-slate-500"><span id="cprDisplay" class="font-mono bg-slate-100 px-2 py-0.5 rounded text-xs">CPR: ---</span></div>
+                                <h3 class="text-lg font-bold text-slate-900 leading-none mb-1" id="userNameDisplay">
+                                    Employee</h3>
+                                <div class="flex items-center gap-2 text-sm text-slate-500"><span id="cprDisplay"
+                                        class="font-mono bg-slate-100 px-2 py-0.5 rounded text-xs">CPR: ---</span></div>
                             </div>
                         </div>
-                        <button onclick="logout()" class="text-xs font-medium text-slate-500 hover:text-brand-600 hover:bg-brand-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        <button onclick="logout()"
+                            class="text-xs font-medium text-slate-500 hover:text-brand-600 hover:bg-brand-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-2">
                             <i class="fa-solid fa-power-off"></i> <span data-i18n="btn_logout">Logout</span>
                         </button>
                     </div>
@@ -152,74 +205,132 @@
                         <!-- Personal Data -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
-                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_passport">Passport Number</span> <span class="text-brand-500">*</span></label>
-                                <input type="text" name="Passport Number" required class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all">
+                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                        data-i18n="lbl_passport">Passport Number</span> <span
+                                        class="text-brand-500">*</span></label>
+                                <input type="text" name="Passport Number" required
+                                    class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all">
                             </div>
                             <div class="form-group">
-                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_license">NHRA License</span> <span class="text-brand-500">*</span></label>
-                                <input type="text" name="NHRA License Number" required class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all">
+                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                        data-i18n="lbl_license">NHRA License</span> <span
+                                        class="text-brand-500">*</span></label>
+                                <input type="text" name="NHRA License Number" required
+                                    class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all">
                             </div>
                             <div class="form-group">
-                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_sponsor">Sponsor</span> <span class="text-brand-500">*</span></label>
+                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                        data-i18n="lbl_sponsor">Sponsor</span> <span
+                                        class="text-brand-500">*</span></label>
                                 <select name="Name of Sponsor" class="select2 w-full" required>
-                                    <option></option><option value="Tabarak CR">Tabarak CR</option><option value="Alhoda CR">Alhoda CR</option><option value="Sanad CR">Sanad CR</option><option value="District CR">District CR</option>
+                                    <option></option>
+                                    <option value="Tabarak CR">Tabarak CR</option>
+                                    <option value="Alhoda CR">Alhoda CR</option>
+                                    <option value="Sanad CR">Sanad CR</option>
+                                    <option value="District CR">District CR</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_join_date">Joining Date</span> <span class="text-brand-500">*</span></label>
+                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                        data-i18n="lbl_join_date">Joining Date</span> <span
+                                        class="text-brand-500">*</span></label>
                                 <div class="relative">
-                                    <input type="text" name="Joining Date" class="datepicker w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all" required>
+                                    <input type="text" name="Joining Date"
+                                        class="datepicker w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all"
+                                        required>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Requests -->
                         <div class="pt-6 border-t border-gray-100">
-                            <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_doc_type">Document Type</span> <span class="text-brand-500">*</span></label>
+                            <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                    data-i18n="lbl_doc_type">Document Type</span> <span
+                                    class="text-brand-500">*</span></label>
                             <select name="Type of Document" class="select2 w-full" multiple required>
-                                <option value="Experience Certificate">Experience Certificate</option><option value="Employment Certificate">Employment Certificate</option><option value="Bank Letter">Bank Letter</option><option value="Embassy Letter">Embassy Letter</option><option value="Salary Certificate">Salary Certificate</option><option value="NOC">NOC</option>
+                                <option value="Experience Certificate">Experience Certificate</option>
+                                <option value="Employment Certificate">Employment Certificate</option>
+                                <option value="Bank Letter">Bank Letter</option>
+                                <option value="Embassy Letter">Embassy Letter</option>
+                                <option value="Salary Certificate">Salary Certificate</option>
+                                <option value="NOC">NOC</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_reason">Reason for Request</span> <span class="text-brand-500">*</span></label>
-                            <textarea name="Reason" rows="3" class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border resize-none transition-all" required></textarea>
+                            <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                    data-i18n="lbl_reason">Reason for Request</span> <span
+                                    class="text-brand-500">*</span></label>
+                            <textarea name="Reason" rows="3"
+                                class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border resize-none transition-all"
+                                required></textarea>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="form-group">
-                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_req_date">Required Date</span> <span class="text-brand-500">*</span></label>
-                                <div class="relative"><input type="text" name="Desired Date" class="datepicker w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border" required></div>
+                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                        data-i18n="lbl_req_date">Required Date</span> <span
+                                        class="text-brand-500">*</span></label>
+                                <div class="relative"><input type="text" name="Desired Date"
+                                        class="datepicker w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border"
+                                        required></div>
                             </div>
                             <div class="form-group">
-                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span data-i18n="lbl_email">Your Email</span> <span class="text-brand-500">*</span></label>
-                                <input type="email" name="Employee Email" class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all" required>
+                                <label class="text-sm font-medium text-slate-700 mb-1.5 block"><span
+                                        data-i18n="lbl_email">Your Email</span> <span
+                                        class="text-brand-500">*</span></label>
+                                <input type="email" name="Employee Email"
+                                    class="w-full border-gray-200 bg-gray-50 rounded-xl focus:bg-white focus:ring-brand-500/20 focus:border-brand-500 py-3 px-4 outline-none border transition-all"
+                                    required>
                             </div>
                         </div>
 
                         <!-- Delivery -->
                         <div class="pt-4">
-                            <label class="block text-sm font-medium text-slate-700 mb-3"><span data-i18n="lbl_delivery">Delivery Method</span> <span class="text-brand-500">*</span></label>
+                            <label class="block text-sm font-medium text-slate-700 mb-3"><span
+                                    data-i18n="lbl_delivery">Delivery Method</span> <span
+                                    class="text-brand-500">*</span></label>
                             <input type="hidden" name="Preferred Delivery Method" id="deliveryInput">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div onclick="selectDelivery('PDF by Email', this)" class="delivery-card group cursor-pointer relative border-2 border-gray-100 rounded-2xl p-5 flex items-center gap-4 hover:border-brand-300 hover:shadow-md transition-all duration-300 bg-white">
-                                     <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-500 group-hover:bg-brand-50 group-hover:text-brand-600 flex items-center justify-center transition-colors text-xl"><i class="fa-regular fa-envelope"></i></div>
-                                     <div><span class="block font-bold text-slate-700" data-i18n="card_email_title">PDF by Email</span><span class="block text-xs text-slate-400 mt-0.5" data-i18n="card_email_desc">Digital copy to your inbox</span></div>
-                                     <div class="check-icon absolute top-1/2 -translate-y-1/2 right-5 rtl:right-auto rtl:left-5 text-brand-600 opacity-0 scale-50 transition-all duration-300"><i class="fa-solid fa-circle-check text-2xl"></i></div>
+                                <div onclick="selectDelivery('PDF by Email', this)"
+                                    class="delivery-card group cursor-pointer relative border-2 border-gray-100 rounded-2xl p-5 flex items-center gap-4 hover:border-brand-300 hover:shadow-md transition-all duration-300 bg-white">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-blue-50 text-blue-500 group-hover:bg-brand-50 group-hover:text-brand-600 flex items-center justify-center transition-colors text-xl">
+                                        <i class="fa-regular fa-envelope"></i></div>
+                                    <div><span class="block font-bold text-slate-700" data-i18n="card_email_title">PDF
+                                            by Email</span><span class="block text-xs text-slate-400 mt-0.5"
+                                            data-i18n="card_email_desc">Digital copy to your inbox</span></div>
+                                    <div
+                                        class="check-icon absolute top-1/2 -translate-y-1/2 right-5 rtl:right-auto rtl:left-5 text-brand-600 opacity-0 scale-50 transition-all duration-300">
+                                        <i class="fa-solid fa-circle-check text-2xl"></i></div>
                                 </div>
-                                <div onclick="selectDelivery('Printed Copy', this)" class="delivery-card group cursor-pointer relative border-2 border-gray-100 rounded-2xl p-5 flex items-center gap-4 hover:border-brand-300 hover:shadow-md transition-all duration-300 bg-white">
-                                     <div class="w-12 h-12 rounded-full bg-orange-50 text-orange-500 group-hover:bg-brand-50 group-hover:text-brand-600 flex items-center justify-center transition-colors text-xl"><i class="fa-solid fa-print"></i></div>
-                                     <div><span class="block font-bold text-slate-700" data-i18n="card_print_title">Printed Copy</span><span class="block text-xs text-slate-400 mt-0.5" data-i18n="card_print_desc">Collect from HR Office</span></div>
-                                     <div class="check-icon absolute top-1/2 -translate-y-1/2 right-5 rtl:right-auto rtl:left-5 text-brand-600 opacity-0 scale-50 transition-all duration-300"><i class="fa-solid fa-circle-check text-2xl"></i></div>
+                                <div onclick="selectDelivery('Printed Copy', this)"
+                                    class="delivery-card group cursor-pointer relative border-2 border-gray-100 rounded-2xl p-5 flex items-center gap-4 hover:border-brand-300 hover:shadow-md transition-all duration-300 bg-white">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-orange-50 text-orange-500 group-hover:bg-brand-50 group-hover:text-brand-600 flex items-center justify-center transition-colors text-xl">
+                                        <i class="fa-solid fa-print"></i></div>
+                                    <div><span class="block font-bold text-slate-700"
+                                            data-i18n="card_print_title">Printed Copy</span><span
+                                            class="block text-xs text-slate-400 mt-0.5"
+                                            data-i18n="card_print_desc">Collect from HR Office</span></div>
+                                    <div
+                                        class="check-icon absolute top-1/2 -translate-y-1/2 right-5 rtl:right-auto rtl:left-5 text-brand-600 opacity-0 scale-50 transition-all duration-300">
+                                        <i class="fa-solid fa-circle-check text-2xl"></i></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Upload Zone -->
                         <div>
-                            <label class="text-sm font-medium text-slate-700 mb-1.5 block" data-i18n="lbl_files">Attachments (Optional)</label>
-                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-xl hover:bg-gray-50 hover:border-brand-400 transition-all cursor-pointer group" onclick="document.getElementById('files').click()">
+                            <label class="text-sm font-medium text-slate-700 mb-1.5 block"
+                                data-i18n="lbl_files">Attachments (Optional)</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-xl hover:bg-gray-50 hover:border-brand-400 transition-all cursor-pointer group"
+                                onclick="document.getElementById('files').click()">
                                 <div class="space-y-1 text-center">
-                                    <div class="w-12 h-12 mx-auto bg-gray-50 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300"><i class="fa-solid fa-cloud-arrow-up text-brand-500 text-xl"></i></div>
-                                    <div class="flex text-sm text-gray-600 justify-center"><span class="font-medium text-brand-600 hover:text-brand-500">Click to upload files</span></div>
+                                    <div
+                                        class="w-12 h-12 mx-auto bg-gray-50 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                        <i class="fa-solid fa-cloud-arrow-up text-brand-500 text-xl"></i></div>
+                                    <div class="flex text-sm text-gray-600 justify-center"><span
+                                            class="font-medium text-brand-600 hover:text-brand-500">Click to upload
+                                            files</span></div>
                                     <p class="text-xs text-gray-400">PDF, PNG, JPG (Max 5MB)</p>
                                 </div>
                                 <input id="files" type="file" class="sr-only" multiple>
@@ -231,12 +342,14 @@
                         <!-- Action Buttons -->
                         <div class="pt-4 flex gap-3">
                             <!-- CLEAR BUTTON -->
-                            <button type="button" onclick="clearForm()" class="flex-1 py-4 px-4 border-2 border-gray-200 rounded-xl text-base font-bold text-slate-600 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all duration-200">
+                            <button type="button" onclick="clearForm()"
+                                class="flex-1 py-4 px-4 border-2 border-gray-200 rounded-xl text-base font-bold text-slate-600 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all duration-200">
                                 <span data-i18n="btn_clear">Clear Form</span>
                             </button>
-                            
+
                             <!-- SUBMIT BUTTON -->
-                            <button type="button" id="submitBtn" onclick="submitForm()" class="flex-[2] py-4 px-4 border border-transparent rounded-xl shadow-xl shadow-brand-900/10 text-base font-bold text-white bg-slate-900 hover:bg-slate-800 transition-all duration-200 flex justify-center items-center gap-2">
+                            <button type="button" id="submitBtn" onclick="submitForm()"
+                                class="flex-[2] py-4 px-4 border border-transparent rounded-xl shadow-xl shadow-brand-900/10 text-base font-bold text-white bg-slate-900 hover:bg-slate-800 transition-all duration-200 flex justify-center items-center gap-2">
                                 <span id="submitText" data-i18n="btn_submit">Submit Request</span>
                             </button>
                         </div>
@@ -246,223 +359,224 @@
         </div>
     </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    // --- CONFIGURATION ---
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhFVrwIdvBK4qOK13y0dXxpaownQMsKfnI_iZFNGh3PWnykKBzgDSxT1Sb1AbbddMy/exec";
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        // --- CONFIGURATION ---
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhFVrwIdvBK4qOK13y0dXxpaownQMsKfnI_iZFNGh3PWnykKBzgDSxT1Sb1AbbddMy/exec";
 
-    let uploadedFiles = [];
-    let currentLang = 'en';
+        let uploadedFiles = [];
+        let currentLang = 'en';
 
-    const translations = {
-        en: {
-            brand_title: "Tabarak<br>Pharmacy", brand_subtitle: "Advanced HR Self-Service Portal",
-            login_title: " HR Request Portal ", login_desc: "Please verify your identity to access the HR self-service.",
-            cpr_label: "CPR Number", btn_continue: "Continue Securely", btn_logout: "Logout",
-            lbl_passport: "Passport Number", lbl_license: "NHRA License", lbl_sponsor: "Sponsor",
-            lbl_join_date: "Joining Date", lbl_doc_type: "Document Type", lbl_reason: "Reason for Request",
-            lbl_req_date: "Doc Required Date", lbl_email: "Your Email", lbl_delivery: "Delivery Method",
-            lbl_files: "Attachments (Optional)", btn_submit: "Submit Request", btn_clear: "Clear Form",
-            card_email_title: "PDF by Email", card_email_desc: "Digital copy to your inbox",
-            card_print_title: "Printed Copy", card_print_desc: "Collect from Main Office/Pharmacy"
-        },
-        ar: {
-            brand_title: "صيدلية<br>تبارك", brand_subtitle: "بوابة الموارد البشرية الذاتية",
-            login_title: "'طلب مستند لموظف'", login_desc: "يرجى تأكيد هويتك للوصول إلى نموذج الطلبات",
-            cpr_label: "الرقم الشخصي (CPR)", btn_continue: "متابعة آمنة", btn_logout: "خروج",
-            lbl_passport: "رقم الجواز", lbl_license: "رقم ترخيص المزاولة", lbl_sponsor: "الكفيل",
-            lbl_join_date: "تاريخ الانضمام", lbl_doc_type: "نوع المستند", lbl_reason: "سبب الطلب",
-            lbl_req_date: "التاريخ المطلوب للاستلام", lbl_email: "البريد الإلكتروني", lbl_delivery: "طريقة الاستلام",
-            lbl_files: "المرفقات (اختياري)", btn_submit: "إرسال الطلب", btn_clear: "مسح البيانات",
-            card_email_title: "نسخة PDF", card_email_desc: "تصلك عبر البريد الإلكتروني",
-            card_print_title: "نسخة مطبوعة", card_print_desc: "استلام من مكتب الشركة / تصلك للفرع"
-        }
-    };
+        const translations = {
+            en: {
+                brand_title: "Tabarak<br>Pharmacy", brand_subtitle: "Advanced HR Self-Service Portal",
+                login_title: " HR Request Portal ", login_desc: "Please verify your identity to access the HR self-service.",
+                cpr_label: "CPR Number", btn_continue: "Continue Securely", btn_logout: "Logout",
+                lbl_passport: "Passport Number", lbl_license: "NHRA License", lbl_sponsor: "Sponsor",
+                lbl_join_date: "Joining Date", lbl_doc_type: "Document Type", lbl_reason: "Reason for Request",
+                lbl_req_date: "Doc Required Date", lbl_email: "Your Email", lbl_delivery: "Delivery Method",
+                lbl_files: "Attachments (Optional)", btn_submit: "Submit Request", btn_clear: "Clear Form",
+                card_email_title: "PDF by Email", card_email_desc: "Digital copy to your inbox",
+                card_print_title: "Printed Copy", card_print_desc: "Collect from Main Office/Pharmacy"
+            },
+            ar: {
+                brand_title: "صيدلية<br>تبارك", brand_subtitle: "بوابة الموارد البشرية الذاتية",
+                login_title: "'طلب مستند لموظف'", login_desc: "يرجى تأكيد هويتك للوصول إلى نموذج الطلبات",
+                cpr_label: "الرقم الشخصي (CPR)", btn_continue: "متابعة آمنة", btn_logout: "خروج",
+                lbl_passport: "رقم الجواز", lbl_license: "رقم ترخيص المزاولة", lbl_sponsor: "الكفيل",
+                lbl_join_date: "تاريخ الانضمام", lbl_doc_type: "نوع المستند", lbl_reason: "سبب الطلب",
+                lbl_req_date: "التاريخ المطلوب للاستلام", lbl_email: "البريد الإلكتروني", lbl_delivery: "طريقة الاستلام",
+                lbl_files: "المرفقات (اختياري)", btn_submit: "إرسال الطلب", btn_clear: "مسح البيانات",
+                card_email_title: "نسخة PDF", card_email_desc: "تصلك عبر البريد الإلكتروني",
+                card_print_title: "نسخة مطبوعة", card_print_desc: "استلام من مكتب الشركة / تصلك للفرع"
+            }
+        };
 
-    $(document).ready(function() {
-        $('.select2').select2({ placeholder: "Select Option...", width: '100%' });
-        flatpickr(".datepicker", { dateFormat: "Y-m-d", minDate: "today", disableMobile: "true" });
-        new Cleave('#cprInput', { numericOnly: true, blocks: [9] });
-    });
-
-    // --- LANGUAGE ---
-    function toggleLanguage() {
-        currentLang = currentLang === 'en' ? 'ar' : 'en';
-        const body = document.body;
-        document.getElementById('langLabel').textContent = currentLang === 'ar' ? "English" : "العربية";
-        body.dir = currentLang === 'ar' ? "rtl" : "ltr";
-        if(currentLang === 'ar') { body.classList.remove('font-sans'); body.classList.add('font-arabic'); }
-        else { body.classList.remove('font-arabic'); body.classList.add('font-sans'); }
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if(translations[currentLang][key]) el.innerHTML = translations[currentLang][key];
+        $(document).ready(function () {
+            $('.select2').select2({ placeholder: "Select Option...", width: '100%' });
+            flatpickr(".datepicker", { dateFormat: "Y-m-d", minDate: "today", disableMobile: "true" });
+            new Cleave('#cprInput', { numericOnly: true, blocks: [9] });
         });
-    }
 
-    // --- LOGIN ---
-    async function handleLogin() {
-        const cprInput = document.getElementById('cprInput');
-        const cpr = cprInput.value.replace(/\s/g, ''); 
-        if (!cpr) { showToast('Please enter your CPR', 'warning'); return; }
-
-        document.getElementById('view-auth').classList.add('hidden');
-        document.getElementById('view-loading').classList.remove('hidden');
-
-        try {
-            const response = await fetch(WEB_APP_URL, {
-                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "login", cpr: cpr })
+        // --- LANGUAGE ---
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            const body = document.body;
+            document.getElementById('langLabel').textContent = currentLang === 'ar' ? "English" : "العربية";
+            body.dir = currentLang === 'ar' ? "rtl" : "ltr";
+            if (currentLang === 'ar') { body.classList.remove('font-sans'); body.classList.add('font-arabic'); }
+            else { body.classList.remove('font-arabic'); body.classList.add('font-sans'); }
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) el.innerHTML = translations[currentLang][key];
             });
-            const result = await response.json();
-            if (result.result === "success") {
-                showForm(result.name, cpr);
-            } else { throw new Error("User Not Found"); }
-        } catch (error) {
-            document.getElementById('view-loading').classList.add('hidden');
-            document.getElementById('view-auth').classList.remove('hidden');
-            showToast('CPR Number not found', 'error');
-            cprInput.value = '';
         }
-    }
 
-    function showForm(name, cpr) {
-        document.getElementById('view-loading').classList.add('hidden');
-        document.getElementById('view-form').classList.remove('hidden');
-        document.getElementById('userNameDisplay').textContent = name;
-        document.getElementById('cprDisplay').textContent = cpr;
-        document.getElementById('avatarInitial').textContent = name.charAt(0);
-        document.getElementById('inputName').value = name;
-        document.getElementById('inputCPR').value = cpr;
-    }
+        // --- LOGIN ---
+        async function handleLogin() {
+            const cprInput = document.getElementById('cprInput');
+            const cpr = cprInput.value.replace(/\s/g, '');
+            if (!cpr) { showToast('Please enter your CPR', 'warning'); return; }
 
-    // --- FILE HANDLING ---
-    document.getElementById('files').addEventListener('change', function(e) {
-        const newFiles = Array.from(e.target.files);
-        // Append new files to existing ones
-        uploadedFiles = uploadedFiles.concat(newFiles);
-        renderFileList();
-    });
+            document.getElementById('view-auth').classList.add('hidden');
+            document.getElementById('view-loading').classList.remove('hidden');
 
-    function renderFileList() {
-        const list = document.getElementById('fileList');
-        list.innerHTML = '';
-        uploadedFiles.forEach((f, index) => {
-            list.innerHTML += `
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify({ action: "login", cpr: cpr })
+                });
+                const result = await response.json();
+                if (result.result === "success") {
+                    showForm(result.name, cpr);
+                } else { throw new Error("User Not Found"); }
+            } catch (error) {
+                document.getElementById('view-loading').classList.add('hidden');
+                document.getElementById('view-auth').classList.remove('hidden');
+                showToast('CPR Number not found', 'error');
+                cprInput.value = '';
+            }
+        }
+
+        function showForm(name, cpr) {
+            document.getElementById('view-loading').classList.add('hidden');
+            document.getElementById('view-form').classList.remove('hidden');
+            document.getElementById('userNameDisplay').textContent = name;
+            document.getElementById('cprDisplay').textContent = cpr;
+            document.getElementById('avatarInitial').textContent = name.charAt(0);
+            document.getElementById('inputName').value = name;
+            document.getElementById('inputCPR').value = cpr;
+        }
+
+        // --- FILE HANDLING ---
+        document.getElementById('files').addEventListener('change', function (e) {
+            const newFiles = Array.from(e.target.files);
+            // Append new files to existing ones
+            uploadedFiles = uploadedFiles.concat(newFiles);
+            renderFileList();
+        });
+
+        function renderFileList() {
+            const list = document.getElementById('fileList');
+            list.innerHTML = '';
+            uploadedFiles.forEach((f, index) => {
+                list.innerHTML += `
                 <div class="flex items-center justify-between bg-white p-3 border border-gray-100 rounded-lg shadow-sm animate-fade-in">
                     <div class="flex items-center gap-3 overflow-hidden">
                         <div class="bg-blue-50 text-blue-600 p-2 rounded-lg text-sm flex-shrink-0"><i class="fa-solid fa-file"></i></div>
                         <div class="flex flex-col overflow-hidden">
                             <span class="text-sm font-medium text-slate-700 truncate">${f.name}</span>
-                            <span class="text-xs text-green-600 font-medium"><i class="fa-solid fa-circle-check text-[10px]"></i> Ready to upload (${(f.size/1024).toFixed(0)}KB)</span>
+                            <span class="text-xs text-green-600 font-medium"><i class="fa-solid fa-circle-check text-[10px]"></i> Ready to upload (${(f.size / 1024).toFixed(0)}KB)</span>
                         </div>
                     </div>
                     <button type="button" onclick="removeFile(${index})" class="text-gray-400 hover:text-red-500 transition-colors p-2"><i class="fa-solid fa-trash-can"></i></button>
                 </div>`;
-        });
-    }
-
-    function removeFile(index) {
-        uploadedFiles.splice(index, 1);
-        renderFileList();
-    }
-
-    // --- SUBMIT ---
-    async function submitForm() {
-        const form = document.getElementById("hrForm");
-        if (!form.checkValidity()) { form.reportValidity(); return; }
-        if (!document.getElementById('deliveryInput').value) { showToast(currentLang==='en'?'Select delivery':'اختر التوصيل', 'warning'); return; }
-
-        // Disable Button & Show Loading
-        const btn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('submitText');
-        const originalText = btnText.innerHTML;
-        
-        btn.disabled = true;
-        btn.classList.add('opacity-75', 'cursor-not-allowed');
-        btnText.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processing...';
-
-        const refNum = 'REQ-' + Math.floor(100000 + Math.random() * 900000);
-
-        try {
-            let attachments = [];
-            for (let file of uploadedFiles) {
-                let base64 = await toBase64(file);
-                attachments.push({ filename: file.name, content: base64.split(",")[1], mimeType: file.type });
-            }
-
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => data[key] = value);
-            data["Type of Document"] = $('select[name="Type of Document"]').val().join(", ");
-            data.attachments = attachments;
-            data.referenceNumber = refNum;
-            data.action = "submit"; 
-
-            const response = await fetch(WEB_APP_URL, {
-                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify(data)
             });
-            const result = await response.json();
-
-            if (result.result === "success") {
-                Swal.fire({
-                    icon: 'success',
-                    title: currentLang === 'en' ? 'Request Submitted' : 'تم استلام الطلب',
-                    html: (currentLang === 'en' ? 'Ref:' : 'المرجع:') + ` <b style="color:#dc2626">${refNum}</b>`,
-                    confirmButtonColor: '#0f172a'
-                }).then(() => location.reload());
-            } else { throw new Error("Failed"); }
-        } catch (error) {
-            console.error(error);
-            showToast('Submission Failed', 'error');
-            // Re-enable button on error
-            btn.disabled = false;
-            btn.classList.remove('opacity-75', 'cursor-not-allowed');
-            btnText.innerHTML = originalText;
         }
-    }
 
-    // --- CLEAR FORM ---
-    function clearForm() {
-        // 1. Reset Form Inputs
-        document.getElementById('hrForm').reset();
-        
-        // 2. Reset Select2
-        $('.select2').val(null).trigger('change');
-        
-        // 3. Clear Files
-        uploadedFiles = [];
-        renderFileList();
-        
-        // 4. Reset Delivery Cards
-        document.querySelectorAll('.delivery-card').forEach(card => {
-            card.classList.remove('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
-            card.classList.add('border-gray-100', 'bg-white');
-            card.querySelector('.check-icon').classList.add('opacity-0', 'scale-50');
-        });
-        document.getElementById('deliveryInput').value = "";
-    }
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            renderFileList();
+        }
 
-    // --- HELPERS ---
-    function selectDelivery(v, el) {
-        document.getElementById('deliveryInput').value = v;
-        document.querySelectorAll('.delivery-card').forEach(c => {
-            c.classList.remove('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
-            c.classList.add('border-gray-100', 'bg-white');
-            c.querySelector('.check-icon').classList.remove('opacity-100', 'scale-100');
-            c.querySelector('.check-icon').classList.add('opacity-0', 'scale-50');
-        });
-        el.classList.remove('border-gray-100', 'bg-white');
-        el.classList.add('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
-        el.querySelector('.check-icon').classList.remove('opacity-0', 'scale-50');
-        el.querySelector('.check-icon').classList.add('opacity-100', 'scale-100');
-    }
-    
-    function showToast(msg, icon) { Swal.fire({ toast: true, position: 'top-end', icon: icon, title: msg, showConfirmButton: false, timer: 3000 }); }
-    function toBase64(file) { return new Promise((r, j) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = () => r(reader.result); reader.onerror = error => j(error); }); }
-    function logout() { location.reload(); }
-</script>
+        // --- SUBMIT ---
+        async function submitForm() {
+            const form = document.getElementById("hrForm");
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+            if (!document.getElementById('deliveryInput').value) { showToast(currentLang === 'en' ? 'Select delivery' : 'اختر التوصيل', 'warning'); return; }
+
+            // Disable Button & Show Loading
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('submitText');
+            const originalText = btnText.innerHTML;
+
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            btnText.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processing...';
+
+            const refNum = 'REQ-' + Math.floor(100000 + Math.random() * 900000);
+
+            try {
+                let attachments = [];
+                for (let file of uploadedFiles) {
+                    let base64 = await toBase64(file);
+                    attachments.push({ filename: file.name, content: base64.split(",")[1], mimeType: file.type });
+                }
+
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => data[key] = value);
+                data["Type of Document"] = $('select[name="Type of Document"]').val().join(", ");
+                data.attachments = attachments;
+                data.referenceNumber = refNum;
+                data.action = "submit";
+
+                const response = await fetch(WEB_APP_URL, {
+                    method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+
+                if (result.result === "success") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: currentLang === 'en' ? 'Request Submitted' : 'تم استلام الطلب',
+                        html: (currentLang === 'en' ? 'Ref:' : 'المرجع:') + ` <b style="color:#dc2626">${refNum}</b>`,
+                        confirmButtonColor: '#0f172a'
+                    }).then(() => location.reload());
+                } else { throw new Error("Failed"); }
+            } catch (error) {
+                console.error(error);
+                showToast('Submission Failed', 'error');
+                // Re-enable button on error
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnText.innerHTML = originalText;
+            }
+        }
+
+        // --- CLEAR FORM ---
+        function clearForm() {
+            // 1. Reset Form Inputs
+            document.getElementById('hrForm').reset();
+
+            // 2. Reset Select2
+            $('.select2').val(null).trigger('change');
+
+            // 3. Clear Files
+            uploadedFiles = [];
+            renderFileList();
+
+            // 4. Reset Delivery Cards
+            document.querySelectorAll('.delivery-card').forEach(card => {
+                card.classList.remove('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
+                card.classList.add('border-gray-100', 'bg-white');
+                card.querySelector('.check-icon').classList.add('opacity-0', 'scale-50');
+            });
+            document.getElementById('deliveryInput').value = "";
+        }
+
+        // --- HELPERS ---
+        function selectDelivery(v, el) {
+            document.getElementById('deliveryInput').value = v;
+            document.querySelectorAll('.delivery-card').forEach(c => {
+                c.classList.remove('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
+                c.classList.add('border-gray-100', 'bg-white');
+                c.querySelector('.check-icon').classList.remove('opacity-100', 'scale-100');
+                c.querySelector('.check-icon').classList.add('opacity-0', 'scale-50');
+            });
+            el.classList.remove('border-gray-100', 'bg-white');
+            el.classList.add('border-brand-500', 'bg-brand-50', 'ring-2', 'ring-brand-500/20');
+            el.querySelector('.check-icon').classList.remove('opacity-0', 'scale-50');
+            el.querySelector('.check-icon').classList.add('opacity-100', 'scale-100');
+        }
+
+        function showToast(msg, icon) { Swal.fire({ toast: true, position: 'top-end', icon: icon, title: msg, showConfirmButton: false, timer: 3000 }); }
+        function toBase64(file) { return new Promise((r, j) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = () => r(reader.result); reader.onerror = error => j(error); }); }
+        function logout() { location.reload(); }
+    </script>
 </body>
+
 </html>

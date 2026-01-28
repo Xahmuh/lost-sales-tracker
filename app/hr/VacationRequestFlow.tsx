@@ -148,9 +148,12 @@ interface VacationRequestFlowProps {
 }
 
 // Helper Component for Inputs
-const InputGroup = ({ label, value, onChange, type = "text", readOnly = false, isRtl = false }: any) => (
+const InputGroup = ({ label, value, onChange, type = "text", readOnly = false, isRtl = false, required = false }: any) => (
     <div className={`space-y-1 ${isRtl ? 'text-right' : 'text-left'}`}>
-        <label className="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">{label}</label>
+        <label className="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
         {readOnly ? (
             <div className="min-h-[40px] text-lg font-bold text-slate-900 border-b border-slate-200 pb-1 flex items-center">
                 {value || '-'}
@@ -311,19 +314,19 @@ export const VacationRequestFlow: React.FC<VacationRequestFlowProps> = ({ employ
                 <div className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 overflow-hidden border border-slate-100 p-8 sm:p-12">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mb-12">
                         <InputGroup label={t.lbl_emp_name} value={employee.name} readOnly isRtl={isRtl} />
-                        <InputGroup label={t.lbl_job_title} value={formData.jobTitle} onChange={(v: any) => setFormData({ ...formData, jobTitle: v })} readOnly={isReview} isRtl={isRtl} />
+                        <InputGroup label={t.lbl_job_title} value={formData.jobTitle} onChange={(v: any) => setFormData({ ...formData, jobTitle: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
                         <InputGroup label={t.lbl_cpr} value={employee.cpr} readOnly isRtl={isRtl} />
-                        <InputGroup label={t.lbl_passport} value={formData.passport} onChange={(v: any) => setFormData({ ...formData, passport: v })} readOnly={isReview} isRtl={isRtl} />
-                        <InputGroup label={t.lbl_dept} value={formData.department} onChange={(v: any) => setFormData({ ...formData, department: v })} readOnly={isReview} isRtl={isRtl} />
-                        <InputGroup label={t.lbl_location} value={formData.location} onChange={(v: any) => setFormData({ ...formData, location: v })} readOnly={isReview} isRtl={isRtl} />
-                        <InputGroup label={t.lbl_join_date} type="date" value={formData.joinDate} onChange={(v: any) => setFormData({ ...formData, joinDate: v })} readOnly={isReview} isRtl={isRtl} />
-                        <InputGroup label={t.lbl_last_vac_date} type="date" value={formData.lastVacationDate} onChange={(v: any) => setFormData({ ...formData, lastVacationDate: v })} readOnly={isReview} isRtl={isRtl} />
+                        <InputGroup label={t.lbl_passport} value={formData.passport} onChange={(v: any) => setFormData({ ...formData, passport: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
+                        <InputGroup label={t.lbl_dept} value={formData.department} onChange={(v: any) => setFormData({ ...formData, department: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
+                        <InputGroup label={t.lbl_location} value={formData.location} onChange={(v: any) => setFormData({ ...formData, location: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
+                        <InputGroup label={t.lbl_join_date} type="date" value={formData.joinDate} onChange={(v: any) => setFormData({ ...formData, joinDate: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
+                        <InputGroup label={t.lbl_last_vac_date} type="date" value={formData.lastVacationDate} onChange={(v: any) => setFormData({ ...formData, lastVacationDate: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
                     </div>
                     <div className="mb-12">
                         <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2"><Calendar className="w-4 h-4" /> {t.lbl_leave_details}</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                            <InputGroup label={t.lbl_from_date} type="date" value={formData.holidayFrom} onChange={(v: any) => setFormData({ ...formData, holidayFrom: v })} readOnly={isReview} isRtl={isRtl} />
-                            <InputGroup label={t.lbl_to_date} type="date" value={formData.holidayTo} onChange={(v: any) => setFormData({ ...formData, holidayTo: v })} readOnly={isReview} isRtl={isRtl} />
+                            <InputGroup label={t.lbl_from_date} type="date" value={formData.holidayFrom} onChange={(v: any) => setFormData({ ...formData, holidayFrom: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
+                            <InputGroup label={t.lbl_to_date} type="date" value={formData.holidayTo} onChange={(v: any) => setFormData({ ...formData, holidayTo: v })} readOnly={isReview} isRtl={isRtl} required={!isReview} />
                             <InputGroup label={t.lbl_days} value={String(formData.daysCount)} readOnly isRtl={isRtl} />
                         </div>
                     </div>
