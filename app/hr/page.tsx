@@ -39,10 +39,10 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhFVrwIdvBK4qOK13y
 
 const translations = {
     en: {
-        portal_name: "Tabarak HR",
-        service_title: "Document Issuance System",
-        login_title: "HR document request",
-        login_desc: "Please verify your identity to access the request form.",
+        portal_name: "HR self-service",
+        service_title: "My HR Requests",
+        login_title: "HR Request Portal",
+        login_desc: "Please verify your identity to access the HR self-service.",
         cpr_label: "CPR Number",
         btn_continue: "Continue Securely",
         btn_logout: "Sign Out",
