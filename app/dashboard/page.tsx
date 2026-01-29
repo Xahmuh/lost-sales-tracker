@@ -58,6 +58,7 @@ import { supabase } from '../../lib/supabase';
 import { LostSale, Branch, Product, Shortage } from '../../types';
 import * as XLSX from 'xlsx';
 import ExcelJS from 'exceljs';
+import { mapBranchName } from '../../utils/excelUtils';
 
 const StrategicKPI: React.FC<{
   label: string;
@@ -619,7 +620,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
           product_name: s.product_name,
           lost_date: s.lost_date,
           timestamp: dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-          branch_name: s.branch_name || 'Unknown',
+          branch_name: mapBranchName(s.branch_name || 'Unknown'),
           quantity: s.quantity,
           unit_price: Number(s.unit_price || 0),
           total_value: Number(s.total_value || 0),
@@ -723,7 +724,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
 
       const branchStats: Record<string, { count: number, value: number }> = {};
       viewData.forEach((s: any) => {
-        const bName = s.branch_name || 'Unknown';
+        const bName = mapBranchName(s.branch_name || 'Unknown');
         if (!branchStats[bName]) branchStats[bName] = { count: 0, value: 0 };
         branchStats[bName].count++;
         branchStats[bName].value += Number(s.total_value || 0);
@@ -743,8 +744,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
 
       const pharmaStats: Record<string, { name: string, branch: string, count: number, value: number }> = {};
       viewData.forEach((s: any) => {
-        const key = `${s.pharmacist_name}_${s.branch_name}`;
-        if (!pharmaStats[key]) pharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: s.branch_name || 'N/A', count: 0, value: 0 };
+        const branchName = mapBranchName(s.branch_name || 'N/A');
+        const key = `${s.pharmacist_name}_${branchName}`;
+        if (!pharmaStats[key]) pharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: branchName, count: 0, value: 0 };
         pharmaStats[key].count++;
         pharmaStats[key].value += Number(s.total_value || 0);
       });
@@ -847,7 +849,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
             product_name: sh.product_name,
             category: sh.category || 'General',
             agent_name: sh.agent_name || 'N/A',
-            branch_name: sh.branch_name || 'Unknown',
+            branch_name: mapBranchName(sh.branch_name || 'Unknown'),
             pharmacist_name: sh.pharmacist_name,
             status: sh.status,
             date: dateObj.toLocaleDateString(),
@@ -893,7 +895,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
 
       const branchStats: Record<string, number> = {};
       viewData.forEach((s: any) => {
-        const bName = s.branch_name || 'Unknown';
+        const bName = mapBranchName(s.branch_name || 'Unknown');
         branchStats[bName] = (branchStats[bName] || 0) + 1;
       });
 
@@ -911,8 +913,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
 
       const pharmaStats: Record<string, { name: string, branch: string, count: number }> = {};
       viewData.forEach((s: any) => {
-        const key = `${s.pharmacist_name}_${s.branch_name}`;
-        if (!pharmaStats[key]) pharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: s.branch_name || 'N/A', count: 0 };
+        const branchName = mapBranchName(s.branch_name || 'N/A');
+        const key = `${s.pharmacist_name}_${branchName}`;
+        if (!pharmaStats[key]) pharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: branchName, count: 0 };
         pharmaStats[key].count++;
       });
 
@@ -1022,7 +1025,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
             product_name: s.product_name,
             lost_date: s.lost_date,
             timestamp: dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
-            branch_name: s.branch_name || 'Unknown',
+            branch_name: mapBranchName(s.branch_name || 'Unknown'),
             quantity: s.quantity,
             unit_price: Number(s.unit_price || 0),
             total_value: Number(s.total_value || 0),
@@ -1095,7 +1098,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
           product_name: sh.product_name,
           category: sh.category || 'General',
           agent_name: sh.agent_name || 'N/A',
-          branch_name: sh.branch_name || 'Unknown',
+          branch_name: mapBranchName(sh.branch_name || 'Unknown'),
           pharmacist_name: sh.pharmacist_name,
           status: sh.status,
           date: dateObj.toLocaleDateString(),
@@ -1118,12 +1121,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
 
       const combinedBranchStats: Record<string, { salesVal: number, shortageCount: number }> = {};
       salesData.forEach(s => {
-        const b = s.branch_name || 'Unknown';
+        const b = mapBranchName(s.branch_name || 'Unknown');
         if (!combinedBranchStats[b]) combinedBranchStats[b] = { salesVal: 0, shortageCount: 0 };
         combinedBranchStats[b].salesVal += Number(s.total_value || 0);
       });
       shortagesData.forEach(s => {
-        const b = s.branch_name || 'Unknown';
+        const b = mapBranchName(s.branch_name || 'Unknown');
         if (!combinedBranchStats[b]) combinedBranchStats[b] = { salesVal: 0, shortageCount: 0 };
         combinedBranchStats[b].shortageCount++;
       });
@@ -1142,8 +1145,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
 
       const combinedPharmaStats: Record<string, { name: string, branch: string, count: number }> = {};
       [...salesData, ...shortagesData].forEach(s => {
-        const key = `${s.pharmacist_name}_${s.branch_name}`;
-        if (!combinedPharmaStats[key]) combinedPharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: s.branch_name || 'N/A', count: 0 };
+        const branchName = mapBranchName(s.branch_name || 'N/A');
+        const key = `${s.pharmacist_name}_${branchName}`;
+        if (!combinedPharmaStats[key]) combinedPharmaStats[key] = { name: s.pharmacist_name || 'N/A', branch: branchName, count: 0 };
         combinedPharmaStats[key].count++;
       });
 

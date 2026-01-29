@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { spinWinService } from '../../services/spinWin';
 import { Branch } from '../../types';
 import ExcelJS from 'exceljs';
+import { mapBranchName } from '../../utils/excelUtils';
 import { RangeDatePicker } from '../RangeDatePicker';
 import {
     Users,
@@ -247,10 +248,10 @@ export const BranchDashboard: React.FC<BranchDashboardProps> = ({ branch, onBack
                 phone: s.customer?.phone || 'N/A',
                 prize_name: s.prize?.name || 'N/A',
                 value: s.prize?.value || 0,
-                branch_name: s.branch?.name || branch.name,
+                branch_name: mapBranchName(s.branch?.name || branch.name),
                 status: s.redeemed_at ? 'REDEEMED' : 'PENDING',
                 redeemed_at: s.redeemed_at ? new Date(s.redeemed_at).toLocaleString() : '-',
-                redeemed_location: s.redeemed_branch?.name || (s.redeemed_branch_id ? 'External Branch' : '-')
+                redeemed_location: mapBranchName(s.redeemed_branch?.name || (s.redeemed_branch_id ? 'External Branch' : '-'))
             });
         });
 

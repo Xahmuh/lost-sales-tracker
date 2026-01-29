@@ -3,6 +3,32 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { Product } from '../types';
 
+export const BRANCH_NAME_MAPPING: Record<string, string> = {
+    'Tabarak Pharmacy - Jerdab branch': 'Tabarak 01 - Jerdab',
+    'Sanad 1 Pharmacy - Club': 'Sanad 01 - Club',
+    'Alhoda Pharmacy - Isa Town': 'Alhoda 03 - Isa Town/AlRabiee',
+    'Tabarak Pharmacy - West Riffa': 'Tabarak 05 - W.Riffa',
+    'Tabarak Pharmacy - Hidd Station': 'Tabarak 03 - Hidd Station',
+    'Alhoda Pharmacy - Sanad branch': 'Alhoda 04 - Sanad',
+    'Tabarak Pharmacy - Janabiya branch': 'Tabarak 04 - Janabiya',
+    'Tabarak Pharmacy - Hidd Club': 'Tabarak 08 - Hidd Club',
+    'Janabiya Square Pharmacy': 'Sanad 03 - Janabiya Sq',
+    'Damistan Pharmacy': 'District 02 - Damistan',
+    'Tabarak Pharmacy - Qalali Station': 'Tabarak 02 - Qalali Station',
+    'Jamila Pharmacy - Zinj branch': 'Sanad 02 - Jamila',
+    'Sanad 2 Pharmacy - Station': 'Sanad 04 - Sanad Station',
+    'Alhoda Pharmacy - Budaiya branch': 'Alhoda 05 - Budaiya',
+    'Tabarak Pharmacy - Qalali 2': 'Tabarak 09 - Qalali 2',
+    'Alnahar Pharmacy - Jerdab branch': 'Alhoda 02 - alnahar Jerdab',
+    'Alhoda Pharmacy - Tubli branch': 'Alhoda 01 - Tubli',
+    'District Pharmacy': 'District 01 - Janabiya',
+    'Tabarak Pharmacy - Juffair branch': 'Tabarak 06 - Juffair',
+    'Tabarak Pharmacy - Karana Branch': 'Tabarak 07 - Karanah',
+    'Tabarak Pharmacy - Mashtan': 'Tabarak 10 - Mashtan'
+};
+
+export const mapBranchName = (name: string) => BRANCH_NAME_MAPPING[name.trim()] || name;
+
 export const generateProductTemplate = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Products Import Template');

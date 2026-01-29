@@ -37,6 +37,7 @@ import ExcelJS from 'exceljs';
 import { RangeDatePicker } from '../RangeDatePicker';
 import { SpinHeatmapCalendar } from './SpinHeatmapCalendar';
 import { formatCurrency } from '../../utils/calculations';
+import { mapBranchName } from '../../utils/excelUtils';
 import { supabaseClient } from '../../lib/supabase';
 
 interface ManagerDashboardProps {
@@ -264,7 +265,7 @@ export const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ onBack }) =>
                 phone: s.customer?.phone || 'N/A',
                 prize_name: s.prize?.name || 'N/A',
                 value: s.prize?.value || 0,
-                branch_name: s.branch?.name || 'N/A',
+                branch_name: mapBranchName(s.branch?.name || 'N/A'),
                 status: s.redeemed_at ? 'REDEEMED' : 'PENDING',
                 redeemed_at: s.redeemed_at ? new Date(s.redeemed_at).toLocaleString() : '-'
             });
