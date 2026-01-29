@@ -53,6 +53,7 @@ import { RevenueChart, OperationalTrendChart, ShortageTrendChart } from '../../c
 import { DailyPerformanceCalendar } from '../../components/DailyPerformanceCalendar';
 import { RangeDatePicker } from '../../components/RangeDatePicker';
 import { PharmacistActivitySection } from './PharmacistActivitySection';
+import { ProductManagementSection } from '../../components/ProductManagementSection';
 import { supabase } from '../../lib/supabase';
 import { LostSale, Branch, Product, Shortage } from '../../types';
 import * as XLSX from 'xlsx';
@@ -160,7 +161,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
   const [branchPage, setBranchPage] = useState(1);
   const [hotShortagePage, setHotShortagePage] = useState(1);
   const [isSyncing, setIsSyncing] = useState(true);
-  const [viewMode, setViewMode] = useState<'standard' | 'expanded'>('standard');
+  const [viewMode, setViewMode] = useState<'standard' | 'expanded' | 'products'>('standard');
   const [expandedShortageId, setExpandedShortageId] = useState<string | null>(null);
   const [shortageStatusFilter, setShortageStatusFilter] = useState<string | null>(null);
   const [isExportDropdownOpen, setIsExportDropdownOpen] = useState(false);
@@ -1392,8 +1393,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
             >
               Inventory Shortages
             </button>
-            {(user.role === 'admin' || user.role === 'manager') && (
-              <></>
+            {(user.role === 'manager') && (
+              <button
+                onClick={() => setViewMode('products')}
+                className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'products' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
+              >
+                Product Catalog
+              </button>
             )}
           </div>
         </div>
@@ -2178,6 +2184,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onBack }) =>
 
               <PharmacistActivitySection sales={sales} branches={branches} />
             </>
+          ) : null
+        }
+
+        {
+          viewMode === 'products' ? (
+            <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm min-h-[600px]">
+              <ProductManagementSection />
+            </div>
           ) : null
         }
         <div className="h-20"></div>
