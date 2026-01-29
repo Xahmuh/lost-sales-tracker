@@ -13,10 +13,10 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
     return (
         <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
             {/* Modal Container - Increased max-width to be wider */}
-            <div className="w-full max-w-5xl bg-white shadow-[0_35px_100px_-20px_rgba(0,0,0,0.5)] relative overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col font-sans border border-white/20">
+            <div className="w-full max-w-5xl max-h-[90vh] bg-white shadow-[0_35px_100px_-20px_rgba(0,0,0,0.5)] relative overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col font-sans border border-white/20">
 
                 {/* Red Header & Content Section */}
-                <div className="bg-[#b81c1d] p-8 md:p-12 relative overflow-hidden">
+                <div className="bg-[#b81c1d] p-8 md:p-12 relative overflow-y-auto overflow-x-hidden flex-1 custom-scrollbar">
                     {/* Background Watermark - Warning Sign */}
                     <div className="absolute top-0 right-0 -mr-16 -mt-16 opacity-10 pointer-events-none">
                         <AlertTriangle size={400} className="text-white rotate-12" strokeWidth={3} />
@@ -102,7 +102,7 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
                 </div>
 
                 {/* Footer Section */}
-                <div className="bg-white p-8 px-10 md:px-14 flex flex-col md:flex-row justify-between items-center gap-6">
+                <div className="bg-white p-8 px-10 md:px-14 flex flex-col md:flex-row justify-between items-center gap-6 flex-shrink-0">
                     <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Tabarak Hub © 2026</p>
                     <div className="flex items-center">
                         <button
