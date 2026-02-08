@@ -406,7 +406,7 @@ export const BranchDashboard: React.FC<BranchDashboardProps> = ({ branch, onBack
                                                             const message = `*Time is running out!*\nRedeem your Tabarak Pharmacies voucher no ${voucherCode} now and make the most of your savings.\n\n*لا تضيع الفرصة!*\nقسيمتك ${voucherCode} من صيدليات تبارك  بتخلص قريب استعملها الحين واستمتع بأقوى توفير.`;
 
                                                             try {
-                                                                const response = await fetch('/spin-header-v4.jpg');
+                                                                const response = await fetch('/spin-suite-header.jpg');
                                                                 const blob = await response.blob();
                                                                 const file = new File([blob], 'tabarak-reminder.jpg', { type: 'image/jpeg' });
 

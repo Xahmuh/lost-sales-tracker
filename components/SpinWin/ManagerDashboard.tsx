@@ -610,7 +610,7 @@ export const ManagerDashboard: React.FC<ManagerDashboardProps> = ({ onBack }) =>
                                                                     <button onClick={async () => {
                                                                         const message = `*Time is running out!*\nRedeem your Tabarak Pharmacies voucher no ${spin.voucher_code} now.\n\n*لا تضيع الفرصة!*\nقسيمتك ${spin.voucher_code} من صيدليات تبارك بتخلص قريب.`;
                                                                         try {
-                                                                            const response = await fetch('/spin-header-v4.jpg');
+                                                                            const response = await fetch('/spin-suite-header.jpg');
                                                                             const blob = await response.blob();
                                                                             const file = new File([blob], 'tabarak-reminder.jpg', { type: 'image/jpeg' });
                                                                             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
