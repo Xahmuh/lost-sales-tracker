@@ -74,62 +74,58 @@ const StrategicKPI: React.FC<{
   unit?: string;
 }> = ({ label, value, icon, isCurrency, trend, isPrimary, subtext, critical, description, unit }) => {
   return (
-    <div className={`p-8 rounded-[2.5rem] border-2 transition-all duration-700 relative flex flex-col justify-between min-h-[180px] group ${isPrimary
-      ? 'bg-red-900 border-red-900 text-white overflow-hidden shadow-2xl shadow-red-900/20'
+    <div className={`p-7 rounded-[2rem] border-2 transition-all duration-500 relative flex flex-col justify-between min-h-[170px] group ${isPrimary
+      ? 'bg-red-700 border-red-700 text-white overflow-hidden shadow-xl shadow-red-700/20'
       : critical
-        ? 'bg-white border-red-100 text-slate-900 hover:border-red-500/30 hover:shadow-2xl hover:shadow-red-500/10'
-        : 'bg-white border-slate-100 text-slate-900 hover:border-brand/30 hover:shadow-2xl hover:shadow-brand/10'
+        ? 'bg-white border-red-100 text-slate-900 hover:border-red-300/50 hover:shadow-xl hover:shadow-red-500/5'
+        : 'bg-white border-slate-100 text-slate-900 hover:border-red-200/50 hover:shadow-xl hover:shadow-red-500/5'
       }`}>
       {isPrimary && (
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-      )}
-
-      {!isPrimary && (
-        <div className="absolute top-0 right-0 w-24 h-24 bg-brand/[0.02] rounded-full -mr-12 -mt-12 group-hover:scale-150 transition-transform duration-700"></div>
+        <div className="absolute top-0 right-0 w-28 h-28 bg-white/5 rounded-full -mr-14 -mt-14 blur-2xl"></div>
       )}
 
       {critical && !isPrimary && (
-        <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 bg-red-50 border border-red-100 rounded-full shadow-sm z-20">
-          <div className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse shadow-[0_0_8px_rgba(220,38,38,0.5)]"></div>
+        <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5 px-2.5 py-1 bg-red-50 border border-red-100 rounded-full z-20">
+          <div className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></div>
           <span className="text-[7px] font-black text-red-600 uppercase tracking-[0.1em]">Action Required</span>
         </div>
       )}
 
-      <div className={`flex items-start justify-between relative z-10 ${critical ? 'mt-4' : ''}`}>
+      <div className={`flex items-start justify-between relative z-10 ${critical ? 'mt-3' : ''}`}>
         <div>
-          <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] ${isPrimary ? 'text-white/60' : 'text-slate-400 group-hover:text-brand transition-colors'}`}>
+          <h3 className={`text-[10px] font-black uppercase tracking-[0.15em] ${isPrimary ? 'text-white/60' : 'text-slate-400 group-hover:text-red-600 transition-colors'}`}>
             {label}
           </h3>
           {description && (
-            <p className="mt-1 text-[11px] font-bold leading-tight text-[#1f161b]">
+            <p className="mt-1 text-[11px] font-bold leading-tight text-slate-600">
               "{description}"
             </p>
           )}
         </div>
-        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border-2 shrink-0 transition-all duration-500 ${isPrimary
+        <div className={`w-11 h-11 rounded-xl flex items-center justify-center border-2 shrink-0 transition-all duration-500 ${isPrimary
           ? 'bg-white/10 border-white/10 text-white'
           : critical
             ? 'bg-red-50 border-red-100 text-red-600'
-            : 'bg-slate-50 border-slate-100 text-slate-400 group-hover:bg-brand group-hover:border-brand group-hover:text-white'
+            : 'bg-slate-50 border-slate-100 text-slate-400 group-hover:bg-red-700 group-hover:border-red-700 group-hover:text-white'
           }`}>
-          {React.isValidElement(icon) ? React.cloneElement(icon as React.ReactElement, { size: 20 }) : icon}
+          {React.isValidElement(icon) ? React.cloneElement(icon as React.ReactElement, { size: 18 }) : icon}
         </div>
       </div>
 
-      <div className="mt-4 relative z-10 flex flex-col">
+      <div className="mt-3 relative z-10 flex flex-col">
         <div className="flex items-baseline gap-2">
           {(isCurrency || unit) && (
-            <span className={`text-sm font-black tracking-tighter ${isPrimary ? 'text-white/40' : 'text-slate-300'}`}>
+            <span className={`text-xs font-black tracking-tighter ${isPrimary ? 'text-white/40' : 'text-slate-300'}`}>
               {isCurrency ? 'BHD' : unit}
             </span>
           )}
-          <span className={`text-5xl font-black tracking-tighter tabular-nums ${critical && !isPrimary ? 'text-red-700' : 'text-slate-900 group-hover:text-brand transition-colors'}`}>
+          <span className={`text-4xl font-black tracking-tighter tabular-nums ${critical && !isPrimary ? 'text-red-700' : isPrimary ? '' : 'text-slate-900 group-hover:text-red-700 transition-colors'}`}>
             {value}
           </span>
         </div>
 
         {subtext ? (
-          <div className={`mt-4 w-fit px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider ${isPrimary
+          <div className={`mt-3 w-fit px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider ${isPrimary
             ? 'bg-white/10 text-white/80'
             : critical ? 'bg-red-600 text-white' : 'bg-red-50 text-red-600'
             }`}>
@@ -1252,35 +1248,32 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, permissions,
 
   const activeBranchLabel = selectedBranch === 'all' ? 'CENTRAL CONSOLE' : branches.find(b => b.id === selectedBranch)?.name;
 
-  return (
-    <div className="min-h-screen bg-white font-sans selection:bg-red-100">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-10">
-        {/* --- HEADER --- */}
-        <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 mb-16">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-red-900 rounded-[1.4rem] flex items-center justify-center text-white shadow-2xl shadow-red-900/20">
-              <LayoutGrid size={32} />
+    return (
+      <div className="min-h-screen bg-white font-sans selection:bg-red-100">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-12 py-10">
+          {/* --- HEADER --- */}
+          <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-12">
+            <div className="flex items-center gap-4">
+              <div className="w-13 h-13 bg-red-700 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-red-700/20">
+                <LayoutGrid size={28} />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none whitespace-nowrap">
+                  {viewMode === 'standard' ? 'Lost Sales Tracker' : viewMode === 'expanded' ? 'Inventory Gaps' : 'Product Catalog'}
+                </h1>
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.25em] mt-1.5">Real-time performance analytics</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-none whitespace-nowrap">
-                {viewMode === 'standard' ? 'Lost Sales Tracker' : 'Inventory Gaps'}
-              </h1>
-              <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] mt-2">Real-time performance analytics</p>
-            </div>
-          </div>
 
-
-
-
-          <div className="flex flex-wrap lg:flex-nowrap items-center gap-4">
-            {isCanSelectBranch && (
-              <div className="relative">
-                <button onClick={() => setIsBranchDropdownOpen(!isBranchDropdownOpen)}
-                  className="flex items-center gap-3 px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-700 hover:bg-white hover:border-red-200 transition-all">
-                  <MapPin size={16} className="text-red-600" />
-                  <span className="max-w-[120px] truncate">{activeBranchLabel}</span>
-                  <ChevronDown size={14} className={`transition-transform duration-500 ${isBranchDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
+            <div className="flex flex-wrap lg:flex-nowrap items-center gap-3">
+              {isCanSelectBranch && (
+                <div className="relative">
+                  <button onClick={() => setIsBranchDropdownOpen(!isBranchDropdownOpen)}
+                    className="flex items-center gap-3 px-5 py-3.5 bg-white border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-700 hover:border-red-200 transition-all">
+                    <MapPin size={15} className="text-red-600" />
+                    <span className="max-w-[120px] truncate">{activeBranchLabel}</span>
+                    <ChevronDown size={13} className={`transition-transform duration-500 ${isBranchDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
                 {isBranchDropdownOpen && (
                   <div className="absolute top-full right-0 mt-3 w-80 bg-white rounded-[2rem] shadow-2xl border border-slate-100 p-4 z-[100] animate-in zoom-in-95 duration-300">
                     <div className="mb-4">
@@ -1340,10 +1333,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, permissions,
               </div>
             )}
 
-            <div className="relative">
-              <button onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-                className="flex items-center gap-3 px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-700 hover:bg-white hover:border-red-200 transition-all">
-                <CalendarDays size={16} className="text-red-600" />
+              <div className="relative">
+                <button onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+                  className="flex items-center gap-3 px-5 py-3.5 bg-white border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-700 hover:border-red-200 transition-all">
+                  <CalendarDays size={15} className="text-red-600" />
                 <span>{dateType === 'today' ? 'Today' : dateType === 'yesterday' ? 'Yesterday' : dateType === '7d' ? 'Last 7 Days' : dateType === 'month' ? 'Last Month' : dateType === 'custom' ? 'Custom Period' : 'Archive View'}</span>
                 <ChevronDown size={14} />
               </button>
@@ -1435,11 +1428,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, permissions,
               )}
             </div>
 
-            <div className="relative export-dropdown-container">
-              <button
-                onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
-                className="flex items-center gap-3 px-8 py-4 bg-red-900 hover:bg-red-800 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl hover:-translate-y-1"
-              >
+              <div className="relative export-dropdown-container">
+                <button
+                  onClick={() => setIsExportDropdownOpen(!isExportDropdownOpen)}
+                  className="flex items-center gap-2.5 px-6 py-3.5 bg-red-700 hover:bg-red-800 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-red-700/20 hover:-translate-y-0.5"
+                >
                 <Download size={18} />
                 <span>Export</span>
                 <ChevronDown size={14} className={`transition-transform duration-300 ${isExportDropdownOpen ? 'rotate-180' : ''}`} />
@@ -1500,11 +1493,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, permissions,
               )}
             </div>
 
-            {onBack && (
-              <button
-                onClick={onBack}
-                className="px-6 py-4 bg-white border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all shadow-sm whitespace-nowrap"
-              >
+              {onBack && (
+                <button
+                  onClick={onBack}
+                  className="px-5 py-3.5 bg-white border-2 border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-slate-200 hover:text-slate-900 transition-all whitespace-nowrap"
+                >
                 Back to Operational Suite
               </button>
             )}
@@ -1513,35 +1506,35 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, permissions,
 
 
 
-        {/* Tabs Navigation */}
-        <div className="flex justify-center mb-12">
-          <div className="flex bg-white p-1.5 rounded-[1.5rem] border border-slate-100 shadow-sm">
-            {salesPerm !== 'none' && (
-              <button
-                onClick={() => setViewMode('standard')}
-                className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'standard' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
-              >
-                Revenue Lost Analysis
-              </button>
-            )}
-            {shortagesPerm !== 'none' && (
-              <button
-                onClick={() => setViewMode('expanded')}
-                className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'expanded' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
-              >
-                Inventory Shortages
-              </button>
-            )}
-            {(user.role === 'manager') && (
-              <button
-                onClick={() => setViewMode('products')}
-                className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'products' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-400 hover:text-slate-900'}`}
-              >
-                Product Catalog
-              </button>
-            )}
+          {/* Tabs Navigation */}
+          <div className="flex justify-center mb-10">
+            <div className="tab-nav p-1.5 rounded-2xl">
+              {salesPerm !== 'none' && (
+                <button
+                  onClick={() => setViewMode('standard')}
+                  className={`tab-item px-7 py-3 rounded-xl ${viewMode === 'standard' ? 'bg-slate-900 text-white shadow-lg' : ''}`}
+                >
+                  Revenue Lost Analysis
+                </button>
+              )}
+              {shortagesPerm !== 'none' && (
+                <button
+                  onClick={() => setViewMode('expanded')}
+                  className={`tab-item px-7 py-3 rounded-xl ${viewMode === 'expanded' ? 'bg-slate-900 text-white shadow-lg' : ''}`}
+                >
+                  Inventory Shortages
+                </button>
+              )}
+              {(user.role === 'manager') && (
+                <button
+                  onClick={() => setViewMode('products')}
+                  className={`tab-item px-7 py-3 rounded-xl ${viewMode === 'products' ? 'bg-slate-900 text-white shadow-lg' : ''}`}
+                >
+                  Product Catalog
+                </button>
+              )}
+            </div>
           </div>
-        </div>
 
         {
           viewMode === 'standard' ? (

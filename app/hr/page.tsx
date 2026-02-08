@@ -324,16 +324,16 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
         <div className={`flex flex-col h-full bg-[#fcfdfe] overflow-hidden ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
 
             {/* BRANDED PROFESSIONAL HEADER (NO LOGO) */}
-            <header className="h-24 bg-white border-b border-slate-100 flex items-center justify-between px-8 lg:px-14 shrink-0 transition-all z-50">
+            <header className="h-20 bg-white border-b-2 border-slate-100 flex items-center justify-between px-8 lg:px-12 shrink-0 transition-all z-50">
                 {employee.name ? (
-                    <div className="flex items-center gap-6 animate-in slide-in-from-left-4 duration-500">
-                        <div className="w-14 h-14 bg-brand text-white rounded-[1.25rem] flex items-center justify-center text-2xl font-black shadow-lg shadow-brand/20">
+                    <div className="flex items-center gap-5 animate-in slide-in-from-left-4 duration-500">
+                        <div className="w-12 h-12 bg-red-700 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg shadow-red-700/20">
                             {employee.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{employee.name}</h2>
-                            <div className="flex items-center gap-3">
-                                <div className="px-3 py-1 bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-[0.2em] rounded-lg">CPR {employee.cpr}</div>
+                            <h2 className="text-lg font-black text-slate-900 tracking-tight leading-none mb-1">{employee.name}</h2>
+                            <div className="flex items-center gap-2.5">
+                                <div className="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-[0.15em] rounded-lg">CPR {employee.cpr}</div>
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
                                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{t.portal_name}</span>
                             </div>
@@ -341,10 +341,10 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                     </div>
                 ) : <div></div>}
 
-                <div className="flex items-center gap-5">
+                <div className="flex items-center gap-3">
                     <button
                         onClick={toggleLang}
-                        className="h-12 px-6 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-2xl border border-slate-200 text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2 group"
+                        className="h-10 px-5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border-2 border-slate-100 text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center gap-2 group"
                     >
                         <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                         {lang === 'en' ? 'Arabic' : 'English'}
@@ -352,10 +352,10 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                     {onBack && (
                         <button
                             onClick={onBack}
-                            className="h-12 px-6 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-600 rounded-2xl border border-rose-100 flex items-center justify-center gap-3 transition-all font-black text-[10px] uppercase tracking-widest shadow-sm"
+                            className="h-10 px-5 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-600 rounded-xl border-2 border-rose-100 flex items-center justify-center gap-2 transition-all font-black text-[10px] uppercase tracking-widest"
                         >
-                            <Power className="w-4 h-4" />
-                            <span>Leave & Back</span>
+                            <Power className="w-3.5 h-3.5" />
+                            <span>Leave</span>
                         </button>
                     )}
                 </div>
@@ -370,8 +370,8 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                 <p className="text-slate-500 font-medium">{t.login_desc}</p>
                             </div>
 
-                            <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border-2 border-slate-100 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+                            <div className="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/50 border-2 border-slate-100 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-28 h-28 bg-slate-50 rounded-full -mr-14 -mt-14 pointer-events-none"></div>
                                 <div className="relative z-10 space-y-6">
                                     <div className="space-y-4">
                                         <label htmlFor="cpr-input" className={`text-xs font-bold text-slate-900 uppercase tracking-widest block ${isRtl ? 'text-right' : ''}`}>{t.cpr_label}</label>
@@ -394,7 +394,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                     <button
                                         onClick={handleLogin}
                                         disabled={isAuthenticating}
-                                        className="w-full h-14 bg-[#D92D20] text-white rounded-xl font-bold text-base shadow-lg shadow-red-500/20 hover:bg-red-700 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:shadow-none"
+                                        className="w-full h-14 bg-red-700 text-white rounded-xl font-bold text-base shadow-lg shadow-red-700/20 hover:bg-red-800 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:shadow-none"
                                     >
                                         {isAuthenticating ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                                             <>
@@ -436,7 +436,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <button
                                         onClick={() => { setSelectedService('documents'); setStep(3); }}
-                                        className="group relative p-8 bg-white rounded-[2.5rem] border-2 border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/20 hover:border-blue-500/50 hover:-translate-y-1 transition-all duration-500 text-left overflow-hidden"
+                                        className="group relative p-8 bg-white rounded-[2rem] border-2 border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/40 hover:-translate-y-1 transition-all duration-500 text-left overflow-hidden"
                                     >
                                         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
                                             <FileTextIcon className="w-32 h-32 text-blue-900" />
@@ -452,7 +452,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
 
                                     <button
                                         onClick={() => { setSelectedService('vacation'); }}
-                                        className="group relative p-8 bg-white rounded-[2.5rem] border-2 border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-emerald-500/20 hover:border-emerald-500/50 hover:-translate-y-1 transition-all duration-500 text-left overflow-hidden"
+                                        className="group relative p-8 bg-white rounded-[2rem] border-2 border-slate-100 shadow-sm hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-500 text-left overflow-hidden"
                                     >
                                         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
                                             <CalendarDays className="w-32 h-32 text-emerald-900" />
@@ -471,13 +471,13 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
 
                         {/* STEP PROGRESSION (Only for Documents) */}
                         {step > 2 && (
-                            <div className="flex items-center justify-center gap-4 mb-24">
+                            <div className="flex items-center justify-center gap-3 mb-20">
                                 {[3, 4, 5].map(idx => (
                                     <React.Fragment key={idx}>
-                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-sm font-black transition-all duration-700 shadow-sm ${step >= idx ? 'bg-brand text-white scale-110 shadow-lg shadow-brand/20' : 'bg-white border border-slate-100 text-slate-200'}`}>
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black transition-all duration-500 ${step >= idx ? 'bg-red-700 text-white scale-105 shadow-lg shadow-red-700/20' : 'bg-white border-2 border-slate-100 text-slate-300'}`}>
                                             {idx - 2}
                                         </div>
-                                        {idx < 5 && <div className={`w-16 h-0.5 rounded-full transition-all duration-1000 ${step > idx ? 'bg-brand' : 'bg-slate-100'}`}></div>}
+                                        {idx < 5 && <div className={`w-12 h-0.5 rounded-full transition-all duration-700 ${step > idx ? 'bg-red-700' : 'bg-slate-100'}`}></div>}
                                     </React.Fragment>
                                 ))}
                             </div>
@@ -676,7 +676,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                                 }
                                                 setStep(4);
                                             }}
-                                            className="px-16 py-7 bg-slate-900 text-white rounded-[2.5rem] font-black uppercase text-xs tracking-[0.4em] shadow-2xl hover:bg-brand hover:scale-105 active:scale-95 transition-all flex items-center gap-5"
+                                            className="px-14 py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase text-xs tracking-[0.3em] shadow-xl hover:bg-red-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-4"
                                         >
                                             <span>{t.btn_next}</span>
                                             <ChevronRight className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} />
@@ -826,7 +826,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                         <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-lg mx-auto">{t.review_desc}</p>
                                     </div>
 
-                                    <div className="bg-slate-900 text-white rounded-[5rem] p-16 lg:p-24 shadow-[0_80px_150px_-40px_rgba(15,23,42,0.4)] relative overflow-hidden group">
+                                    <div className="bg-slate-900 text-white rounded-[3rem] p-12 lg:p-16 shadow-2xl shadow-slate-900/30 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand/10 rounded-full blur-[120px] -mr-64 -mt-64 transition-transform group-hover:scale-110 duration-1000"></div>
 
                                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 relative z-10">
