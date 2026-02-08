@@ -397,7 +397,7 @@ export const CustomerFlow: React.FC<CustomerFlowProps> = ({ token }) => {
                     <div className="flex-1 flex flex-col items-center justify-between py-4 animate-in zoom-in duration-700">
                         <div className="w-full mb-6">
                             <img
-                                src="/spin-suite-header.jpg"
+                                src="/spin-header-v4.jpg"
                                 alt="Spin and Win"
                                 className="w-full h-auto object-cover rounded-2xl"
                             />
