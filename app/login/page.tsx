@@ -130,7 +130,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 <input
                   type="text"
                   className="w-full px-5 py-4 rounded-xl bg-transparent text-slate-900 font-bold outline-none text-base placeholder:text-slate-300"
-                  placeholder="e.g. B001"
+                  placeholder="Enter branch code"
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                   onFocus={() => setFocusedField('code')}

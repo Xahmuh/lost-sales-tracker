@@ -2,8 +2,80 @@
 import React from 'react';
 import { Globe, Mail, Phone, MapPin, Shield, ExternalLink } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+export interface FooterProps {
+    onNavigate?: (tab: any) => void;
+    permissions?: any[];
+    user?: any;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onNavigate, permissions = [], user }) => {
     const currentYear = new Date().getFullYear();
+
+    const isManager = user?.role === 'manager' || user?.role === 'admin';
+    const isAccounts = user?.role === 'accounts';
+    const isAdmin01 = user?.code === 'ADMIN01';
+
+    const checkPermission = (feature: string) => {
+        if (!permissions) return true;
+        const perm = permissions.find(p => p.featureName === feature);
+        if (!perm) return true;
+        return perm.accessLevel !== 'none';
+    };
+
+    const modules: { name: string; tab: string }[] = [];
+
+    // Mirroring App.tsx exact display logic
+
+    // 1. Lost Sales & Shortage
+    if (!isAdmin01 && !isAccounts && (checkPermission('lost_sales') || checkPermission('shortages'))) {
+        modules.push({ name: 'Lost Sales Tracker', tab: 'pos' });
+    }
+
+    // 2. Performance Portal (Branch) / Performance Dashboard (Manager/Admin01)
+    if (isManager) {
+        // Both normal managers and ADMIN01 see this
+        modules.push({ name: 'Performance Dashboard', tab: 'dashboard' });
+    } else if (!isAccounts && (checkPermission('lost_sales') || checkPermission('shortages'))) {
+        modules.push({ name: 'Performance Portal', tab: 'dashboard' });
+    }
+
+    // 3. HR Admin Portal (Manager only, NOT ADMIN01)
+    if (isManager && !isAdmin01 && checkPermission('hr_requests')) {
+        modules.push({ name: 'HR Admin Portal', tab: 'hr-manager' });
+    }
+    // HR Self-Service (Branch only)
+    else if (!isManager && !isAccounts && checkPermission('hr_requests')) {
+        modules.push({ name: 'HR Self-Service', tab: 'hr' });
+    }
+
+    // 4. Workforce Analytics (Manager only, NOT ADMIN01)
+    if (isManager && !isAdmin01 && user?.role === 'manager' && checkPermission('hr_requests')) {
+        modules.push({ name: 'Workforce Analytics', tab: 'workforce' });
+    }
+
+    // 5. Cash Flow Planner (Manager only, NOT ADMIN01)
+    if (isManager && !isAdmin01 && checkPermission('cash_flow')) {
+        modules.push({ name: 'Cash Flow Planner', tab: 'cash-flow' });
+    }
+    // Branch Cash Tracker
+    else if (!isManager && checkPermission('cash_tracker')) {
+        modules.push({ name: 'Branch Cash Tracker', tab: 'cash-tracker' });
+    }
+
+    // 6. Corporate Codex (NOT ADMIN01)
+    if (!isAdmin01 && !isAccounts && checkPermission('corporate_codex')) {
+        modules.push({ name: 'Corporate Codex', tab: 'corporate-codex' });
+    }
+
+    // 7. Spin & Win (NOT ADMIN01)
+    if (!isAdmin01 && !isAccounts && checkPermission('spin_win')) {
+        modules.push({ name: 'Spin & Win Rewards', tab: 'spin-win' });
+    }
+
+    // 8. Settings / Infrastructure (Manager only, NOT ADMIN01)
+    if (isManager && !isAdmin01 && checkPermission('settings')) {
+        modules.push({ name: 'Infrastructure Control', tab: 'settings' });
+    }
 
     return (
         <footer className="w-full bg-slate-950 relative overflow-hidden mt-auto">
@@ -44,14 +116,17 @@ export const Footer: React.FC = () => {
 
                     {/* Quick Links */}
                     <div className="md:col-span-3 md:pl-8">
-                        <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5">Platform</h5>
+                        <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5">Modules</h5>
                         <ul className="space-y-3">
-                            {['Lost Sales Tracker', 'Performance Dashboard', 'HR Self-Service', 'Cash Flow Planner', 'Spin & Win Rewards', 'Corporate Codex'].map((item) => (
-                                <li key={item}>
-                                    <span className="text-sm text-slate-500 hover:text-slate-300 transition-colors cursor-default flex items-center group">
+                            {modules.map((item) => (
+                                <li key={item.tab}>
+                                    <button
+                                        onClick={() => onNavigate?.(item.tab)}
+                                        className="text-sm text-slate-500 hover:text-brand transition-all flex items-center group text-left w-full outline-none"
+                                    >
                                         <span className="w-1 h-1 bg-slate-700 rounded-full mr-3 group-hover:bg-brand transition-colors"></span>
-                                        {item}
-                                    </span>
+                                        {item.name}
+                                    </button>
                                 </li>
                             ))}
                         </ul>

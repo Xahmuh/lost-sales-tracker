@@ -57,6 +57,14 @@ export const SpinHeatmapCalendar: React.FC<SpinHeatmapCalendarProps> = ({ spins 
         return values.length > 0 ? Math.max(...values) : 0;
     }, [dailyStats]);
 
+    const getIntensityClass = (total: number) => {
+        if (total === 0) return 'bg-slate-50';
+        const ratio = total / Math.max(maxActivity, 1);
+        if (ratio <= 0.25) return 'bg-red-100';
+        if (ratio <= 0.5) return 'bg-red-200';
+        if (ratio <= 0.75) return 'bg-red-300';
+        return 'bg-red-500';
+    };
 
     const changeMonth = (offset: number) => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + offset, 1));
@@ -67,34 +75,36 @@ export const SpinHeatmapCalendar: React.FC<SpinHeatmapCalendarProps> = ({ spins 
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     return (
-        <div className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-sm relative overflow-hidden h-full flex flex-col">
-            <div className="flex items-center justify-between mb-10">
-                <div className="flex items-center space-x-5">
-                    <div className="w-14 h-14 bg-brand/10 rounded-2xl flex items-center justify-center text-brand">
-                        <CalendarIcon className="w-6 h-6" />
+        <div className="bg-white rounded-2xl p-6 lg:p-8 border border-slate-100 shadow-sm relative overflow-hidden h-full flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-red-600">
+                        <CalendarIcon className="w-5 h-5" />
                     </div>
                     <div>
-                        <h3 className="text-2xl font-black text-slate-900 tracking-tighter leading-none">{monthName}</h3>
-                        <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.3em] mt-2">{year} Engagement Heatmap</p>
+                        <h3 className="text-xl font-bold text-slate-900 tracking-tight">{monthName} {year}</h3>
+                        <p className="text-xs text-slate-400 font-medium">Engagement Heatmap</p>
                     </div>
                 </div>
-                <div className="flex items-center bg-slate-50 p-1.5 rounded-xl border border-slate-100">
-                    <button onClick={() => changeMonth(-1)} className="p-2 hover:bg-white hover:text-brand hover:shadow-lg rounded-lg transition-all text-slate-400">
-                        <ChevronLeft className="w-5 h-5" />
+                <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-lg border border-slate-100">
+                    <button onClick={() => changeMonth(-1)} className="p-2 hover:bg-white hover:text-red-600 rounded-md transition-all text-slate-400">
+                        <ChevronLeft className="w-4 h-4" />
                     </button>
-                    <div className="w-px h-4 bg-slate-200 mx-2"></div>
-                    <button onClick={() => changeMonth(1)} className="p-2 hover:bg-white hover:text-brand hover:shadow-lg rounded-lg transition-all text-slate-400">
-                        <ChevronRight className="w-5 h-5" />
+                    <button onClick={() => changeMonth(1)} className="p-2 hover:bg-white hover:text-red-600 rounded-md transition-all text-slate-400">
+                        <ChevronRight className="w-4 h-4" />
                     </button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-7 mb-4">
+            {/* Week headers */}
+            <div className="grid grid-cols-7 mb-2">
                 {weekDays.map(day => (
-                    <div key={day} className="text-center text-[9px] font-black text-slate-400 uppercase tracking-widest">{day}</div>
+                    <div key={day} className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-wider py-1">{day}</div>
                 ))}
             </div>
 
+            {/* Calendar grid */}
             <div className="grid grid-cols-7 gap-1 flex-1">
                 {daysInMonth.map((dateObj, idx) => {
                     const key = `${dateObj.year}-${dateObj.month}-${dateObj.day}`;
@@ -102,52 +112,45 @@ export const SpinHeatmapCalendar: React.FC<SpinHeatmapCalendarProps> = ({ spins 
                     const isToday = new Date().toDateString() === new Date(dateObj.year, dateObj.month, dateObj.day).toDateString();
                     const total = stat.created + stat.redeemed;
 
-                    // Intensity calculation based on total activity
-                    const intensity = total === 0 ? 'bg-slate-50' : 'bg-slate-100';
-
                     return (
                         <div
                             key={idx}
-                            className={`aspect-square rounded-2xl flex flex-col items-center justify-start p-2 transition-all duration-500 group relative ${!dateObj.isCurrentMonth ? 'opacity-0 pointer-events-none' : intensity}`}
+                            className={`aspect-square rounded-lg flex flex-col items-center justify-start p-1.5 transition-all duration-300 group relative ${!dateObj.isCurrentMonth ? 'opacity-0 pointer-events-none' : getIntensityClass(total)} ${isToday ? 'ring-2 ring-red-400 ring-offset-1' : ''}`}
+                            title={total > 0 ? `${stat.created} spins, ${stat.redeemed} redeemed` : ''}
                         >
-                            <span className={`text-[10px] font-black text-slate-900 mb-1`}>
+                            <span className={`text-[10px] font-bold ${total > 0 && (total / Math.max(maxActivity, 1)) > 0.5 ? 'text-white' : 'text-slate-700'}`}>
                                 {dateObj.day}
                             </span>
 
-                            {(stat.created > 0 || stat.redeemed > 0) && (
-                                <div className="flex flex-col items-center gap-0.5 w-full">
-                                    {stat.created > 0 && (
-                                        <div className="text-center leading-tight">
-                                            <span className="text-[14px] font-black text-red-600 block">{stat.created}</span>
-                                            <span className="text-[12px] font-bold text-red-400 uppercase tracking-tight block">Created</span>
-                                        </div>
-                                    )}
+                            {stat.created > 0 && (
+                                <div className="flex flex-col items-center gap-0 mt-0.5">
+                                    <span className={`text-[11px] font-black leading-none ${total > 0 && (total / Math.max(maxActivity, 1)) > 0.5 ? 'text-white' : 'text-red-600'}`}>
+                                        {stat.created}
+                                    </span>
                                     {stat.redeemed > 0 && (
-                                        <div className="text-center leading-tight mt-1">
-                                            <span className="text-[14px] font-black text-orange-500 block">{stat.redeemed}</span>
-                                            <span className="text-[12px] font-bold text-orange-400 uppercase tracking-tight block">Redeemed</span>
-                                        </div>
+                                        <span className={`text-[9px] font-bold leading-none ${total > 0 && (total / Math.max(maxActivity, 1)) > 0.5 ? 'text-white/70' : 'text-amber-600'}`}>
+                                            +{stat.redeemed}
+                                        </span>
                                     )}
                                 </div>
-                            )}
-
-                            {isToday && total === 0 && (
-                                <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-brand rounded-full"></div>
                             )}
                         </div>
                     );
                 })}
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                    <Zap className="w-3 h-3 text-brand" />
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Spin Activity Density</span>
+            {/* Legend */}
+            <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <Zap className="w-3 h-3 text-red-600" />
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Activity Density</span>
                 </div>
-                <div className="flex items-center space-x-1">
-                    {[0, 1, 2, 3].map(i => (
-                        <div key={i} className={`w-3 h-3 rounded-[4px] ${i === 0 ? 'bg-slate-50' : i === 1 ? 'bg-brand/10' : i === 2 ? 'bg-brand/40' : 'bg-brand'}`}></div>
+                <div className="flex items-center gap-1">
+                    <span className="text-[9px] text-slate-400 mr-1">Low</span>
+                    {['bg-slate-50', 'bg-red-100', 'bg-red-200', 'bg-red-300', 'bg-red-500'].map((c, i) => (
+                        <div key={i} className={`w-3 h-3 rounded ${c} border border-slate-200/50`}></div>
                     ))}
+                    <span className="text-[9px] text-slate-400 ml-1">High</span>
                 </div>
             </div>
         </div>

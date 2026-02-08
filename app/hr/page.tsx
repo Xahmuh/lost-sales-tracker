@@ -28,7 +28,15 @@ import {
     Bell,
     UserCircle2,
     CalendarDays,
-    FileText as FileTextIcon
+    FileText as FileTextIcon,
+    Sparkles,
+    Shield,
+    ArrowLeft,
+    Eye,
+    EyeOff,
+    BadgeCheck,
+    Briefcase,
+    Hash
 } from 'lucide-react';
 import { VacationRequestFlow } from './VacationRequestFlow';
 import Swal from 'sweetalert2';
@@ -40,102 +48,110 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzhFVrwIdvBK4qOK13y
 const translations = {
     en: {
         portal_name: "HR self-service",
-        service_title: "My HR Requests",
-        login_title: "HR Request Portal",
-        login_desc: "Please verify your identity to access the HR self-service.",
+        service_title: "How can we help you?",
+        login_title: "Welcome Back",
+        login_desc: "Enter your CPR to access HR self-service portal",
         cpr_label: "CPR Number",
-        btn_continue: "Continue Securely",
+        btn_continue: "Verify Identity",
         btn_logout: "Sign Out",
         btn_back: "Back",
         btn_next: "Continue",
         lbl_submit: "Review Request",
-        btn_confirm: "Submit Officially",
+        btn_confirm: "Submit Request",
         lbl_passport: "Passport Number",
-        lbl_passport_name: "Full Name as in Passport",
+        lbl_passport_name: "Full Name (as in Passport)",
         lbl_license: "NHRA License",
-        lbl_sponsor: "Sponsor Name",
+        lbl_sponsor: "Sponsor / Company",
         lbl_join_date: "Joining Date",
         lbl_doc_type: "Document Type",
         lbl_others: "Please specify document",
-        lbl_reason: "Reason of Document",
-        lbl_reason_placeholder: "Briefly explain the purpose of this document",
-        lbl_req_date: "Needed By Date",
-        lbl_email: "Corporate Email",
+        lbl_reason: "Purpose of Document",
+        lbl_reason_placeholder: "Briefly explain what you need this document for...",
+        lbl_req_date: "Needed By",
+        lbl_email: "Email Address",
         lbl_delivery: "Delivery Method",
         lbl_files: "Attachments",
-        card_email_title: "E-Certificate (PDF)",
-        card_email_desc: "Sent to your corporate email",
+        card_email_title: "Digital Copy (PDF)",
+        card_email_desc: "Delivered to your email within 24h",
         card_print_title: "Physical Copy",
-        card_print_desc: "Collect from HR department",
+        card_print_desc: "Collect from HR office",
         step_identity: "Access",
-        step_details: "Request Info",
+        step_details: "Details",
         step_delivery: "Delivery",
-        step_review: "Confirmation",
+        step_review: "Review",
         track_status: "Track My Requests",
         new_request: "New Document",
         draft_saved: "Draft Saved",
         no_requests: "No requests found",
-        reference_id: "Reference #",
+        reference_id: "Reference",
         submitted_on: "Date",
         status_pending: "Processing",
         status_completed: "Ready",
-        review_title: "Final Confirmation",
-        review_desc: "Verify these details before sending to HR.",
-        declaration: "I confirm all provided data is accurate.",
+        review_title: "Review & Confirm",
+        review_desc: "Please verify all information before submitting to HR.",
+        declaration: "I confirm that all information provided is accurate and complete.",
         toast_cpr_missing: "CPR is required",
         toast_cpr_not_found: "Employee record not found",
-        submission_success: "Request Submitted successfully",
+        submission_success: "Request Submitted",
         cpr_placeholder: "000000000",
         upload_limits: "Max 5MB",
-        click_upload: "Click to upload files",
+        click_upload: "Upload files",
         select_placeholder: "Select an option...",
         friday_warning: "Delivery is not available on Fridays. Please select another date.",
-        btn_remove: "Remove"
+        btn_remove: "Remove",
+        greeting: "Hello",
+        doc_service_title: "Document Request",
+        doc_service_desc: "Certificates, letters, and official HR documents",
+        vac_service_title: "Vacation Request",
+        vac_service_desc: "Submit leave requests and manage your schedule",
+        step_label_1: "Employee Info",
+        step_label_2: "Documents",
+        step_label_3: "Delivery",
     },
     ar: {
         portal_name: "تبارك للموارد البشرية",
-        service_title: "نظام إصدار المستندات",
-        login_title: "دخول الموظف",
-        login_desc: "يرجى تسجيل الدخول برقمك الشخصي للوصول للنظام.",
+        service_title: "كيف يمكننا مساعدتك؟",
+        login_title: "مرحباً بعودتك",
+        login_desc: "أدخل رقمك الشخصي للوصول إلى بوابة الموارد البشرية",
         cpr_label: "الرقم الشخصي",
-        btn_continue: "توثيق",
+        btn_continue: "توثيق الهوية",
         btn_logout: "خروج",
         btn_back: "رجوع",
         btn_next: "استمرار",
         btn_submit: "مراجعة الطلب",
-        btn_confirm: "إرسال رسمي",
+        btn_confirm: "إرسال الطلب",
         lbl_passport: "رقم جواز السفر",
-        lbl_passport_name: "الاسم الكامل كما في الجواز",
+        lbl_passport_name: "الاسم الكامل (كما في الجواز)",
         lbl_license: "ترخيص الهيئة (NHRA)",
-        lbl_sponsor: "اسم الكفيل",
+        lbl_sponsor: "الكفيل / الشركة",
         lbl_join_date: "تاريخ الالتحاق",
         lbl_doc_type: "نوع المستند",
         lbl_others: "يرجى تحديد الوثيقة",
-        lbl_reason: "سبب طلب الوثيقة",
-        lbl_reason_placeholder: "اشرح باختصار الغرض من هذه الوثيقة",
+        lbl_reason: "الغرض من الوثيقة",
+        lbl_reason_placeholder: "اشرح باختصار الغرض من هذه الوثيقة...",
         lbl_req_date: "تاريخ الاستحقاق",
         lbl_email: "البريد الإلكتروني",
         lbl_delivery: "طريقة الاستلام",
         lbl_files: "المرفقات",
-        card_email_title: "شهادة إلكترونية (PDF)",
-        card_email_desc: "ترسل لبريدك الإلكتروني رسمي",
+        card_email_title: "نسخة إلكترونية (PDF)",
+        card_email_desc: "ترسل لبريدك خلال 24 ساعة",
         card_print_title: "نسخة ورقية",
-        card_print_desc: "استلام من قسم الموارد البشرية",
+        card_print_desc: "استلام من مكتب الموارد البشرية",
         step_identity: "الدخول",
-        step_details: "بيانات الطلب",
+        step_details: "التفاصيل",
         step_delivery: "الاستلام",
-        step_review: "التأكيد",
+        step_review: "المراجعة",
         track_status: "طلباتي السابقة",
         new_request: "طلب جديد",
         draft_saved: "تم حفظ المسودة",
         no_requests: "لا توجد طلبات سابقة",
-        reference_id: "رقم المرجع #",
+        reference_id: "رقم المرجع",
         submitted_on: "التاريخ",
         status_pending: "قيد المعالجة",
         status_completed: "جاهز",
-        review_title: "التأكيد النهائي",
-        review_desc: "تأكد من صحة البيانات قبل الإرسال.",
-        declaration: "أؤكد أن جميع البيانات المقدمة صحيحة.",
+        review_title: "مراجعة وتأكيد",
+        review_desc: "تأكد من صحة البيانات قبل الإرسال إلى الموارد البشرية.",
+        declaration: "أؤكد أن جميع البيانات المقدمة صحيحة وكاملة.",
         toast_cpr_missing: "الرقم الشخصي مطلوب",
         toast_cpr_not_found: "سجل الموظف غير موجود",
         submission_success: "تم إرسال الطلب بنجاح",
@@ -143,7 +159,15 @@ const translations = {
         upload_limits: "الحد الأقصى 5 ميجا",
         select_placeholder: "اختر من القائمة...",
         friday_warning: "التسليم غير متاح أيام الجمعة. يرجى اختيار تاريخ آخر.",
-        btn_remove: "حذف"
+        btn_remove: "حذف",
+        greeting: "مرحباً",
+        doc_service_title: "طلب مستند",
+        doc_service_desc: "الشهادات والخطابات والمستندات الرسمية",
+        vac_service_title: "طلب إجازة",
+        vac_service_desc: "تقديم طلبات الإجازة وإدارة جدولك",
+        step_label_1: "بيانات الموظف",
+        step_label_2: "المستندات",
+        step_label_3: "الاستلام",
     }
 };
 
@@ -153,6 +177,20 @@ type Step = 1 | 2 | 3 | 4 | 5;
 interface HRPortalPageProps {
     onBack?: () => void;
 }
+
+// Reusable form field component
+const FormField = ({ label, required, children, isRtl }: { label: string; required?: boolean; children: React.ReactNode; isRtl?: boolean }) => (
+    <div className="space-y-2">
+        <label className={`text-xs font-semibold text-slate-600 flex items-center gap-1 ${isRtl ? 'text-right' : ''}`}>
+            {label}
+            {required && <span className="text-red-500 text-[10px]">*</span>}
+        </label>
+        {children}
+    </div>
+);
+
+const inputClass = "w-full h-11 bg-white border border-slate-200 focus:border-red-400 focus:ring-2 focus:ring-red-50 px-4 rounded-xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none transition-all";
+const selectClass = "w-full h-11 bg-white border border-slate-200 focus:border-red-400 focus:ring-2 focus:ring-red-50 px-4 rounded-xl text-sm font-medium text-slate-900 outline-none transition-all appearance-none";
 
 export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
     const [lang, setLang] = useState<Language>('en');
@@ -174,7 +212,7 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
         docTypes: [] as string[],
         otherDocType: '',
         docReason: '',
-        reason: '', // General internal reason
+        reason: '',
         reqDate: '',
         email: '',
         delivery: ''
@@ -300,9 +338,9 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                 Swal.fire({
                     icon: 'success',
                     title: t.submission_success,
-                    html: `<div class="p-6 bg-red-50 border border-red-100 rounded-3xl mt-4"><p class="text-[10px] font-black uppercase text-red-400 mb-2">${t.reference_id}</p><h2 class="text-4xl font-black text-slate-900 tracking-tighter">${refNum}</h2></div>`,
+                    html: `<div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl mt-4"><p class="text-[10px] font-semibold uppercase text-slate-400 mb-1">${t.reference_id}</p><h2 class="text-2xl font-bold text-slate-900 font-mono">${refNum}</h2></div>`,
                     confirmButtonColor: '#b91c1c',
-                    confirmButtonText: isRtl ? 'تم الإطلاع علي التنبيه' : 'Acknowledged'
+                    confirmButtonText: isRtl ? 'تم' : 'Done'
                 }).then(() => {
                     if (onBack) onBack(); else window.location.reload();
                 });
@@ -320,72 +358,97 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
         });
     };
 
+    const stepLabels = [
+        { num: 1, label: t.step_label_1 },
+        { num: 2, label: t.step_label_2 },
+        { num: 3, label: t.step_label_3 },
+    ];
+
     return (
-        <div className={`flex flex-col h-full bg-[#fcfdfe] overflow-hidden ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
+        <div className={`flex flex-col h-full bg-slate-50 overflow-hidden ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
 
-            {/* BRANDED PROFESSIONAL HEADER (NO LOGO) */}
-            <header className="h-20 bg-white border-b-2 border-slate-100 flex items-center justify-between px-8 lg:px-12 shrink-0 transition-all z-50">
-                {employee.name ? (
-                    <div className="flex items-center gap-5 animate-in slide-in-from-left-4 duration-500">
-                        <div className="w-12 h-12 bg-red-700 text-white rounded-2xl flex items-center justify-center text-xl font-black shadow-lg shadow-red-700/20">
-                            {employee.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                            <h2 className="text-lg font-black text-slate-900 tracking-tight leading-none mb-1">{employee.name}</h2>
-                            <div className="flex items-center gap-2.5">
-                                <div className="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-[0.15em] rounded-lg">CPR {employee.cpr}</div>
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{t.portal_name}</span>
-                            </div>
-                        </div>
-                    </div>
-                ) : <div></div>}
-
-                <div className="flex items-center gap-3">
-                    <button
-                        onClick={toggleLang}
-                        className="h-10 px-5 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl border-2 border-slate-100 text-[10px] font-black uppercase tracking-[0.15em] transition-all flex items-center gap-2 group"
-                    >
-                        <Globe className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                        {lang === 'en' ? 'Arabic' : 'English'}
-                    </button>
+            {/* HEADER */}
+            <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 lg:px-8 shrink-0 z-50">
+                <div className="flex items-center gap-4">
                     {onBack && (
                         <button
                             onClick={onBack}
-                            className="h-10 px-5 bg-rose-50 hover:bg-rose-500 hover:text-white text-rose-600 rounded-xl border-2 border-rose-100 flex items-center justify-center gap-2 transition-all font-black text-[10px] uppercase tracking-widest"
+                            className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors"
+                        >
+                            {isRtl ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+                        </button>
+                    )}
+                    {employee.name ? (
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 bg-gradient-to-br from-red-600 to-red-700 text-white rounded-xl flex items-center justify-center text-sm font-bold shadow-sm">
+                                {employee.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h2 className="text-sm font-bold text-slate-900 leading-none">{employee.name}</h2>
+                                <span className="text-[11px] text-slate-400 font-medium">CPR {employee.cpr}</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center">
+                                <Building2 className="w-4 h-4 text-red-600" />
+                            </div>
+                            <span className="text-sm font-bold text-slate-900">{t.portal_name}</span>
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={toggleLang}
+                        className="h-8 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5"
+                    >
+                        <Globe className="w-3.5 h-3.5" />
+                        {lang === 'en' ? 'عربي' : 'EN'}
+                    </button>
+                    {employee.name && onBack && (
+                        <button
+                            onClick={onBack}
+                            className="h-8 px-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg flex items-center gap-1.5 transition-all text-xs font-semibold"
                         >
                             <Power className="w-3.5 h-3.5" />
-                            <span>Leave</span>
                         </button>
                     )}
                 </div>
             </header>
 
-            <main className="flex-1 overflow-y-auto relative bg-[#fcfdfe]">
+            <main className="flex-1 overflow-y-auto">
+                {/* LOGIN SCREEN */}
                 {!employee.name ? (
-                    <div className="min-h-full flex flex-col items-center justify-center p-6 bg-slate-50">
-                        <div className="w-full max-w-lg">
-                            <div className="text-center mb-10">
-                                <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-3">{t.login_title}</h2>
-                                <p className="text-slate-500 font-medium">{t.login_desc}</p>
-                            </div>
+                    <div className="min-h-full flex items-center justify-center p-6">
+                        <div className="w-full max-w-md">
+                            {/* Login Card */}
+                            <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/60 border border-slate-200 overflow-hidden">
+                                {/* Card Header */}
+                                <div className="bg-gradient-to-br from-red-600 to-red-700 px-8 py-10 text-center">
+                                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-5">
+                                        <Shield className="w-8 h-8 text-white" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-white mb-2">{t.login_title}</h2>
+                                    <p className="text-red-100 text-sm">{t.login_desc}</p>
+                                </div>
 
-                            <div className="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/50 border-2 border-slate-100 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-28 h-28 bg-slate-50 rounded-full -mr-14 -mt-14 pointer-events-none"></div>
-                                <div className="relative z-10 space-y-6">
-                                    <div className="space-y-4">
-                                        <label htmlFor="cpr-input" className={`text-xs font-bold text-slate-900 uppercase tracking-widest block ${isRtl ? 'text-right' : ''}`}>{t.cpr_label}</label>
-                                        <div className="relative group">
-                                            <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                                                <IdCard className="h-6 w-6 text-slate-400 group-focus-within:text-brand transition-colors" />
+                                {/* Card Body */}
+                                <div className="p-8 space-y-6">
+                                    <div className="space-y-2">
+                                        <label htmlFor="cpr-input" className={`text-xs font-semibold text-slate-600 block ${isRtl ? 'text-right' : ''}`}>{t.cpr_label}</label>
+                                        <div className="relative">
+                                            <div className={`absolute inset-y-0 ${isRtl ? 'right-0 pr-4' : 'left-0 pl-4'} flex items-center pointer-events-none`}>
+                                                <Hash className="h-4 w-4 text-slate-400" />
                                             </div>
                                             <input
                                                 id="cpr-input"
                                                 type="text"
                                                 value={cpr}
                                                 onChange={(e) => setCpr(e.target.value.replace(/\D/g, '').slice(0, 9))}
-                                                className="block w-full h-16 pl-14 pr-5 bg-slate-50 border-2 border-slate-100 rounded-2xl text-lg font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/10 focus:border-brand transition-all"
-                                                placeholder="Example: 901234567"
+                                                onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                                                className={`block w-full h-12 ${isRtl ? 'pr-11 pl-4' : 'pl-11 pr-4'} bg-slate-50 border border-slate-200 rounded-xl text-base font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-400 transition-all`}
+                                                placeholder="901234567"
                                                 title={t.cpr_label}
                                             />
                                         </div>
@@ -393,22 +456,22 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
 
                                     <button
                                         onClick={handleLogin}
-                                        disabled={isAuthenticating}
-                                        className="w-full h-14 bg-red-700 text-white rounded-xl font-bold text-base shadow-lg shadow-red-700/20 hover:bg-red-800 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:shadow-none"
+                                        disabled={isAuthenticating || !cpr.trim()}
+                                        className="w-full h-12 bg-slate-900 text-white rounded-xl font-semibold text-sm hover:bg-slate-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
                                     >
-                                        {isAuthenticating ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                                        {isAuthenticating ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                                             <>
                                                 <span>{t.btn_continue}</span>
-                                                <ArrowRight className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} />
+                                                <ArrowRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
                                             </>
                                         )}
                                     </button>
                                 </div>
                             </div>
 
-                            <div className="mt-8 flex items-center justify-center gap-2 text-slate-400">
+                            <div className="mt-6 flex items-center justify-center gap-2 text-slate-400">
                                 <Lock className="w-3 h-3" />
-                                <span className="text-[11px] font-medium">End-to-end encrypted connection</span>
+                                <span className="text-[11px] font-medium">Secure encrypted connection</span>
                             </div>
                         </div>
                     </div>
@@ -422,165 +485,158 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                         />
                     </div>
                 ) : (
-                    // FOCUSED FORM FLOW
-                    <div className="max-w-4xl mx-auto py-20 px-8 animate-in fade-in duration-1000">
+                    <div className="max-w-3xl mx-auto py-10 px-6">
 
                         {/* STEP 2: SERVICE SELECTION */}
                         {step === 2 && (
-                            <div className="space-y-12 animate-in slide-in-from-bottom-8 duration-700">
-                                <div className="text-center">
-                                    <h2 className="text-3xl font-black text-slate-900 mb-4">{t.service_title}</h2>
-                                    <p className="text-slate-500 font-medium">Select the type of request you wish to submit.</p>
+                            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                {/* Greeting */}
+                                <div>
+                                    <h2 className="text-2xl font-bold text-slate-900 mb-1">
+                                        {t.greeting}, {employee.name.split(' ')[0]} 👋
+                                    </h2>
+                                    <p className="text-slate-500 text-sm">{t.service_title}</p>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {/* Service Cards */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <button
                                         onClick={() => { setSelectedService('documents'); setStep(3); }}
-                                        className="group relative p-8 bg-white rounded-[2rem] border-2 border-slate-100 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-500/40 hover:-translate-y-1 transition-all duration-500 text-left overflow-hidden"
+                                        className="group relative p-6 bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/5 transition-all duration-300 text-left"
                                     >
-                                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                                            <FileTextIcon className="w-32 h-32 text-blue-900" />
+                                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                            <FileTextIcon className="w-6 h-6" />
                                         </div>
-                                        <div className="w-16 h-16 bg-blue-50 border-2 border-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white transition-all duration-500 relative z-10">
-                                            <FileTextIcon className="w-8 h-8" />
-                                        </div>
-                                        <div className="relative z-10">
-                                            <h3 className="text-xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-blue-600 transition-colors">Internal Documents</h3>
-                                            <p className="text-sm text-slate-500 font-medium leading-relaxed group-hover:text-slate-600">Request salary certificates, employment letters, and other official HR documentation.</p>
-                                        </div>
+                                        <h3 className="text-base font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">{t.doc_service_title}</h3>
+                                        <p className="text-xs text-slate-500 leading-relaxed">{t.doc_service_desc}</p>
+                                        <ArrowRight className={`absolute ${isRtl ? 'left-6' : 'right-6'} top-6 w-4 h-4 text-slate-300 group-hover:text-blue-500 transition-all ${isRtl ? 'rotate-180' : ''}`} />
                                     </button>
 
                                     <button
                                         onClick={() => { setSelectedService('vacation'); }}
-                                        className="group relative p-8 bg-white rounded-[2rem] border-2 border-slate-100 shadow-sm hover:shadow-xl hover:shadow-emerald-500/10 hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-500 text-left overflow-hidden"
+                                        className="group relative p-6 bg-white rounded-2xl border border-slate-200 hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/5 transition-all duration-300 text-left"
                                     >
-                                        <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                                            <CalendarDays className="w-32 h-32 text-emerald-900" />
+                                        <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                                            <CalendarDays className="w-6 h-6" />
                                         </div>
-                                        <div className="w-16 h-16 bg-emerald-50 border-2 border-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:border-emerald-600 group-hover:text-white transition-all duration-500 relative z-10">
-                                            <CalendarDays className="w-8 h-8" />
-                                        </div>
-                                        <div className="relative z-10">
-                                            <h3 className="text-xl font-black text-slate-900 mb-2 tracking-tight group-hover:text-emerald-600 transition-colors">Vacation Request</h3>
-                                            <p className="text-sm text-slate-500 font-medium leading-relaxed group-hover:text-slate-600">Submit a new leave request, view policies, and manage your vacation schedule.</p>
-                                        </div>
+                                        <h3 className="text-base font-bold text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors">{t.vac_service_title}</h3>
+                                        <p className="text-xs text-slate-500 leading-relaxed">{t.vac_service_desc}</p>
+                                        <ArrowRight className={`absolute ${isRtl ? 'left-6' : 'right-6'} top-6 w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-all ${isRtl ? 'rotate-180' : ''}`} />
                                     </button>
                                 </div>
                             </div>
                         )}
 
-                        {/* STEP PROGRESSION (Only for Documents) */}
+                        {/* STEP INDICATOR (Documents flow) */}
                         {step > 2 && (
-                            <div className="flex items-center justify-center gap-3 mb-20">
-                                {[3, 4, 5].map(idx => (
-                                    <React.Fragment key={idx}>
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-black transition-all duration-500 ${step >= idx ? 'bg-red-700 text-white scale-105 shadow-lg shadow-red-700/20' : 'bg-white border-2 border-slate-100 text-slate-300'}`}>
-                                            {idx - 2}
-                                        </div>
-                                        {idx < 5 && <div className={`w-12 h-0.5 rounded-full transition-all duration-700 ${step > idx ? 'bg-red-700' : 'bg-slate-100'}`}></div>}
-                                    </React.Fragment>
-                                ))}
+                            <div className="mb-10">
+                                <div className="flex items-center gap-1 mb-6">
+                                    <button
+                                        onClick={() => { setSelectedService(null); setStep(2); }}
+                                        className="text-xs text-slate-400 hover:text-slate-600 font-medium transition-colors flex items-center gap-1"
+                                    >
+                                        {isRtl ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+                                        {isRtl ? 'القائمة' : 'Menu'}
+                                    </button>
+                                    <span className="text-slate-300 mx-1">/</span>
+                                    <span className="text-xs text-slate-600 font-semibold">{t.doc_service_title}</span>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                    {stepLabels.map((s, idx) => (
+                                        <React.Fragment key={s.num}>
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold transition-all ${
+                                                    step >= s.num + 2
+                                                        ? step > s.num + 2
+                                                            ? 'bg-emerald-100 text-emerald-700'
+                                                            : 'bg-red-600 text-white'
+                                                        : 'bg-slate-100 text-slate-400'
+                                                }`}>
+                                                    {step > s.num + 2 ? <CheckCircle2 className="w-4 h-4" /> : s.num}
+                                                </div>
+                                                <span className={`text-xs font-medium hidden sm:block ${step >= s.num + 2 ? 'text-slate-700' : 'text-slate-400'}`}>{s.label}</span>
+                                            </div>
+                                            {idx < stepLabels.length - 1 && <div className={`flex-1 h-px ${step > s.num + 2 ? 'bg-emerald-300' : 'bg-slate-200'}`}></div>}
+                                        </React.Fragment>
+                                    ))}
+                                </div>
                             </div>
                         )}
 
-                        <form className="space-y-20">
-                            {/* STEP 3: DOCUMENTS & REASONS */}
+                        <form className="space-y-8">
+                            {/* STEP 3: EMPLOYEE INFO & DOCUMENTS */}
                             {step === 3 && (
-                                <div className="space-y-20 animate-in slide-in-from-bottom-12 duration-700">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <label htmlFor="passportName" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_passport_name} <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                id="passportName"
-                                                value={formData.passportName}
-                                                onChange={e => setFormData({ ...formData, passportName: e.target.value })}
-                                                className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all"
-                                                placeholder="e.g. MOHAMED AHMED"
-                                                title={t.lbl_passport_name}
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="passportNumber" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_passport} <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                id="passportNumber"
-                                                value={formData.passport}
-                                                onChange={e => setFormData({ ...formData, passport: e.target.value })}
-                                                className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all"
-                                                title={t.lbl_passport}
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="nhraLicense" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_license} <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                id="nhraLicense"
-                                                value={formData.license}
-                                                onChange={e => setFormData({ ...formData, license: e.target.value })}
-                                                className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all"
-                                                title={t.lbl_license}
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="sponsor" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_sponsor} <span className="text-red-500">*</span>
-                                            </label>
-                                            <div className="relative">
-                                                <select
-                                                    id="sponsor"
-                                                    value={formData.sponsor}
-                                                    onChange={e => setFormData({ ...formData, sponsor: e.target.value })}
-                                                    className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all appearance-none"
-                                                    title={t.lbl_sponsor}
-                                                >
-                                                    <option value="">{t.select_placeholder}</option>
-                                                    <option value="TABARAK PHARMACY WLL">TABARAK PHARMACY WLL</option>
-                                                    <option value="ALHODA PHARMACY WLL">ALHODA PHARMACY WLL</option>
-                                                    <option value="SANAD PHARMACY WLL">SANAD PHARMACY WLL</option>
-                                                    <option value="DISTRICT PHARMACY WLL">DISTRICT PHARMACY WLL</option>
-                                                    <option value="ALNAHAR PHARMACY WLL">ALNAHAR PHARMACY WLL</option>
-                                                    <option value="DAMISTAN PHARMACY WLL">DAMISTAN PHARMACY WLL</option>
-                                                    <option value="JANABIYA SQUARE PHARMACY WLL">JANABIYA SQUARE PHARMACY WLL</option>
-                                                    <option value="JAMILA PHARMACY WLL">JAMILA PHARMACY WLL</option>
-                                                    <option value="SANAD 2 PHARMACY WLL">SANAD 2 PHARMACY WLL</option>
-                                                </select>
-                                                <ChevronDown className={`absolute ${isRtl ? 'left-4' : 'right-4'} top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none`} />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="joinDate" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_join_date} <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                id="joinDate"
-                                                type="date"
-                                                value={formData.joinDate}
-                                                onChange={e => setFormData({ ...formData, joinDate: e.target.value })}
-                                                className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl font-medium outline-none transition-all text-slate-500 focus:text-slate-900"
-                                                title={t.lbl_join_date}
-                                            />
+                                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    {/* Employee Info Section */}
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                                        <h3 className="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2">
+                                            <UserCircle2 className="w-4 h-4 text-slate-400" />
+                                            {t.step_label_1}
+                                        </h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                            <FormField label={t.lbl_passport_name} required isRtl={isRtl}>
+                                                <input
+                                                    value={formData.passportName}
+                                                    onChange={e => setFormData({ ...formData, passportName: e.target.value })}
+                                                    className={inputClass}
+                                                    placeholder="MOHAMED AHMED"
+                                                />
+                                            </FormField>
+                                            <FormField label={t.lbl_passport} required isRtl={isRtl}>
+                                                <input
+                                                    value={formData.passport}
+                                                    onChange={e => setFormData({ ...formData, passport: e.target.value })}
+                                                    className={inputClass}
+                                                />
+                                            </FormField>
+                                            <FormField label={t.lbl_license} required isRtl={isRtl}>
+                                                <input
+                                                    value={formData.license}
+                                                    onChange={e => setFormData({ ...formData, license: e.target.value })}
+                                                    className={inputClass}
+                                                />
+                                            </FormField>
+                                            <FormField label={t.lbl_sponsor} required isRtl={isRtl}>
+                                                <div className="relative">
+                                                    <select
+                                                        value={formData.sponsor}
+                                                        onChange={e => setFormData({ ...formData, sponsor: e.target.value })}
+                                                        className={selectClass}
+                                                    >
+                                                        <option value="">{t.select_placeholder}</option>
+                                                        <option value="TABARAK PHARMACY WLL">TABARAK PHARMACY WLL</option>
+                                                        <option value="ALHODA PHARMACY WLL">ALHODA PHARMACY WLL</option>
+                                                        <option value="SANAD PHARMACY WLL">SANAD PHARMACY WLL</option>
+                                                        <option value="DISTRICT PHARMACY WLL">DISTRICT PHARMACY WLL</option>
+                                                        <option value="ALNAHAR PHARMACY WLL">ALNAHAR PHARMACY WLL</option>
+                                                        <option value="DAMISTAN PHARMACY WLL">DAMISTAN PHARMACY WLL</option>
+                                                        <option value="JANABIYA SQUARE PHARMACY WLL">JANABIYA SQUARE PHARMACY WLL</option>
+                                                        <option value="JAMILA PHARMACY WLL">JAMILA PHARMACY WLL</option>
+                                                        <option value="SANAD 2 PHARMACY WLL">SANAD 2 PHARMACY WLL</option>
+                                                    </select>
+                                                    <ChevronDown className={`absolute ${isRtl ? 'left-3' : 'right-3'} top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none`} />
+                                                </div>
+                                            </FormField>
+                                            <FormField label={t.lbl_join_date} required isRtl={isRtl}>
+                                                <input
+                                                    type="date"
+                                                    value={formData.joinDate}
+                                                    onChange={e => setFormData({ ...formData, joinDate: e.target.value })}
+                                                    className={inputClass}
+                                                />
+                                            </FormField>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
-                                        <label htmlFor="docTypeDisplay" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                            {t.lbl_doc_type} <span className="text-red-500">*</span>
-                                        </label>
-                                        <div className="grid grid-cols-1 gap-2">
-                                            <input
-                                                id="docTypeDisplay"
-                                                value={formData.docTypes.join(", ")}
-                                                readOnly
-                                                className="w-full h-12 bg-white border border-slate-200 px-4 rounded-xl text-slate-500 font-medium outline-none cursor-default"
-                                                placeholder={t.select_placeholder}
-                                                title={t.lbl_doc_type}
-                                            />
-                                        </div>
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    {/* Document Selection Section */}
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                                        <h3 className="text-sm font-bold text-slate-900 mb-5 flex items-center gap-2">
+                                            <FileText className="w-4 h-4 text-slate-400" />
+                                            {t.lbl_doc_type}
+                                            <span className="text-red-500 text-[10px]">*</span>
+                                        </h3>
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
                                             {['Experience Certificate', 'Employment Certificate', 'Salary Certificate', 'NOC', 'Bank Letter', 'Embassy Letter', 'Others'].map(doc => (
                                                 <button
                                                     key={doc}
@@ -591,73 +647,72 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                                             : [...formData.docTypes, doc];
                                                         setFormData({ ...formData, docTypes: types });
                                                     }}
-                                                    className={`px-4 py-3 rounded-xl text-left border transition-all flex items-center gap-3 ${formData.docTypes.includes(doc) ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'}`}
+                                                    className={`px-3 py-2.5 rounded-xl text-left border transition-all flex items-center gap-2.5 ${
+                                                        formData.docTypes.includes(doc)
+                                                            ? 'bg-red-50 border-red-200 text-red-700'
+                                                            : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300'
+                                                    }`}
                                                 >
-                                                    <div className={`w-4 h-4 rounded-full flex items-center justify-center border ${formData.docTypes.includes(doc) ? 'border-white bg-white' : 'border-slate-300'}`}>
-                                                        {formData.docTypes.includes(doc) && <div className="w-2 h-2 rounded-full bg-slate-900"></div>}
+                                                    <div className={`w-4 h-4 rounded flex items-center justify-center border transition-all ${
+                                                        formData.docTypes.includes(doc)
+                                                            ? 'border-red-500 bg-red-500 text-white'
+                                                            : 'border-slate-300'
+                                                    }`}>
+                                                        {formData.docTypes.includes(doc) && <CheckCircle2 className="w-3 h-3" />}
                                                     </div>
-                                                    <span className="text-sm font-medium">{doc}</span>
+                                                    <span className="text-xs font-medium">{doc}</span>
                                                 </button>
                                             ))}
                                         </div>
 
-                                        {/* CONDITIONAL SALARY INPUT */}
                                         {formData.docTypes.includes('Salary Certificate') && (
-                                            <div className="mt-4 animate-in zoom-in-95 duration-500">
-                                                <label htmlFor="salary" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1 mb-2">
-                                                    Monthly Salary (BHD) <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    id="salary"
-                                                    type="number"
-                                                    value={formData.salary}
-                                                    onChange={e => setFormData({ ...formData, salary: e.target.value })}
-                                                    className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all"
-                                                    placeholder="e.g. 500"
-                                                    title="Monthly Salary (BHD)"
-                                                />
+                                            <div className="mt-5 animate-in fade-in duration-300">
+                                                <FormField label={isRtl ? "الراتب الشهري (د.ب)" : "Monthly Salary (BHD)"} required isRtl={isRtl}>
+                                                    <input
+                                                        type="number"
+                                                        value={formData.salary}
+                                                        onChange={e => setFormData({ ...formData, salary: e.target.value })}
+                                                        className={inputClass}
+                                                        placeholder="500"
+                                                    />
+                                                </FormField>
                                             </div>
                                         )}
 
-                                        {/* CONDITIONAL SPECIFICATION */}
                                         {formData.docTypes.includes('Others') && (
-                                            <div className="mt-4 animate-in zoom-in-95 duration-500">
-                                                <label htmlFor="otherDocType" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1 mb-2">
-                                                    {t.lbl_others} <span className="text-red-500">*</span>
-                                                </label>
-                                                <input
-                                                    id="otherDocType"
-                                                    value={formData.otherDocType}
-                                                    onChange={e => setFormData({ ...formData, otherDocType: e.target.value })}
-                                                    className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all"
-                                                    placeholder="..."
-                                                    title={t.lbl_others}
-                                                />
+                                            <div className="mt-5 animate-in fade-in duration-300">
+                                                <FormField label={t.lbl_others} required isRtl={isRtl}>
+                                                    <input
+                                                        value={formData.otherDocType}
+                                                        onChange={e => setFormData({ ...formData, otherDocType: e.target.value })}
+                                                        className={inputClass}
+                                                        placeholder="..."
+                                                    />
+                                                </FormField>
                                             </div>
                                         )}
-
-                                        {/* REASON OF DOCUMENT FIELD */}
-                                        <div className="mt-8 space-y-2">
-                                            <label htmlFor="docReason" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_reason}
-                                            </label>
-                                            <textarea
-                                                id="docReason"
-                                                value={formData.docReason}
-                                                onChange={e => setFormData({ ...formData, docReason: e.target.value })}
-                                                className="w-full h-32 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 p-4 rounded-xl text-slate-900 font-medium outline-none transition-all resize-none"
-                                                placeholder={t.lbl_reason_placeholder}
-                                                title={t.lbl_reason}
-                                            />
-                                        </div>
                                     </div>
 
-                                    <div className="flex justify-between pt-12 border-t border-slate-100">
+                                    {/* Purpose */}
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                                        <FormField label={t.lbl_reason} isRtl={isRtl}>
+                                            <textarea
+                                                value={formData.docReason}
+                                                onChange={e => setFormData({ ...formData, docReason: e.target.value })}
+                                                className="w-full h-24 bg-white border border-slate-200 focus:border-red-400 focus:ring-2 focus:ring-red-50 p-4 rounded-xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none transition-all resize-none"
+                                                placeholder={t.lbl_reason_placeholder}
+                                            />
+                                        </FormField>
+                                    </div>
+
+                                    {/* Navigation */}
+                                    <div className="flex justify-between pt-4">
                                         <button
-                                            onClick={() => setStep(2)}
-                                            className="px-8 py-4 rounded-xl font-bold text-slate-500 hover:bg-slate-100 transition-all"
+                                            type="button"
+                                            onClick={() => { setSelectedService(null); setStep(2); }}
+                                            className="h-11 px-6 rounded-xl font-semibold text-sm text-slate-500 hover:bg-white hover:text-slate-700 border border-transparent hover:border-slate-200 transition-all"
                                         >
-                                            Back to Menu
+                                            {t.btn_back}
                                         </button>
                                         <button
                                             type="button"
@@ -676,121 +731,120 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                                 }
                                                 setStep(4);
                                             }}
-                                            className="px-14 py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase text-xs tracking-[0.3em] shadow-xl hover:bg-red-700 hover:scale-105 active:scale-95 transition-all flex items-center gap-4"
+                                            className="h-11 px-8 bg-slate-900 text-white rounded-xl font-semibold text-sm hover:bg-red-700 transition-all flex items-center gap-2"
                                         >
                                             <span>{t.btn_next}</span>
-                                            <ChevronRight className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} />
+                                            <ChevronRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
                                         </button>
                                     </div>
                                 </div>
                             )}
 
-                            {/* STEP 4: DISPATCH DETAILS */}
+                            {/* STEP 4: DELIVERY DETAILS */}
                             {step === 4 && (
-                                <div className="space-y-8 animate-in slide-in-from-right-12 duration-700">
-                                    {/* Date & Email Row */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <div className="space-y-2">
-                                            <label htmlFor="reqDate" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_req_date} <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                id="reqDate"
-                                                type="date"
-                                                min={new Date().toISOString().split('T')[0]}
-                                                value={formData.reqDate}
-                                                onChange={e => {
-                                                    if (isFriday(e.target.value)) showToast(t.friday_warning, 'warning');
-                                                    setFormData({ ...formData, reqDate: e.target.value });
-                                                }}
-                                                className={`w-full h-12 bg-white border border-slate-200 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all ${isFriday(formData.reqDate) ? 'border-rose-500 ring-4 ring-rose-500/10' : 'focus:border-slate-400 focus:ring-4 focus:ring-slate-100'}`}
-                                                title={t.lbl_req_date}
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="email" className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                                {t.lbl_email} <span className="text-red-500">*</span>
-                                            </label>
-                                            <input
-                                                id="email"
-                                                type="email"
-                                                value={formData.email}
-                                                onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                                className="w-full h-12 bg-white border border-slate-200 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 px-4 rounded-xl text-slate-900 font-medium outline-none transition-all"
-                                                placeholder="name@tabarak.com"
-                                                title={t.lbl_email}
-                                            />
+                                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    {/* Date & Email */}
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                            <FormField label={t.lbl_req_date} required isRtl={isRtl}>
+                                                <input
+                                                    type="date"
+                                                    min={new Date().toISOString().split('T')[0]}
+                                                    value={formData.reqDate}
+                                                    onChange={e => {
+                                                        if (isFriday(e.target.value)) showToast(t.friday_warning, 'warning');
+                                                        setFormData({ ...formData, reqDate: e.target.value });
+                                                    }}
+                                                    className={`${inputClass} ${isFriday(formData.reqDate) ? '!border-rose-400 !ring-2 !ring-rose-50' : ''}`}
+                                                />
+                                            </FormField>
+                                            <FormField label={t.lbl_email} required isRtl={isRtl}>
+                                                <input
+                                                    type="email"
+                                                    value={formData.email}
+                                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                                    className={inputClass}
+                                                    placeholder="name@company.com"
+                                                />
+                                            </FormField>
                                         </div>
                                     </div>
 
-                                    {/* Delivery Method Cards */}
-                                    <div className="space-y-4">
-                                        <label className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                            {t.lbl_delivery} <span className="text-red-500">*</span>
-                                        </label>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Delivery Method */}
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                                        <h3 className="text-sm font-bold text-slate-900 mb-4">{t.lbl_delivery} <span className="text-red-500 text-[10px]">*</span></h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                             <button
                                                 type="button"
                                                 onClick={() => setFormData({ ...formData, delivery: 'PDF by Email' })}
-                                                className={`p-6 rounded-[2rem] border-2 transition-all flex items-center gap-5 text-left group hover:shadow-lg hover:-translate-y-0.5 duration-500 ${formData.delivery === 'PDF by Email' ? 'bg-white border-blue-500 shadow-xl shadow-blue-500/20' : 'bg-white border-slate-100 hover:border-blue-400/50'}`}
+                                                className={`p-4 rounded-xl border-2 transition-all flex items-center gap-4 text-left ${
+                                                    formData.delivery === 'PDF by Email'
+                                                        ? 'border-blue-500 bg-blue-50/50'
+                                                        : 'border-slate-200 hover:border-slate-300'
+                                                }`}
                                             >
-                                                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0 text-blue-500 transition-colors group-hover:bg-blue-500 group-hover:text-white">
-                                                    <Mail className="w-6 h-6" />
+                                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                                                    formData.delivery === 'PDF by Email' ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-400'
+                                                }`}>
+                                                    <Mail className="w-5 h-5" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-black text-slate-900 text-sm mb-0.5 tracking-tight group-hover:text-blue-600 transition-colors uppercase">{t.card_email_title}</h4>
-                                                    <p className="text-xs text-slate-400 font-bold">{t.card_email_desc}</p>
+                                                    <h4 className="font-semibold text-slate-900 text-sm">{t.card_email_title}</h4>
+                                                    <p className="text-xs text-slate-500">{t.card_email_desc}</p>
                                                 </div>
                                             </button>
 
                                             <button
                                                 type="button"
                                                 onClick={() => setFormData({ ...formData, delivery: 'Printed Copy' })}
-                                                className={`p-6 rounded-[2rem] border-2 transition-all flex items-center gap-5 text-left group hover:shadow-lg hover:-translate-y-0.5 duration-500 ${formData.delivery === 'Printed Copy' ? 'bg-white border-orange-500 shadow-xl shadow-orange-500/20' : 'bg-white border-slate-100 hover:border-orange-400/50'}`}
+                                                className={`p-4 rounded-xl border-2 transition-all flex items-center gap-4 text-left ${
+                                                    formData.delivery === 'Printed Copy'
+                                                        ? 'border-orange-500 bg-orange-50/50'
+                                                        : 'border-slate-200 hover:border-slate-300'
+                                                }`}
                                             >
-                                                <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0 text-orange-500 transition-colors group-hover:bg-orange-500 group-hover:text-white">
-                                                    <Printer className="w-6 h-6" />
+                                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                                                    formData.delivery === 'Printed Copy' ? 'bg-orange-500 text-white' : 'bg-slate-100 text-slate-400'
+                                                }`}>
+                                                    <Printer className="w-5 h-5" />
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-black text-slate-900 text-sm mb-0.5 tracking-tight group-hover:text-orange-600 transition-colors uppercase">{t.card_print_title}</h4>
-                                                    <p className="text-xs text-slate-400 font-bold">{t.card_print_desc}</p>
+                                                    <h4 className="font-semibold text-slate-900 text-sm">{t.card_print_title}</h4>
+                                                    <p className="text-xs text-slate-500">{t.card_print_desc}</p>
                                                 </div>
                                             </button>
                                         </div>
                                     </div>
 
-                                    {/* Attachments Section */}
-                                    <div className="space-y-4">
-                                        <label className="text-sm font-bold text-slate-700 px-1 flex items-center gap-1">
-                                            {t.lbl_files} <span className="text-slate-400 font-normal">(Optional)</span>
-                                        </label>
+                                    {/* Attachments */}
+                                    <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                                        <h3 className="text-sm font-bold text-slate-900 mb-4">{t.lbl_files} <span className="text-xs text-slate-400 font-normal">({isRtl ? 'اختياري' : 'Optional'})</span></h3>
                                         <div
                                             onClick={() => document.getElementById('final-files-refined')?.click()}
-                                            className="border-2 border-dashed border-slate-200 rounded-[2rem] py-12 flex flex-col items-center justify-center bg-slate-50/50 hover:bg-slate-50 hover:border-red-200 transition-all cursor-pointer group"
+                                            className="border-2 border-dashed border-slate-200 rounded-xl py-8 flex flex-col items-center justify-center bg-slate-50/50 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer group"
                                         >
-                                            <div className="w-14 h-14 bg-white rounded-2xl border-2 border-slate-100 flex items-center justify-center mb-4 text-slate-400 group-hover:text-red-500 group-hover:border-red-100 group-hover:scale-110 transition-all duration-500 shadow-sm">
-                                                <UploadCloud className="w-6 h-6" />
-                                            </div>
-                                            <p className="text-sm font-black text-slate-900 uppercase tracking-widest mb-1 group-hover:text-red-600 transition-colors">{t.click_upload}</p>
-                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">PDF, PNG, JPG (Max 5MB)</p>
+                                            <UploadCloud className="w-8 h-8 text-slate-300 group-hover:text-slate-400 mb-2 transition-colors" />
+                                            <p className="text-sm font-medium text-slate-500">{t.click_upload}</p>
+                                            <p className="text-[10px] text-slate-400 mt-1">PDF, PNG, JPG ({t.upload_limits})</p>
                                             <input id="final-files-refined" type="file" multiple className="hidden" onChange={e => { if (e.target.files) setUploadedFiles([...uploadedFiles, ...Array.from(e.target.files)]); }} />
                                         </div>
                                         {uploadedFiles.length > 0 && (
-                                            <div className="space-y-2">
+                                            <div className="space-y-2 mt-3">
                                                 {uploadedFiles.map((f, i) => (
-                                                    <div key={i} className="bg-white border border-slate-100 p-3 rounded-xl flex items-center justify-between group shadow-sm">
+                                                    <div key={i} className="bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center justify-between">
                                                         <div className="flex items-center gap-3 truncate">
-                                                            <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 text-xs font-bold">PDF</div>
-                                                            <span className="text-xs font-bold text-slate-700 truncate">{f.name}</span>
+                                                            <FileText className="w-4 h-4 text-slate-400 shrink-0" />
+                                                            <span className="text-xs font-medium text-slate-700 truncate">{f.name}</span>
+                                                            <span className="text-[10px] text-slate-400 shrink-0">{(f.size / 1024).toFixed(0)}KB</span>
                                                         </div>
                                                         <button
                                                             type="button"
                                                             onClick={() => setUploadedFiles(uploadedFiles.filter((_, idx) => idx !== i))}
-                                                            className="text-rose-500 hover:bg-rose-50 p-2 rounded-lg transition-all"
+                                                            className="text-slate-400 hover:text-rose-500 p-1 rounded-lg transition-all"
                                                             aria-label={t.btn_remove}
                                                             title={t.btn_remove}
                                                         >
-                                                            <Trash2 className="w-4 h-4" />
+                                                            <Trash2 className="w-3.5 h-3.5" />
                                                         </button>
                                                     </div>
                                                 ))}
@@ -798,99 +852,122 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
                                         )}
                                     </div>
 
-                                    {/* Footer Buttons */}
-                                    <div className="flex items-center gap-6 pt-8">
+                                    {/* Navigation */}
+                                    <div className="flex justify-between pt-4">
                                         <button
                                             type="button"
                                             onClick={() => setStep(3)}
-                                            className="flex-1 h-14 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold text-sm hover:bg-slate-50 transition-all shadow-sm"
+                                            className="h-11 px-6 rounded-xl font-semibold text-sm text-slate-500 hover:bg-white hover:text-slate-700 border border-transparent hover:border-slate-200 transition-all"
                                         >
-                                            {isRtl ? 'رجوع' : 'Back'}
+                                            {t.btn_back}
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setStep(5)}
-                                            className="flex-1 h-14 bg-[#0F172A] text-white rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20"
+                                            onClick={() => {
+                                                if (!formData.reqDate || !formData.email || !formData.delivery) {
+                                                    showToast(isRtl ? "يرجى تعبئة جميع الحقول المطلوبة" : "Please fill all required fields", 'warning');
+                                                    return;
+                                                }
+                                                setStep(5);
+                                            }}
+                                            className="h-11 px-8 bg-slate-900 text-white rounded-xl font-semibold text-sm hover:bg-red-700 transition-all flex items-center gap-2"
                                         >
-                                            {isRtl ? 'مراجعة الطلب' : 'Submit Request'}
+                                            <span>{t.step_review}</span>
+                                            <ChevronRight className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
                                         </button>
                                     </div>
                                 </div>
                             )}
 
-                            {/* STEP 5: FORMAL REVIEW */}
+                            {/* STEP 5: REVIEW & CONFIRM */}
                             {step === 5 && (
-                                <div className="space-y-20 animate-in zoom-in-95 duration-700">
-                                    <div className="text-center">
-                                        <h2 className="text-5xl font-black text-slate-900 tracking-tighter uppercase mb-6">{t.review_title}</h2>
-                                        <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-lg mx-auto">{t.review_desc}</p>
+                                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-slate-900 mb-1">{t.review_title}</h2>
+                                        <p className="text-sm text-slate-500">{t.review_desc}</p>
                                     </div>
 
-                                    <div className="bg-slate-900 text-white rounded-[3rem] p-12 lg:p-16 shadow-2xl shadow-slate-900/30 relative overflow-hidden group">
-                                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand/10 rounded-full blur-[120px] -mr-64 -mt-64 transition-transform group-hover:scale-110 duration-1000"></div>
+                                    {/* Summary Card */}
+                                    <div className="bg-white rounded-2xl border border-slate-200 divide-y divide-slate-100">
+                                        {/* Employee Info */}
+                                        <div className="p-6">
+                                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">{t.step_label_1}</h4>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <ReviewItem label={t.lbl_passport_name} value={formData.passportName} />
+                                                <ReviewItem label={t.lbl_passport} value={formData.passport} />
+                                                <ReviewItem label={t.lbl_license} value={formData.license} />
+                                                <ReviewItem label={t.lbl_sponsor} value={formData.sponsor} />
+                                                <ReviewItem label={t.lbl_join_date} value={formData.joinDate} />
+                                            </div>
+                                        </div>
 
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 relative z-10">
-                                            <div className="space-y-16">
-                                                <div>
-                                                    <label className="text-[10px] font-black text-brand uppercase tracking-[0.5em] block mb-10 border-l-4 border-brand pl-6">{t.step_details}</label>
-                                                    <div className="space-y-8">
-                                                        <div className="flex justify-between border-b border-white/10 pb-6"><span className="text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">Sponsor Entity</span><span className="font-black text-xl">{formData.sponsor}</span></div>
-                                                        <div className="flex flex-col gap-4 border-b border-white/10 pb-6">
-                                                            <span className="text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">Documents Requested</span>
-                                                            <span className="font-black text-2xl text-brand leading-tight">
-                                                                {formData.docTypes.map(d => d === 'Others' ? formData.otherDocType : d).join(" • ")}
-                                                            </span>
-                                                        </div>
-                                                        <div className="flex flex-col gap-4">
-                                                            <span className="text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">Purpose</span>
-                                                            <span className="font-bold text-lg text-slate-400 leading-relaxed italic">"{formData.docReason || 'N/A'}"</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        {/* Documents */}
+                                        <div className="p-6">
+                                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">{t.lbl_doc_type}</h4>
+                                            <div className="flex flex-wrap gap-2 mb-3">
+                                                {formData.docTypes.map(d => (
+                                                    <span key={d} className="px-3 py-1.5 bg-red-50 text-red-700 rounded-lg text-xs font-semibold border border-red-100">
+                                                        {d === 'Others' ? formData.otherDocType : d}
+                                                    </span>
+                                                ))}
                                             </div>
-                                            <div className="space-y-16">
-                                                <div>
-                                                    <label className="text-[10px] font-black text-brand uppercase tracking-[0.5em] block mb-10 border-l-4 border-brand pl-6">{t.step_delivery}</label>
-                                                    <div className="space-y-8">
-                                                        <div className="flex justify-between border-b border-white/10 pb-6"><span className="text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">Method</span><span className="font-black text-xl">{formData.delivery}</span></div>
-                                                        <div className="flex justify-between border-b border-white/10 pb-6"><span className="text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">Desired Date</span><span className="font-black text-2xl text-emerald-400">{formData.reqDate}</span></div>
-                                                        <div className="p-8 bg-white/5 rounded-3xl border border-white/5">
-                                                            <div className="flex items-center gap-3 text-brand mb-4">
-                                                                <ShieldCheck className="w-5 h-5" />
-                                                                <span className="text-[10px] font-black uppercase tracking-[0.3em]">Official Filing System v3.0</span>
-                                                            </div>
-                                                            <p className="text-[11px] text-white/30 leading-relaxed font-bold uppercase tracking-wider">Direct encryption bridge established to Tabarak Central HR servers.</p>
-                                                        </div>
-                                                    </div>
+                                            {formData.docReason && (
+                                                <p className="text-sm text-slate-600 italic">"{formData.docReason}"</p>
+                                            )}
+                                            {formData.salary && (
+                                                <div className="mt-2">
+                                                    <ReviewItem label={isRtl ? "الراتب" : "Salary"} value={`${formData.salary} BHD`} />
                                                 </div>
+                                            )}
+                                        </div>
+
+                                        {/* Delivery */}
+                                        <div className="p-6">
+                                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">{t.step_delivery}</h4>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <ReviewItem label={t.lbl_delivery} value={formData.delivery} />
+                                                <ReviewItem label={t.lbl_req_date} value={formData.reqDate} />
+                                                <ReviewItem label={t.lbl_email} value={formData.email} />
                                             </div>
+                                            {uploadedFiles.length > 0 && (
+                                                <div className="mt-3">
+                                                    <span className="text-[10px] font-semibold text-slate-400">{t.lbl_files}: {uploadedFiles.length} file(s)</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
+                                    {/* Declaration */}
                                     <div
-                                        className={`group p-12 rounded-[4rem] border-2 transition-all flex items-start gap-10 cursor-pointer ${declared ? 'bg-brand/5 border-brand shadow-2xl shadow-brand/10 scale-[1.03]' : 'bg-white border-slate-100 hover:border-brand/40'}`}
+                                        className={`p-5 rounded-xl border-2 transition-all flex items-start gap-4 cursor-pointer ${
+                                            declared ? 'bg-emerald-50/50 border-emerald-300' : 'bg-white border-slate-200 hover:border-slate-300'
+                                        }`}
                                         onClick={() => setDeclared(!declared)}
                                     >
-                                        <div className={`w-14 h-14 rounded-[1.5rem] flex items-center justify-center transition-all shrink-0 ${declared ? 'bg-brand text-white shadow-xl rotate-3' : 'bg-slate-50 text-slate-200'}`}>
-                                            <CheckCircle2 className="w-8 h-8" />
+                                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+                                            declared ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-300'
+                                        }`}>
+                                            <CheckCircle2 className="w-4 h-4" />
                                         </div>
-                                        <div>
-                                            <p className={`text-lg font-black leading-relaxed ${declared ? 'text-brand' : 'text-slate-600'}`}>{t.declaration}</p>
-                                            <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-2">{isRtl ? 'بموجب قوانين الموارد البشرية' : 'UNDER HR COMPLIANCE POLICY v2.4'}</p>
-                                        </div>
+                                        <p className={`text-sm font-medium ${declared ? 'text-emerald-800' : 'text-slate-600'}`}>{t.declaration}</p>
                                     </div>
 
-                                    <div className="flex justify-between items-center pt-20 border-t border-slate-100">
-                                        <button type="button" onClick={() => setStep(4)} className="h-20 px-10 rounded-[2rem] text-[11px] font-black uppercase text-slate-400 hover:text-slate-900 transition-all flex items-center gap-4">
-                                            <ChevronLeft className={`w-5 h-5 ${isRtl ? 'rotate-180' : ''}`} /> {t.btn_back}
+                                    {/* Actions */}
+                                    <div className="flex justify-between pt-4">
+                                        <button
+                                            type="button"
+                                            onClick={() => setStep(4)}
+                                            className="h-11 px-6 rounded-xl font-semibold text-sm text-slate-500 hover:bg-white hover:text-slate-700 border border-transparent hover:border-slate-200 transition-all"
+                                        >
+                                            {t.btn_back}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={finalSubmit}
                                             disabled={isSubmitting || !declared || isFriday(formData.reqDate)}
-                                            className="px-24 py-9 bg-brand text-white rounded-[3rem] font-black uppercase text-base tracking-[0.5em] shadow-[0_40px_80px_-15px_rgba(185,28,28,0.5)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-8 disabled:opacity-20 disabled:scale-100 disabled:shadow-none"
+                                            className="h-12 px-10 bg-red-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-red-600/20 hover:bg-red-700 active:scale-[0.98] transition-all flex items-center gap-3 disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed"
                                         >
-                                            {isSubmitting ? <Loader2 className="w-10 h-10 animate-spin" /> : <FileCheck className="w-10 h-10" />}
+                                            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileCheck className="w-4 h-4" />}
                                             <span>{t.btn_confirm}</span>
                                         </button>
                                     </div>
@@ -903,3 +980,11 @@ export const HRPortalPage: React.FC<HRPortalPageProps> = ({ onBack }) => {
         </div>
     );
 };
+
+// Review helper
+const ReviewItem = ({ label, value }: { label: string; value: string }) => (
+    <div>
+        <span className="text-[10px] font-semibold text-slate-400 block mb-0.5">{label}</span>
+        <span className="text-sm font-semibold text-slate-900">{value || '—'}</span>
+    </div>
+);
