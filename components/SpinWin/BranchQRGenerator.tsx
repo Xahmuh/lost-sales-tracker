@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { toPng } from 'html-to-image';
 import { spinWinService } from '../../services/spinWin';
 import { supabaseClient } from '../../lib/supabase';
 import { SpinSession, Branch } from '../../types';
@@ -18,7 +19,8 @@ import {
     MessageCircle,
     ArrowLeft,
     Copy,
-    Send
+    Send,
+    Download
 } from 'lucide-react';
 
 import { NETWORK_CONFIG } from '../../lib/networkConfig';
@@ -29,13 +31,16 @@ interface BranchQRGeneratorProps {
 }
 
 export const BranchQRGenerator: React.FC<BranchQRGeneratorProps> = ({ branch, onBack }) => {
+    const [qrType, setQrType] = useState<'static' | 'single' | 'multi'>('static');
+    const qrRef = React.useRef<HTMLDivElement>(null);
+    const posterRef = React.useRef<HTMLDivElement>(null);
     const [session, setSession] = useState<SpinSession | null>(null);
-    const [isMultiUse, setIsMultiUse] = useState(false);
     const [timeLeft, setTimeLeft] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [isLocked, setIsLocked] = useState(branch.isSpinEnabled === false);
     const [copied, setCopied] = useState(false);
+    const [showDownloadOptions, setShowDownloadOptions] = useState(false);
 
     const [talabatMessage, setTalabatMessage] = useState(`*طلبكم بالطريق!*
 شكراً لثقتكم بصيدليات تبارك
@@ -74,14 +79,15 @@ Free delivery to all areas of Bahrain`);
         checkPermission();
     }, [branch.id]);
 
-    const generateSession = async (multi: boolean = isMultiUse) => {
-        if (isLocked) return;
+    const generateSession = async (type: 'single' | 'multi' | 'static') => {
+        if (isLocked || type === 'static') return;
         setIsLoading(true);
         setError('');
         try {
-            const newSession = await spinWinService.sessions.generate(branch.id, multi);
+            const isMulti = type === 'multi';
+            const newSession = await spinWinService.sessions.generate(branch.id, isMulti);
             setSession(newSession);
-            setTimeLeft(multi ? 7 * 24 * 60 * 60 : 600);
+            setTimeLeft(isMulti ? 7 * 24 * 60 * 60 : 600);
         } catch (err: any) {
             setError(err.message || 'Failed to generate session.');
         } finally {
@@ -90,8 +96,15 @@ Free delivery to all areas of Bahrain`);
     };
 
     useEffect(() => {
-        if (!isLocked) generateSession(isMultiUse);
-    }, [isMultiUse, isLocked]);
+        if (!isLocked) {
+            if (qrType === 'static') {
+                setSession(null);
+                setTimeLeft(0);
+            } else {
+                generateSession(qrType);
+            }
+        }
+    }, [qrType, isLocked]);
 
     useEffect(() => {
         if (timeLeft > 0) {
@@ -106,8 +119,142 @@ Free delivery to all areas of Bahrain`);
     const currentHost = window.location.hostname;
     const isLocalhost = currentHost === 'localhost' || currentHost === '127.0.0.1';
     const effectiveBaseUrl = isLocalhost ? `http://${NETWORK_CONFIG.localIp}:${NETWORK_CONFIG.port}` : baseUrl;
-    const customerUrl = `${effectiveBaseUrl}${window.location.pathname}?token=${session?.token || ''}`;
-    const talabatUrl = `${effectiveBaseUrl}${window.location.pathname}?token=${session?.token || ''}&skipRating=true`;
+
+    const customerUrl = qrType === 'static'
+        ? `${effectiveBaseUrl}${window.location.pathname}?node=${branch.code}`
+        : `${effectiveBaseUrl}${window.location.pathname}?token=${session?.token || ''}`;
+
+    const talabatUrl = qrType === 'static'
+        ? `${effectiveBaseUrl}${window.location.pathname}?node=${branch.code}&skipRating=true`
+        : `${effectiveBaseUrl}${window.location.pathname}?token=${session?.token || ''}&skipRating=true`;
+
+    const downloadQR = async () => {
+        if (!posterRef.current) return;
+        setIsLoading(true);
+        try {
+            const dataUrl = await toPng(posterRef.current, {
+                cacheBust: true,
+                pixelRatio: 4,
+                backgroundColor: '#ffffff',
+            });
+            const link = document.createElement('a');
+            link.download = `spinwin-poster-${branch.code || 'branch'}.jpg`;
+            link.href = dataUrl;
+            link.click();
+        } catch (err) {
+            console.error('Download failed', err);
+            setError('Image generation failed.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const downloadPDF = async () => {
+        if (!qrRef.current) return;
+        setIsLoading(true);
+        try {
+            const qrDataUrl = await toPng(qrRef.current, {
+                cacheBust: true,
+                pixelRatio: 4,
+                backgroundColor: '#ffffff',
+            });
+
+            const baseUrl = window.location.origin;
+            const bgUrl = `${baseUrl}/poster-bg.jpg`;
+
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+                printWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Spin & Win Poster - ${branch.name}</title>
+                            <style>
+                                @page { 
+                                    size: 200mm 200mm; 
+                                    margin: 0; 
+                                }
+                                @media print {
+                                    html, body {
+                                        width: 200mm;
+                                        height: 200mm;
+                                    }
+                                }
+                                body { 
+                                    margin: 0; 
+                                    padding: 0;
+                                    display: block;
+                                    width: 200mm;
+                                    height: 200mm;
+                                    -webkit-print-color-adjust: exact;
+                                    print-color-adjust: exact;
+                                }
+                                .poster-container {
+                                    width: 200mm;
+                                    height: 200mm;
+                                    position: relative;
+                                    overflow: hidden;
+                                }
+                                .bg-image {
+                                    width: 200mm;
+                                    height: 200mm;
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    z-index: 1;
+                                }
+                                .qr-overlay {
+                                    position: absolute;
+                                    top: 130px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    width: 320px;
+                                    height: 320px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    z-index: 10;
+                                }
+                                .qr-overlay img {
+                                    width: 280px;
+                                    height: 280px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="poster-container">
+                                <img src="${bgUrl}" class="bg-image" id="bgImg" />
+                                <div class="qr-overlay">
+                                    <img src="${qrDataUrl}" id="qrImg" />
+                                </div>
+                            </div>
+                            <script>
+                                function checkLoaded() {
+                                    const bg = document.getElementById('bgImg');
+                                    const qr = document.getElementById('qrImg');
+                                    if (bg.complete && qr.complete) {
+                                        setTimeout(() => {
+                                            window.print();
+                                            window.close();
+                                        }, 1000);
+                                    } else {
+                                        setTimeout(checkLoaded, 100);
+                                    }
+                                }
+                                window.onload = checkLoaded;
+                            </script>
+                        </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            }
+        } catch (err) {
+            console.error('PDF generation failed', err);
+            setError('Could not generate PDF.');
+        } finally {
+            setIsLoading(false);
+            setShowDownloadOptions(false);
+        }
+    };
 
     const handleCopy = async () => {
         try {
@@ -208,10 +355,10 @@ Free delivery to all areas of Bahrain`;
                             <p className="text-white/50 text-xs font-medium">Generate QR codes for customer rewards</p>
                         </div>
                     </div>
-                    {session && (
+                    {(session || qrType === 'static') && (
                         <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
                             <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-                            <span className="text-xs font-bold text-white/80">Active</span>
+                            <span className="text-xs font-bold text-white/80">{qrType === 'static' ? 'Permanent' : 'Active'}</span>
                         </div>
                     )}
                 </div>
@@ -220,8 +367,8 @@ Free delivery to all areas of Bahrain`;
                     {/* Left: QR */}
                     <div className="p-6 lg:p-8 flex flex-col items-center">
                         {/* QR Code */}
-                        <div className={`bg-white p-6 rounded-2xl border-2 border-slate-100 mb-6 transition-all ${!session ? 'opacity-30 grayscale' : 'shadow-lg'}`}>
-                            {session ? (
+                        <div ref={qrRef} className={`bg-white p-6 rounded-2xl border-2 border-slate-100 mb-6 transition-all ${(!session && qrType !== 'static') ? 'opacity-30 grayscale' : 'shadow-lg'}`}>
+                            {(session || qrType === 'static') ? (
                                 <QRCodeSVG value={customerUrl} size={200} level="H" includeMargin={false} />
                             ) : (
                                 <div className="w-[200px] h-[200px] flex items-center justify-center bg-slate-50 rounded-xl">
@@ -231,20 +378,22 @@ Free delivery to all areas of Bahrain`;
                         </div>
 
                         {/* Timer */}
-                        {session && (
+                        {(session || qrType === 'static') && (
                             <div className="bg-slate-900 text-white px-4 py-2.5 rounded-xl flex items-center gap-2 mb-4 w-full max-w-[280px] justify-center">
                                 <Clock className="w-4 h-4 text-red-400" />
                                 <span className="text-xs font-bold tabular-nums">
-                                    {isMultiUse
-                                        ? `Expires in ${Math.ceil(timeLeft / (24 * 3600))} Days`
-                                        : `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`
+                                    {qrType === 'static'
+                                        ? 'Static (Never Expires)'
+                                        : qrType === 'multi'
+                                            ? `Expires in ${Math.ceil(timeLeft / (24 * 3600))} Days`
+                                            : `${Math.floor(timeLeft / 60)}:${(timeLeft % 60).toString().padStart(2, '0')}`
                                     }
                                 </span>
                             </div>
                         )}
 
                         {/* URL */}
-                        {session && (
+                        {(session || qrType === 'static') && (
                             <div className="bg-slate-50 border border-slate-100 px-3 py-2 rounded-lg w-full max-w-[280px] mb-5">
                                 <code className="text-[10px] text-slate-600 font-mono break-all">{customerUrl}</code>
                             </div>
@@ -253,29 +402,67 @@ Free delivery to all areas of Bahrain`;
                         {/* Mode Toggle */}
                         <div className="w-full max-w-[280px] bg-slate-100 p-1 rounded-xl flex mb-5">
                             <button
-                                onClick={() => setIsMultiUse(false)}
-                                className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all ${!isMultiUse ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}
+                                onClick={() => setQrType('static')}
+                                className={`flex-1 py-2.5 rounded-lg text-[10px] font-bold transition-all ${qrType === 'static' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}
                             >
-                                Single Use
+                                Static
                             </button>
                             <button
-                                onClick={() => setIsMultiUse(true)}
-                                className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all ${isMultiUse ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}
+                                onClick={() => setQrType('single')}
+                                className={`flex-1 py-2.5 rounded-lg text-[10px] font-bold transition-all ${qrType === 'single' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}
                             >
-                                Multi Use
+                                Single
+                            </button>
+                            <button
+                                onClick={() => setQrType('multi')}
+                                className={`flex-1 py-2.5 rounded-lg text-[10px] font-bold transition-all ${qrType === 'multi' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500'}`}
+                            >
+                                Multi
                             </button>
                         </div>
 
                         {/* Actions */}
-                        <div className="flex gap-2 w-full max-w-[280px]">
-                            <button
-                                onClick={() => generateSession(isMultiUse)}
-                                disabled={isLoading}
-                                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-                            >
-                                <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                                Regenerate
-                            </button>
+                        <div className="flex gap-2 w-full max-w-[280px] relative">
+                            {qrType === 'static' ? (
+                                <div className="flex-1 relative">
+                                    <button
+                                        onClick={() => setShowDownloadOptions(!showDownloadOptions)}
+                                        disabled={isLoading}
+                                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                    >
+                                        <Download className="w-4 h-4" />
+                                        Download
+                                    </button>
+
+                                    {showDownloadOptions && (
+                                        <div className="absolute bottom-full left-0 w-full mb-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-10 animate-in slide-in-from-bottom-2 duration-200">
+                                            <button
+                                                onClick={() => { downloadQR(); setShowDownloadOptions(false); }}
+                                                className="w-full px-4 py-3 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2 border-b border-slate-50"
+                                            >
+                                                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                                Download as JPG
+                                            </button>
+                                            <button
+                                                onClick={downloadPDF}
+                                                className="w-full px-4 py-3 text-left text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                                            >
+                                                <div className="w-2 h-2 rounded-full bg-red-500" />
+                                                Save as PDF (Print)
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => generateSession(qrType)}
+                                    disabled={isLoading}
+                                    className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                                >
+                                    <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                                    Regenerate
+                                </button>
+                            )}
                             <button
                                 onClick={handleCopy}
                                 className="flex-1 bg-white border-2 border-slate-200 hover:border-red-200 text-slate-700 hover:text-red-600 font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
@@ -356,6 +543,20 @@ Free delivery to all areas of Bahrain`;
                                 <Send className="w-4 h-4" />
                                 Send via WhatsApp
                             </button>
+                            {qrType !== 'static' ? (
+                                <button
+                                    onClick={() => generateSession(qrType)}
+                                    disabled={isLoading}
+                                    className="w-full bg-white border border-orange-200 text-orange-600 hover:bg-orange-50 font-bold py-2 rounded-lg text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                                >
+                                    <RefreshCcw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+                                    Regenerate Session Link
+                                </button>
+                            ) : (
+                                <div className="bg-orange-50 text-orange-700 p-2 rounded-lg text-[10px] font-medium text-center">
+                                    Using Static Branch Link
+                                </div>
+                            )}
                         </div>
 
                         {/* Message Template */}
@@ -403,6 +604,20 @@ Free delivery to all areas of Bahrain`;
                                 <MessageCircle className="w-5 h-5" />
                                 Share via WhatsApp
                             </button>
+                            {qrType !== 'static' ? (
+                                <button
+                                    onClick={() => generateSession(qrType)}
+                                    disabled={isLoading}
+                                    className="w-full bg-white border border-green-200 text-green-600 hover:bg-green-50 font-bold py-2 rounded-lg text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                                >
+                                    <RefreshCcw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+                                    Regenerate Session Link
+                                </button>
+                            ) : (
+                                <div className="bg-green-50 text-green-700 p-2 rounded-lg text-[10px] font-medium text-center">
+                                    Using Static Branch Link
+                                </div>
+                            )}
                             <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
                                 <p className="text-xs text-blue-700">Opens WhatsApp with your message pre-filled. Select contacts to share.</p>
                             </div>
@@ -428,6 +643,54 @@ Free delivery to all areas of Bahrain`;
                     </div>
                 </div>
             </div>
-        </div>
+            {/* Hidden Poster Template for Export */}
+            <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+                <div
+                    ref={posterRef}
+                    style={{
+                        width: '800px',
+                        height: '800px',
+                        position: 'relative',
+                        backgroundColor: '#8B1D23',
+                        overflow: 'hidden'
+                    }}
+                >
+                    <img
+                        src="/poster-bg.jpg"
+                        alt="Poster Background"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'block'
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '147px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: '320px',
+                            height: '320px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: 'white',
+                            padding: '10px',
+                            boxSizing: 'border-box'
+                        }}
+                    >
+                        {(session || qrType === 'static') && (
+                            <QRCodeSVG
+                                value={customerUrl}
+                                size={280}
+                                level="H"
+                                includeMargin={false}
+                            />
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div >
     );
 };

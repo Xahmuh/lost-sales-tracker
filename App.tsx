@@ -37,6 +37,7 @@ import { CashFlowPlanner } from './components/CashFlow/CashFlowPlanner';
 import { BranchCashTrackerPage } from './components/CashFlow/BranchCashTrackerPage';
 import { CorporateCodex } from './components/CorporateCodex';
 import { ProjectSettings } from './components/ProjectSettings';
+import { spinWinService } from './services/spinWin';
 
 const App: React.FC = () => {
   const [authState, setAuthState] = useState<AuthState>({ user: null, pharmacist: null });
@@ -54,10 +55,37 @@ const App: React.FC = () => {
     });
   };
 
-  const [customerToken] = useState(() => {
+  const [customerToken, setCustomerToken] = useState<string | null>(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get('token');
   });
+
+  // Handle Static QR Codes (e.g. ?node=BH-01 or ?branch=BH-01)
+  useEffect(() => {
+    const handleStaticToken = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const branchCode = params.get('node') || params.get('branch');
+
+      if (branchCode && !customerToken) {
+        setIsInitializing(true);
+        try {
+          const branch = await supabase.branches.findByCode(branchCode);
+          if (branch) {
+            // Generate a multi-use token for this branch
+            const session = await spinWinService.sessions.generate(branch.id, true);
+            if (session?.token) {
+              setCustomerToken(session.token);
+            }
+          }
+        } catch (err) {
+          console.error("Static token error:", err);
+        } finally {
+          setIsInitializing(false);
+        }
+      }
+    };
+    handleStaticToken();
+  }, [customerToken]);
 
   useEffect(() => {
     const init = async () => {
