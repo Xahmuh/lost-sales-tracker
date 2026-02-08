@@ -33,7 +33,6 @@ interface BranchQRGeneratorProps {
 export const BranchQRGenerator: React.FC<BranchQRGeneratorProps> = ({ branch, onBack }) => {
     const [qrType, setQrType] = useState<'static' | 'single' | 'multi'>('static');
     const qrRef = React.useRef<HTMLDivElement>(null);
-    const posterRef = React.useRef<HTMLDivElement>(null);
     const [session, setSession] = useState<SpinSession | null>(null);
     const [timeLeft, setTimeLeft] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
@@ -129,16 +128,16 @@ Free delivery to all areas of Bahrain`);
         : `${effectiveBaseUrl}${window.location.pathname}?token=${session?.token || ''}&skipRating=true`;
 
     const downloadQR = async () => {
-        if (!posterRef.current) return;
+        if (!qrRef.current) return;
         setIsLoading(true);
         try {
-            const dataUrl = await toPng(posterRef.current, {
+            const dataUrl = await toPng(qrRef.current, {
                 cacheBust: true,
-                pixelRatio: 4,
+                pixelRatio: 3,
                 backgroundColor: '#ffffff',
             });
             const link = document.createElement('a');
-            link.download = `spinwin-poster-${branch.code || 'branch'}.jpg`;
+            link.download = `spinwin-qr-${branch.code || 'branch'}.jpg`;
             link.href = dataUrl;
             link.click();
         } catch (err) {
@@ -643,54 +642,6 @@ Free delivery to all areas of Bahrain`;
                     </div>
                 </div>
             </div>
-            {/* Hidden Poster Template for Export */}
-            <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
-                <div
-                    ref={posterRef}
-                    style={{
-                        width: '800px',
-                        height: '800px',
-                        position: 'relative',
-                        backgroundColor: '#8B1D23',
-                        overflow: 'hidden'
-                    }}
-                >
-                    <img
-                        src="/poster-bg.jpg"
-                        alt="Poster Background"
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            display: 'block'
-                        }}
-                    />
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: '147px',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            width: '320px',
-                            height: '320px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            background: 'white',
-                            padding: '10px',
-                            boxSizing: 'border-box'
-                        }}
-                    >
-                        {(session || qrType === 'static') && (
-                            <QRCodeSVG
-                                value={customerUrl}
-                                size={280}
-                                level="H"
-                                includeMargin={false}
-                            />
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div >
+        </div>
     );
 };
