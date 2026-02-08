@@ -86,7 +86,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           </h2>
 
           <p className="text-slate-400 text-lg font-medium leading-relaxed mb-12 max-w-md">
-            Official operational platform for Tabarak Pharmacy Group. Secure branch authentication required for all transactions.
+            Official operational platform for Tabarak Pharmacy Group.
           </p>
 
           <div className="flex flex-col space-y-4">
@@ -98,16 +98,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
               <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">All Systems Operational</span>
             </div>
-          </div>
-
-          {/* Version info at bottom */}
-          <div className="absolute bottom-0 left-0 flex items-center space-x-6 text-slate-600">
-            <div className="flex items-center space-x-2">
-              <Globe className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">v1.0.0 LSTP</span>
-            </div>
-            <span className="text-slate-800">|</span>
-            <span className="text-[10px] font-bold uppercase tracking-widest">Developed by Ahmed Elsherbini</span>
           </div>
         </div>
       </div>
@@ -198,7 +188,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span className="text-[10px] font-bold uppercase tracking-widest">Secure Connection</span>
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-widest">v1.0.0</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">Developed by Ahmed Elsherbini</span>
             </div>
           </div>
         </div>

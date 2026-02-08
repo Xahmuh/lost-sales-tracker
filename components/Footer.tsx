@@ -76,27 +76,15 @@ export const Footer: React.FC = () => {
                     </div>
 
                     {/* Developer Info */}
-                    <div className="md:col-span-3 md:pl-4">
-                        <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5">Development</h5>
-                        <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5">
-                            <div className="flex items-center space-x-3 mb-4">
-                                <div className="w-10 h-10 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white text-sm font-black shadow-lg shadow-brand/20">
-                                    AE
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-white">Ahmed Elsherbini</p>
-                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Lead Developer</p>
-                                </div>
+
+                    <div className="md:col-span-3">
+                        <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5">Developed By</h5>
+                        <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 bg-gradient-to-br from-brand to-brand-dark rounded-xl flex items-center justify-center text-white text-sm font-black shadow-lg shadow-brand/20">
+                                AE
                             </div>
-                            <div className="space-y-2.5">
-                                <div className="flex items-center space-x-2.5 text-slate-500">
-                                    <Globe className="w-3.5 h-3.5" />
-                                    <span className="text-xs">Full-Stack Architecture</span>
-                                </div>
-                                <div className="flex items-center space-x-2.5 text-slate-500">
-                                    <Shield className="w-3.5 h-3.5" />
-                                    <span className="text-xs">React + Supabase Stack</span>
-                                </div>
+                            <div>
+                                <p className="text-sm font-bold text-white">Ahmed Elsherbini</p>
                             </div>
                         </div>
                     </div>
@@ -110,10 +98,7 @@ export const Footer: React.FC = () => {
                                 &copy; {currentYear} Tabarak Pharmacy Group. All rights reserved.
                             </p>
                         </div>
-                        <div className="flex items-center space-x-4">
-                            <span className="text-[10px] text-slate-700 font-bold uppercase tracking-widest">Built with precision</span>
-                            <span className="text-slate-800">|</span>
-                            <span className="text-[10px] text-slate-700 font-bold uppercase tracking-widest">Egypt</span>
+                        <div className="flex items-center space-x-4">                            <span className="text-[10px] text-slate-700 font-bold uppercase tracking-widest">BAHRAIN</span>
                         </div>
                     </div>
                 </div>
