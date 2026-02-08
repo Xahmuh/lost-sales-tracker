@@ -120,12 +120,12 @@ Free delivery to all areas of Bahrain`);
     const effectiveBaseUrl = isLocalhost ? `http://${NETWORK_CONFIG.localIp}:${NETWORK_CONFIG.port}` : baseUrl;
 
     const customerUrl = qrType === 'static'
-        ? `${effectiveBaseUrl}${window.location.pathname}?node=${branch.code}`
-        : `${effectiveBaseUrl}${window.location.pathname}?token=${session?.token || ''}`;
+        ? `${effectiveBaseUrl}/?node=${branch.code}`
+        : `${effectiveBaseUrl}/?token=${session?.token || ''}`;
 
     const talabatUrl = qrType === 'static'
-        ? `${effectiveBaseUrl}${window.location.pathname}?node=${branch.code}&skipRating=true`
-        : `${effectiveBaseUrl}${window.location.pathname}?token=${session?.token || ''}&skipRating=true`;
+        ? `${effectiveBaseUrl}/?node=${branch.code}&skipRating=true`
+        : `${effectiveBaseUrl}/?token=${session?.token || ''}&skipRating=true`;
 
     const downloadQR = async () => {
         if (!qrRef.current) return;

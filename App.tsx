@@ -45,6 +45,10 @@ const App: React.FC = () => {
   const [isInitializing, setIsInitializing] = useState(true);
   const [isPending, startTransition] = useTransition();
   const [showPOSGuideline, setShowPOSGuideline] = useState(false);
+  const [isCustomerFlow] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.has('token') || params.has('node') || params.has('branch');
+  });
 
   const handleTabChange = (tab: 'pos' | 'dashboard' | 'selector' | 'spin-win' | 'hr' | 'hr-manager' | 'workforce' | 'cash-flow' | 'cash-tracker' | 'corporate-codex' | 'settings' | null) => {
     if (tab === 'pos') {
@@ -164,6 +168,34 @@ const App: React.FC = () => {
     return (
       <div className="min-h-screen bg-slate-50">
         <CustomerFlow token={customerToken} />
+      </div>
+    );
+  }
+
+  // If we are definitely in customer flow but waiting for token exchange (static QR)
+  if (isCustomerFlow && isInitializing) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-10 text-center space-y-8">
+        <div className="relative">
+          <div className="w-16 h-16 border-[3px] border-slate-100 border-t-brand rounded-full animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <QrCode className="w-6 h-6 text-brand" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-xl font-black text-slate-900 tracking-tight uppercase">Reward Hub</h3>
+          <p className="text-xs text-slate-400 font-medium uppercase tracking-[0.2em]">Verifying Security Token...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Block main app if we are in customer flow but still initializing
+  if (isCustomerFlow && !customerToken) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center p-10 text-center">
+        <Loader2 className="w-10 h-10 text-brand animate-spin mb-4" />
+        <p className="text-sm font-bold text-slate-900">Entering Secure Reward Session...</p>
       </div>
     );
   }
