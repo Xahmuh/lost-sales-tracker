@@ -134,21 +134,8 @@ const App: React.FC = () => {
 
   if (customerToken) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col">
-        <header className="bg-white border-b border-slate-100 h-20 shadow-sm flex items-center justify-between px-10">
-          <div className="flex items-center space-x-6">
-            <div className="w-12 h-12 bg-brand rounded-xl flex items-center justify-center shadow-lg shadow-brand/20">
-              <QrCode className="text-white w-7 h-7" />
-            </div>
-            <div>
-              <h1 className="text-xl font-black text-slate-900 tracking-tighter">Tabarak<span className="text-brand">.</span></h1>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Self-Service Portal</p>
-            </div>
-          </div>
-        </header>
-        <main className="flex-1">
-          <CustomerFlow token={customerToken} />
-        </main>
+      <div className="min-h-screen bg-slate-50">
+        <CustomerFlow token={customerToken} />
       </div>
     );
   }
