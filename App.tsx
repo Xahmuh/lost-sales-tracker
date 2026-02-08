@@ -149,7 +149,6 @@ const App: React.FC = () => {
         <main className="flex-1">
           <CustomerFlow token={customerToken} />
         </main>
-        <Footer onNavigate={handleTabChange} permissions={authState.permissions} user={authState.user} />
       </div>
     );
   }

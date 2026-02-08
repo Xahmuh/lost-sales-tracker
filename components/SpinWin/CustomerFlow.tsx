@@ -414,7 +414,7 @@ export const CustomerFlow: React.FC<CustomerFlowProps> = ({ token }) => {
                                 <div className="absolute inset-0 flex items-center justify-center z-30">
                                     <div className="bg-slate-900/90 text-white p-6 rounded-3xl shadow-2xl backdrop-blur-md border border-white/10 flex flex-col items-center space-y-3">
                                         <Star className="w-8 h-8 text-amber-400 fill-amber-400 animate-bounce" />
-                                        <span className="font-bold text-xs text-center leading-tight">Unlock Wheel<br/>via Google Maps</span>
+                                        <span className="font-bold text-xs text-center leading-tight">Unlock Wheel<br />via Google Maps</span>
                                     </div>
                                 </div>
                             )}
@@ -556,11 +556,6 @@ export const CustomerFlow: React.FC<CustomerFlowProps> = ({ token }) => {
                         <p className="text-center text-slate-400 text-[10px] font-medium uppercase tracking-wider pt-2">Redeemable at any branch &bull; Valid for 7 days</p>
                     </div>
                 )}
-            </div>
-
-            {/* Footer */}
-            <div className="p-6 text-center bg-white border-t border-slate-100 mt-auto">
-                <p className="text-slate-300 font-bold uppercase tracking-widest text-[8px]">Tabarak Health Systems Protocol v4.0</p>
             </div>
 
             {/* Hidden Voucher for Image Generation */}
