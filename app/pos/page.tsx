@@ -480,26 +480,26 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, permission
                   </div>
                 </div>
               ) : (
-                <div className="text-center space-y-4 animate-in fade-in zoom-in duration-500">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em]">ACTIVE REPORTING</p>
-                  <div className="w-24 h-24 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto border-2 border-dashed border-slate-200">
-                    <Target size={40} className="text-slate-300 animate-pulse" />
-                  </div>
-                  <p className="text-xl font-black text-slate-900 tracking-tight uppercase">Monitoring Gaps</p>
+                <div className="text-center space-y-3">
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ACTIVE REPORTING</p>
+                    <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto border border-slate-100">
+                      <Target size={28} className="text-slate-300" />
+                    </div>
+                    <p className="text-lg font-black text-slate-900 tracking-tight uppercase">Monitoring Gaps</p>
                 </div>
               )}
             </div>
 
-            <div className="space-y-4 border-t border-slate-50 pt-10">
-              <div className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl transition-all">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cart Items</span>
-                <span className="px-3 py-1 bg-white rounded-lg text-xs font-black text-slate-900 shadow-sm border border-slate-100">{cart.length}</span>
-              </div>
-              <div className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl transition-all">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Network</span>
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  <span className="text-xs font-black text-slate-900">Encrypted</span>
+              <div className="space-y-3 border-t border-slate-100 pt-6">
+                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-lg">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Cart Items</span>
+                  <span className="px-2.5 py-0.5 bg-white rounded-md text-xs font-black text-slate-900 shadow-sm border border-slate-100">{cart.length}</span>
+                </div>
+                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-lg">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Network</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span className="text-xs font-bold text-slate-900">Encrypted</span>
                 </div>
               </div>
             </div>
