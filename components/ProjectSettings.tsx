@@ -346,7 +346,7 @@ export const ProjectSettings: React.FC<{ onBack: () => void }> = ({ onBack }) =>
                                             <div className="space-y-6">
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                     {FEATURES.map(feature => {
-                                                        const currentPerm = permissions.find(p => p.featureName === feature.id)?.accessLevel || 'read';
+                                                        const currentPerm = permissions.find(p => p.featureName === feature.id)?.accessLevel || 'edit';
                                                         return (
                                                             <div key={feature.id} className="bg-[#fcfcfc] border border-slate-100 p-6 rounded-[2rem] flex items-center justify-between group hover:bg-white hover:shadow-xl transition-all">
                                                                 <div className="flex items-center gap-4">

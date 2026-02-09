@@ -46,6 +46,7 @@ type Mode = 'sales' | 'shortages';
 
 export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, permissions, onBackToPharmacist }) => {
   const getPermission = (feature: string) => {
+    if (branch.role === 'admin' || branch.role === 'manager') return 'edit';
     return permissions.find(p => p.featureName === feature)?.accessLevel || 'edit';
   };
 
@@ -260,126 +261,126 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, permission
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 min-h-0 h-full page-enter font-sans">
-        {/* Search & Cart Area */}
-        <div className="lg:col-span-8 flex flex-col gap-5">
-          {branch.isItemsEntryEnabled !== false && (
-            <div className="flex flex-col md:flex-row items-center gap-3">
-              <div className="flex-1 w-full relative">
-                <ProductSearch
-                  onSelect={addItem}
-                  onManual={(q) => { setManualQuery(q); setIsManualModalOpen(true); }}
-                />
-              </div>
-              <button
-                onClick={() => setIsScannerOpen(true)}
-                className="w-full md:w-auto h-14 md:h-[58px] px-5 bg-white border-2 border-slate-100 text-slate-400 hover:text-red-700 hover:border-red-200 rounded-2xl flex items-center justify-center gap-2 transition-all shrink-0 press-effect"
-                aria-label="Open barcode scanner"
-              >
-                <ScanLine className="w-5 h-5" />
-                <span className="md:hidden text-xs font-bold">Scan</span>
-              </button>
+      {/* Search & Cart Area */}
+      <div className="lg:col-span-8 flex flex-col gap-5">
+        {branch.isItemsEntryEnabled !== false && (
+          <div className="flex flex-col md:flex-row items-center gap-3">
+            <div className="flex-1 w-full relative">
+              <ProductSearch
+                onSelect={addItem}
+                onManual={(q) => { setManualQuery(q); setIsManualModalOpen(true); }}
+              />
             </div>
-          )}
+            <button
+              onClick={() => setIsScannerOpen(true)}
+              className="w-full md:w-auto h-14 md:h-[58px] px-5 bg-white border-2 border-slate-100 text-slate-400 hover:text-red-700 hover:border-red-200 rounded-2xl flex items-center justify-center gap-2 transition-all shrink-0 press-effect"
+              aria-label="Open barcode scanner"
+            >
+              <ScanLine className="w-5 h-5" />
+              <span className="md:hidden text-xs font-bold">Scan</span>
+            </button>
+          </div>
+        )}
 
-          <div className="flex-1 bg-white rounded-[2rem] border-2 border-slate-100 overflow-hidden flex flex-col relative shadow-sm">
-            {/* Cart Header */}
-            <div className="px-7 py-5 border-b border-slate-100 flex items-center justify-between relative">
-              <div className="flex-1 min-w-0">
-                <h2 className="text-base font-black text-slate-900 tracking-tight uppercase leading-none">
-                  {mode === 'sales' ? 'Loss Logging' : 'Shortage Report'}
-                </h2>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">
-                  {mode === 'sales' ? 'Documenting Gaps' : 'Inventory Audit'}
-                </p>
-              </div>
-
-              {/* Mode Switcher */}
-              <div className="absolute left-1/2 -translate-x-1/2 tab-nav">
-                {salesPerm !== 'none' && (
-                  <button
-                    onClick={() => switchMode('sales')}
-                    className={`tab-item ${mode === 'sales' ? 'tab-item-brand' : ''}`}
-                  >
-                    Lost Sales
-                  </button>
-                )}
-                {shortagesPerm !== 'none' && (
-                  <button
-                    onClick={() => switchMode('shortages')}
-                    className={`tab-item ${mode === 'shortages' ? 'tab-item-active' : ''}`}
-                  >
-                    Shortage
-                  </button>
-                )}
-              </div>
-
-              {/* Status */}
-              <div className="flex-1 flex justify-end">
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-lg border border-emerald-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider">Active</span>
-                </div>
-              </div>
+        <div className="flex-1 bg-white rounded-[2rem] border-2 border-slate-100 overflow-hidden flex flex-col relative shadow-sm">
+          {/* Cart Header */}
+          <div className="px-7 py-5 border-b border-slate-100 flex items-center justify-between relative">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-base font-black text-slate-900 tracking-tight uppercase leading-none">
+                {mode === 'sales' ? 'Loss Logging' : 'Shortage Report'}
+              </h2>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">
+                {mode === 'sales' ? 'Documenting Gaps' : 'Inventory Audit'}
+              </p>
             </div>
 
-            {/* Cart Items */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-3 custom-scrollbar">
-              {cart.length === 0 ? (
-                <div className="empty-state">
-                  <div className="empty-state-icon">
-                    <Package size={32} strokeWidth={1.5} />
-                  </div>
-                  <p className="empty-state-title">Cart Empty</p>
-                  <p className="empty-state-desc">Scan or search for products to begin</p>
+            {/* Mode Switcher */}
+            <div className="absolute left-1/2 -translate-x-1/2 tab-nav">
+              {salesPerm !== 'none' && (
+                <button
+                  onClick={() => switchMode('sales')}
+                  className={`tab-item ${mode === 'sales' ? 'tab-item-brand' : ''}`}
+                >
+                  Lost Sales
+                </button>
+              )}
+              {shortagesPerm !== 'none' && (
+                <button
+                  onClick={() => switchMode('shortages')}
+                  className={`tab-item ${mode === 'shortages' ? 'tab-item-active' : ''}`}
+                >
+                  Shortage
+                </button>
+              )}
+            </div>
+
+            {/* Status */}
+            <div className="flex-1 flex justify-end">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 rounded-lg border border-emerald-100">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider">Active</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Cart Items */}
+          <div className="flex-1 overflow-y-auto p-5 space-y-3 custom-scrollbar">
+            {cart.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-state-icon">
+                  <Package size={32} strokeWidth={1.5} />
                 </div>
+                <p className="empty-state-title">Cart Empty</p>
+                <p className="empty-state-desc">Scan or search for products to begin</p>
+              </div>
             ) : (
               cart.map((item, idx) => (
-                  <div key={idx} className="group p-4 bg-white rounded-2xl border-2 border-slate-100 hover:border-red-200/60 hover:shadow-lg hover:shadow-red-500/5 transition-all duration-300 flex flex-col gap-3">
+                <div key={idx} className="group p-4 bg-white rounded-2xl border-2 border-slate-100 hover:border-red-200/60 hover:shadow-lg hover:shadow-red-500/5 transition-all duration-300 flex flex-col gap-3">
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div className="flex items-center gap-3.5 w-full sm:w-auto">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${mode === 'sales' ? 'bg-orange-50 text-orange-500 border border-orange-100' : 'bg-red-50 text-red-500 border border-red-100'}`}>
-                          <Package size={20} />
+                        <Package size={20} />
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-black text-slate-900 tracking-tight uppercase text-sm leading-tight truncate">{item.productName}</h4>
+                        <h4 className="font-black text-slate-900 tracking-tight uppercase text-sm leading-tight line-clamp-2">{item.productName}</h4>
                         <div className="flex items-center gap-2 mt-0.5">
                           <p className="text-[10px] font-bold text-red-600 uppercase tracking-wider flex items-center gap-1">
-                              <Hash size={9} strokeWidth={3} />
-                              <span>{item.internalCode || 'NO CODE'}</span>
-                            </p>
-                            <span className="w-1 h-1 rounded-full bg-slate-200"></span>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider truncate">{item.agentName || 'NO AGENT'}</span>
+                            <Hash size={9} strokeWidth={3} />
+                            <span>{item.internalCode || 'NO CODE'}</span>
+                          </p>
+                          <span className="w-1 h-1 rounded-full bg-slate-200"></span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider truncate">{item.agentName || 'NO AGENT'}</span>
                         </div>
                       </div>
                     </div>
 
                     {mode === 'sales' ? (
                       <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
-                          {/* Marks */}
-                          <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100">
-                            <button
-                              onClick={() => toggleAlternative(idx)}
-                              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-tight transition-all border ${item.alternativeGiven ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-transparent border-transparent text-slate-400 hover:text-slate-600'}`}
-                              title="Alternative Suggested"
-                            >
-                              <Sparkles size={11} />
-                              <span>Alt</span>
-                            </button>
-                            <button
-                              onClick={() => toggleTransfer(idx)}
-                              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-tight transition-all border ${item.internalTransfer ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-transparent border-transparent text-slate-400 hover:text-slate-600'}`}
-                              title="Internal Transfer Initiated"
-                            >
-                              <RefreshCcw size={11} />
-                              <span>Transfer</span>
-                            </button>
-                          </div>
+                        {/* Marks */}
+                        <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100">
+                          <button
+                            onClick={() => toggleAlternative(idx)}
+                            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-tight transition-all border ${item.alternativeGiven ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-transparent border-transparent text-slate-400 hover:text-slate-600'}`}
+                            title="Alternative Suggested"
+                          >
+                            <Sparkles size={11} />
+                            <span>Alt</span>
+                          </button>
+                          <button
+                            onClick={() => toggleTransfer(idx)}
+                            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-tight transition-all border ${item.internalTransfer ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-transparent border-transparent text-slate-400 hover:text-slate-600'}`}
+                            title="Internal Transfer Initiated"
+                          >
+                            <RefreshCcw size={11} />
+                            <span>Transfer</span>
+                          </button>
+                        </div>
 
-                          <div className="flex flex-col items-center">
-                            <span className="text-[8px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Price</span>
-                            <div className="flex items-center bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-1.5">
-                              <span className="text-[9px] font-bold text-slate-400 mr-1.5">BHD</span>
-                              <input
+                        <div className="flex flex-col items-center">
+                          <span className="text-[8px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Price</span>
+                          <div className="flex items-center bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-1.5">
+                            <span className="text-[9px] font-bold text-slate-400 mr-1.5">BHD</span>
+                            <input
                               type="number"
                               value={item.unitPrice}
                               onChange={(e) => updatePrice(idx, parseFloat(e.target.value) || 0)}
@@ -389,49 +390,49 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, permission
                             />
                           </div>
                         </div>
-                          <div className="flex flex-col items-center">
-                            <span className="text-[8px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Qty</span>
-                            <div className="flex items-center bg-slate-900 rounded-xl overflow-hidden">
-                              <button onClick={() => updateQty(idx, item.quantity - 1)} className="p-2 text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Decrease quantity"><Minus size={13} /></button>
-                              <span className="w-8 text-center text-xs font-black text-white tabular-nums">{item.quantity}</span>
-                              <button onClick={() => updateQty(idx, item.quantity + 1)} className="p-2 text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Increase quantity"><Plus size={13} /></button>
-                            </div>
+                        <div className="flex flex-col items-center">
+                          <span className="text-[8px] font-bold text-slate-400 mb-1 uppercase tracking-wider">Qty</span>
+                          <div className="flex items-center bg-slate-900 rounded-xl overflow-hidden">
+                            <button onClick={() => updateQty(idx, item.quantity - 1)} className="p-2 text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Decrease quantity"><Minus size={13} /></button>
+                            <span className="w-8 text-center text-xs font-black text-white tabular-nums">{item.quantity}</span>
+                            <button onClick={() => updateQty(idx, item.quantity + 1)} className="p-2 text-white/40 hover:text-white hover:bg-white/10 transition-colors" aria-label="Increase quantity"><Plus size={13} /></button>
                           </div>
+                        </div>
 
-                          <button onClick={() => removeItem(idx)} className="p-2.5 text-slate-200 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" aria-label="Remove item from cart"><Trash2 size={18} /></button>
+                        <button onClick={() => removeItem(idx)} className="p-2.5 text-slate-200 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" aria-label="Remove item from cart"><Trash2 size={18} /></button>
                       </div>
                     ) : (
                       <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
                         <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100">
                           <button
-                              onClick={() => updateStatus(idx, 'Low')}
-                              className={`px-3.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${item.status === 'Low' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
-                            >
-                              Low
-                            </button>
-                            <button
-                              onClick={() => updateStatus(idx, 'Critical')}
-                              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${item.status === 'Critical' ? 'bg-rose-500 text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
-                            >
-                              <AlertTriangle size={11} />
-                              <span>Critical</span>
-                            </button>
-                            <button
-                              onClick={() => updateStatus(idx, 'Out of Stock')}
-                              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${item.status === 'Out of Stock' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
-                            >
-                              <Box size={11} />
-                              <span>OOS</span>
-                            </button>
-                          </div>
-                          <button onClick={() => removeItem(idx)} className="p-2.5 text-slate-200 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" aria-label="Remove item from cart"><Trash2 size={18} /></button>
+                            onClick={() => updateStatus(idx, 'Low')}
+                            className={`px-3.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${item.status === 'Low' ? 'bg-amber-500 text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                          >
+                            Low
+                          </button>
+                          <button
+                            onClick={() => updateStatus(idx, 'Critical')}
+                            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${item.status === 'Critical' ? 'bg-rose-500 text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                          >
+                            <AlertTriangle size={11} />
+                            <span>Critical</span>
+                          </button>
+                          <button
+                            onClick={() => updateStatus(idx, 'Out of Stock')}
+                            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all ${item.status === 'Out of Stock' ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                          >
+                            <Box size={11} />
+                            <span>OOS</span>
+                          </button>
+                        </div>
+                        <button onClick={() => removeItem(idx)} className="p-2.5 text-slate-200 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all" aria-label="Remove item from cart"><Trash2 size={18} /></button>
                       </div>
                     )}
                   </div>
 
-                    {/* Notes */}
-                    <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100/80 flex items-start gap-2">
-                      <FileText size={13} className="text-slate-300 mt-0.5 shrink-0" />
+                  {/* Notes */}
+                  <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100/80 flex items-start gap-2">
+                    <FileText size={13} className="text-slate-300 mt-0.5 shrink-0" />
                     <textarea
                       placeholder="Add a remark or note for the warehouse/audit..."
                       value={item.notes || ''}
@@ -444,56 +445,56 @@ export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, permission
             )}
           </div>
 
-            {/* Success Banner */}
-            {showSuccess && (
-              <div className="absolute inset-x-5 bottom-5 bg-slate-900 text-white p-6 rounded-2xl flex items-center gap-5 shadow-2xl z-50 ring-1 ring-white/10 animate-fade-in-up">
-                <div className="w-11 h-11 bg-emerald-500 rounded-xl flex items-center justify-center text-white shrink-0">
-                  <CheckCircle2 size={24} />
-                </div>
-                <div>
-                  <p className="font-black text-lg tracking-tight">SUCCESSFULLY SYNCED</p>
-                  <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest mt-0.5">Inventory records updated in real-time</p>
-                </div>
+          {/* Success Banner */}
+          {showSuccess && (
+            <div className="absolute inset-x-5 bottom-5 bg-slate-900 text-white p-6 rounded-2xl flex items-center gap-5 shadow-2xl z-50 ring-1 ring-white/10 animate-fade-in-up">
+              <div className="w-11 h-11 bg-emerald-500 rounded-xl flex items-center justify-center text-white shrink-0">
+                <CheckCircle2 size={24} />
               </div>
-            )}
+              <div>
+                <p className="font-black text-lg tracking-tight">SUCCESSFULLY SYNCED</p>
+                <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest mt-0.5">Inventory records updated in real-time</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-        {/* Sidebar */}
-        <div className="lg:col-span-4 flex flex-col gap-5">
-          {/* Summary Card */}
-          <div className="bg-white rounded-[2rem] border-2 border-slate-100 shadow-sm p-7 flex-1 flex flex-col">
-            <div className="flex-1 flex flex-col">
-              <div className="min-h-[130px] flex flex-col items-center justify-center mb-6">
-                {mode === 'sales' ? (
-                  <div className="text-center space-y-3">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">TOTAL LOSS ESTIMATE</p>
-                    <div className="relative inline-block">
-                      <p className="text-5xl font-black text-slate-900 tracking-tighter leading-none tabular-nums">{grandTotal.toFixed(3)}</p>
-                      <p className="text-[9px] font-bold text-red-600 uppercase tracking-widest absolute -bottom-5 left-0 right-0">BAHRAINI DINARS</p>
+      {/* Sidebar */}
+      <div className="lg:col-span-4 flex flex-col gap-5">
+        {/* Summary Card */}
+        <div className="bg-white rounded-[2rem] border-2 border-slate-100 shadow-sm p-7 flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col">
+            <div className="min-h-[130px] flex flex-col items-center justify-center mb-6">
+              {mode === 'sales' ? (
+                <div className="text-center space-y-3">
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">TOTAL LOSS ESTIMATE</p>
+                  <div className="relative inline-block">
+                    <p className="text-5xl font-black text-slate-900 tracking-tighter leading-none tabular-nums">{grandTotal.toFixed(3)}</p>
+                    <p className="text-[9px] font-bold text-red-600 uppercase tracking-widest absolute -bottom-5 left-0 right-0">BAHRAINI DINARS</p>
                   </div>
                 </div>
               ) : (
                 <div className="text-center space-y-3">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ACTIVE REPORTING</p>
-                    <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto border-2 border-slate-100">
-                      <Target size={26} className="text-slate-300" />
-                    </div>
-                    <p className="text-base font-black text-slate-900 tracking-tight uppercase">Monitoring Gaps</p>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">ACTIVE REPORTING</p>
+                  <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto border-2 border-slate-100">
+                    <Target size={26} className="text-slate-300" />
+                  </div>
+                  <p className="text-base font-black text-slate-900 tracking-tight uppercase">Monitoring Gaps</p>
                 </div>
               )}
             </div>
 
-              <div className="space-y-2.5 border-t border-slate-100 pt-5">
-                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Cart Items</span>
-                  <span className="px-2.5 py-0.5 bg-white rounded-lg text-xs font-black text-slate-900 shadow-sm border border-slate-100 tabular-nums">{cart.length}</span>
-                </div>
-                <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Network</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    <span className="text-xs font-bold text-slate-900">Encrypted</span>
+            <div className="space-y-2.5 border-t border-slate-100 pt-5">
+              <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Cart Items</span>
+                <span className="px-2.5 py-0.5 bg-white rounded-lg text-xs font-black text-slate-900 shadow-sm border border-slate-100 tabular-nums">{cart.length}</span>
+              </div>
+              <div className="flex justify-between items-center bg-slate-50 p-3 rounded-xl">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Network</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span className="text-xs font-bold text-slate-900">Encrypted</span>
                 </div>
               </div>
             </div>
