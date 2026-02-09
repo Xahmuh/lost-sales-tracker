@@ -98,14 +98,15 @@ const App: React.FC = () => {
         const session = data?.session;
         if (session) {
           let currentSession = session as any;
-          if (!currentSession.permissions && currentSession.user) {
+          if (currentSession.user) {
             try {
               const perms = await supabase.permissions.listForBranch(currentSession.user.id);
               currentSession.permissions = perms;
               supabase.auth.setSession(currentSession);
             } catch (pErr) {
               console.error("Init permission fetch error:", pErr);
-              currentSession.permissions = [];
+              // Fallback: ensure permissions is at least an empty array if undefined
+              if (!currentSession.permissions) currentSession.permissions = [];
             }
           }
           setAuthState(currentSession);

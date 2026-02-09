@@ -47,7 +47,9 @@ type Mode = 'sales' | 'shortages';
 export const POSPage: React.FC<POSPageProps> = ({ branch, pharmacist, permissions, onBackToPharmacist }) => {
   const getPermission = (feature: string) => {
     if (branch.role === 'admin' || branch.role === 'manager') return 'edit';
-    return permissions.find(p => p.featureName === feature)?.accessLevel || 'edit';
+    const level = permissions.find(p => p.featureName === feature)?.accessLevel || 'edit';
+    // If a branch is in POS, they should have logging access ('edit') by default
+    return level === 'read' ? 'edit' : level;
   };
 
   const salesPerm = getPermission('lost_sales');
