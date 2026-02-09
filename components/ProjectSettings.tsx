@@ -385,11 +385,18 @@ export const ProjectSettings: React.FC<{ onBack: () => void }> = ({ onBack }) =>
 
             {/* Branch Modal */}
             {isBranchModalOpen && (
-                <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-xl z-[100] flex items-center justify-center p-4">
+                <div
+                    className="fixed inset-0 bg-slate-900/80 backdrop-blur-xl z-[100] flex items-center justify-center p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="branch-modal-title"
+                    aria-describedby="branch-modal-description"
+                >
                     <div className="bg-white w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+                        <span id="branch-modal-description" className="sr-only">Configuration form for branch or admin system identities.</span>
                         <div className="p-10 border-b flex items-center justify-between bg-slate-50">
                             <div>
-                                <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">System Identity</h3>
+                                <h3 id="branch-modal-title" className="text-2xl font-black text-slate-900 uppercase tracking-tight">System Identity</h3>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Configure Branch or Admin access</p>
                             </div>
                             <button onClick={() => setIsBranchModalOpen(false)} className="w-12 h-12 bg-slate-200 hover:bg-slate-300 rounded-full flex items-center justify-center transition-all"><X size={24} /></button>
@@ -495,11 +502,18 @@ export const ProjectSettings: React.FC<{ onBack: () => void }> = ({ onBack }) =>
 
             {/* Pharmacist Modal */}
             {isPharModalOpen && (
-                <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-xl z-[100] flex items-center justify-center p-4">
+                <div
+                    className="fixed inset-0 bg-slate-900/80 backdrop-blur-xl z-[100] flex items-center justify-center p-4"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="pharmacist-modal-title"
+                    aria-describedby="pharmacist-modal-description"
+                >
                     <div className="bg-white w-full max-w-xl rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+                        <span id="pharmacist-modal-description" className="sr-only">Form to manage personnel profiles and specialist credentials.</span>
                         <div className="p-10 border-b flex items-center justify-between bg-slate-50">
                             <div>
-                                <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Personnel Profile</h3>
+                                <h3 id="pharmacist-modal-title" className="text-2xl font-black text-slate-900 uppercase tracking-tight">Personnel Profile</h3>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Manage Specialist Credentials</p>
                             </div>
                             <button onClick={() => setIsPharModalOpen(false)} className="w-12 h-12 bg-slate-200 hover:bg-slate-300 rounded-full flex items-center justify-center transition-all"><X size={24} /></button>

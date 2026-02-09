@@ -75,15 +75,22 @@ export const BarcodeScanner: React.FC<BarcodeScannerProps> = ({ onScan, onClose 
   }, [onScan, onClose]);
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-xl animate-in fade-in duration-300 p-6">
+    <div
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-xl animate-in fade-in duration-300 p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="scanner-terminal-title"
+      aria-describedby="scanner-terminal-description"
+    >
       <div className="max-w-xl w-full flex flex-col items-center">
+        <span id="scanner-terminal-description" className="sr-only">Barcode scanning interface. Use your camera to scan product barcodes for automatic identification.</span>
         <div className="w-full flex justify-between items-center mb-8">
           <div className="flex items-center space-x-3 text-white">
             <div className="w-10 h-10 bg-[#B91c1c] rounded-xl flex items-center justify-center shadow-lg shadow-[#B91c1c]/20">
               <Camera className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-xl font-black tracking-tight">Scanner Terminal</h3>
+              <h3 id="scanner-terminal-title" className="text-xl font-black tracking-tight">Scanner Terminal</h3>
               <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Active Optical Scan</p>
             </div>
           </div>

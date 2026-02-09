@@ -221,7 +221,15 @@ export const CorporateCodex: React.FC<CorporateCodexProps> = ({ userRole, onBack
         const totalPages = activeEntry.pages.length;
 
         return (
-            <div className="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[200] flex flex-col items-center justify-center p-4 md:p-6 select-none overflow-hidden">
+            <div
+                className="fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[200] flex flex-col items-center justify-center p-4 md:p-6 select-none overflow-hidden"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="codex-viewer-title"
+                aria-describedby="codex-viewer-description"
+            >
+                <div id="codex-viewer-description" className="sr-only">Document viewer for {activeEntry.title}. Consists of {totalPages} pages.</div>
+                <h3 id="codex-viewer-title" className="sr-only">{activeEntry.title}</h3>
                 <button
                     onClick={() => { setActiveEntry(null); setZoom(1); setPanning({ x: 0, y: 0 }); }}
                     className="fixed top-5 right-5 z-[260] w-9 h-9 bg-white/10 hover:bg-red-600 text-white rounded-lg flex items-center justify-center transition-colors"
@@ -286,10 +294,17 @@ export const CorporateCodex: React.FC<CorporateCodexProps> = ({ userRole, onBack
     };
 
     const renderEditor = () => (
-        <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[250] flex items-center justify-center p-4">
+        <div
+            className="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[250] flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="codex-editor-title"
+            aria-describedby="codex-editor-description"
+        >
             <div className="bg-white w-full max-w-3xl rounded-xl shadow-2xl overflow-hidden">
+                <div id="codex-editor-description" className="sr-only">Form to create or update corporate documents, policies, and circulars.</div>
                 <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                    <h3 className="text-base font-bold text-slate-900">{editorData.id ? 'Edit Document' : 'New Document'}</h3>
+                    <h3 id="codex-editor-title" className="text-base font-bold text-slate-900">{editorData.id ? 'Edit Document' : 'New Document'}</h3>
                     <button onClick={() => setIsEditorOpen(false)} className="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors"><X size={18} /></button>
                 </div>
                 <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto custom-scrollbar">

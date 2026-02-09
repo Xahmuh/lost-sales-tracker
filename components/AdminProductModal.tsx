@@ -60,11 +60,18 @@ export const AdminProductModal: React.FC<AdminProductModalProps> = ({ isOpen, pr
     };
 
     return (
-        <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+        <div
+            className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="admin-product-modal-title"
+            aria-describedby="admin-product-modal-description"
+        >
             <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                <span id="admin-product-modal-description" className="sr-only">Form for adding or editing product details including code, price, and category.</span>
                 {/* Header */}
                 <div className="bg-slate-900 p-6 flex justify-between items-center text-white">
-                    <h2 className="text-xl font-bold">{product ? 'Edit Product' : 'Add New Product'}</h2>
+                    <h2 id="admin-product-modal-title" className="text-xl font-bold">{product ? 'Edit Product' : 'Add New Product'}</h2>
                     <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
                         <X size={24} />
                     </button>

@@ -34,8 +34,15 @@ export const ManualProductModal: React.FC<ManualProductModalProps> = ({ isOpen, 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-xl animate-in fade-in duration-500">
+    <div
+      className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-xl animate-in fade-in duration-500"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="manual-product-modal-title"
+      aria-describedby="manual-product-modal-description"
+    >
       <div className="bg-white w-full max-w-2xl rounded-[3.5rem] p-12 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] border border-white relative overflow-hidden animate-in zoom-in-95 duration-500">
+        <span id="manual-product-modal-description" className="sr-only">Form for adding a manual deficit entry for a product not in the system.</span>
         <div className="absolute top-0 right-0 w-64 h-64 bg-red-50 rounded-full blur-3xl -mr-32 -mt-32"></div>
 
         <div className="flex justify-between items-start mb-12 relative z-10">
@@ -44,7 +51,7 @@ export const ManualProductModal: React.FC<ManualProductModalProps> = ({ isOpen, 
               <Plus className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="text-3xl font-black text-slate-900 tracking-tighter">Manual Deficit</h3>
+              <h3 id="manual-product-modal-title" className="text-3xl font-black text-slate-900 tracking-tighter">Manual Deficit</h3>
               <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px]">Record Non-Inventory SKU</p>
             </div>
           </div>

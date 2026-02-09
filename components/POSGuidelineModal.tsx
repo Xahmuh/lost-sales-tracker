@@ -11,7 +11,13 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300">
+        <div
+            className="fixed inset-0 z-[3000] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-300"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="pos-guideline-title"
+            aria-describedby="pos-guideline-description"
+        >
             {/* Modal Container - Increased max-width to be wider */}
             <div className="w-full max-w-5xl max-h-[90vh] bg-white shadow-[0_35px_100px_-20px_rgba(0,0,0,0.5)] relative overflow-hidden animate-in zoom-in-95 duration-300 flex flex-col font-sans border border-white/20">
 
@@ -24,7 +30,7 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
 
                     {/* Header Title & Close */}
                     <div className="flex justify-between items-start mb-6 relative z-10">
-                        <h3 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Attention / تنبيه</h3>
+                        <h3 id="pos-guideline-title" className="text-3xl md:text-4xl font-bold text-white tracking-tight">Attention / تنبيه</h3>
                         <button
                             onClick={onClose}
                             className="bg-white/10 hover:bg-white/20 text-white transition-all p-2 rounded-lg"
@@ -51,7 +57,7 @@ export const POSGuidelineModal: React.FC<POSGuidelineModalProps> = ({ isOpen, on
                         {/* Arabic Section (Right Side on Wide Screens) */}
                         <div className="text-right space-y-6 lg:order-2">
                             <h4 className="text-2xl font-bold text-white leading-tight">عزيزي الصيدلي</h4>
-                            <p className="text-xl font-bold leading-relaxed text-white" dir="rtl">
+                            <p id="pos-guideline-description" className="text-xl font-bold leading-relaxed text-white" dir="rtl">
                                 برجاء الانتباه جيدًا إلى الفرق بين تسجيل الأصناف كـ Lost Sales وتسجيلها كـ Shortage، وذلك لتجنب تسجيل بيانات غير دقيقة.
                             </p>
 
