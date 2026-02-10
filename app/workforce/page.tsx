@@ -32,6 +32,10 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
         setIncludeAnnualLeave,
         ramadanConfig,
         setRamadanConfig,
+        currentStaff,
+        setCurrentStaff,
+        leaveCycleMonths,
+        setLeaveCycleMonths,
         results
     } = useStaffingCalculator(INITIAL_REGIONS);
 
@@ -172,6 +176,77 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
                             </div>
                         </div>
                     ))}
+
+                    {/* Current Staff Input */}
+                    <div className="bg-slate-900 text-white p-6 rounded-[2.5rem] shadow-xl border-2 border-slate-800">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                                <Users className="w-5 h-5 text-emerald-400" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-lg leading-tight">Current Headcount</h4>
+                                <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest">عدد الصيادلة الحالي</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10">
+                            <button
+                                onClick={() => setCurrentStaff(Math.max(0, currentStaff - 1))}
+                                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white hover:bg-red-500 transition-colors"
+                            >
+                                <Minus className="w-4 h-4" />
+                            </button>
+                            <input
+                                type="number"
+                                value={currentStaff}
+                                onChange={(e) => setCurrentStaff(Number(e.target.value))}
+                                className="bg-transparent text-center text-3xl font-black focus:outline-none w-24 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            />
+                            <button
+                                onClick={() => setCurrentStaff(currentStaff + 1)}
+                                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white hover:bg-emerald-500 transition-colors"
+                            >
+                                <Plus className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Target Leave Cycle Input */}
+                    <div className="bg-indigo-900 text-white p-6 rounded-[2.5rem] shadow-xl border-2 border-indigo-800">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                                <Calendar className="w-5 h-5 text-indigo-400" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-lg leading-tight">Target Leave Cycle</h4>
+                                <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest">دورة الإجازات المستهدفة</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/10">
+                            <button
+                                onClick={() => setLeaveCycleMonths(Math.max(1, leaveCycleMonths - 1))}
+                                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white hover:bg-amber-500 transition-colors"
+                            >
+                                <Minus className="w-4 h-4" />
+                            </button>
+                            <div className="flex flex-col items-center">
+                                <span className="text-3xl font-black">{leaveCycleMonths}</span>
+                                <span className="text-[10px] font-bold uppercase opacity-40">Months | شهر</span>
+                            </div>
+                            <button
+                                onClick={() => setLeaveCycleMonths(leaveCycleMonths + 1)}
+                                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white hover:bg-indigo-500 transition-colors"
+                            >
+                                <Plus className="w-4 h-4" />
+                            </button>
+                        </div>
+                        <p className="mt-4 text-[11px] text-white/40 leading-relaxed text-center">
+                            Defines the timeframe for distributing annual leaves across staff.
+                            <br />
+                            تحديد المدة الزمنية لتوزيع الإجازات السنوية.
+                        </p>
+                    </div>
                 </div>
 
                 {/* Right Column: Results Dashboard */}
@@ -275,12 +350,12 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
                             </div>
                             <ul className="space-y-3">
                                 <li className="flex justify-between text-sm">
-                                    <span className="text-slate-500">Calendar Days</span>
-                                    <span className="font-bold text-slate-900">365 Days</span>
+                                    <span className="text-slate-500">Cycle Days ({results.leaveCycleMonths} Mo)</span>
+                                    <span className="font-bold text-slate-900">{Math.round(365 * (results.leaveCycleMonths / 12))} Days</span>
                                 </li>
                                 <li className="flex justify-between text-sm">
                                     <span className="text-slate-500">Weekly Leaves (1/Week)</span>
-                                    <span className="font-bold text-red-500">-52 Days</span>
+                                    <span className="font-bold text-red-500">-{Math.round(52 * (results.leaveCycleMonths / 12))} Days</span>
                                 </li>
                                 <li className="flex justify-between text-sm">
                                     <span className={includeAnnualLeave ? "text-slate-500" : "text-slate-500 opacity-50"}>Annual Leave (Deferred)</span>
@@ -291,7 +366,7 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
                                 {includePublicHolidays && (
                                     <li className="flex justify-between text-sm">
                                         <span className="text-slate-500">Public Holidays</span>
-                                        <span className="font-bold text-red-500">-14 Days</span>
+                                        <span className="font-bold text-red-500">-{Math.round(14 * (results.leaveCycleMonths / 12))} Days</span>
                                     </li>
                                 )}
                                 {includeRamadan && (
@@ -305,7 +380,7 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
                                 <li className="flex justify-between text-sm pt-3 border-t border-slate-100">
                                     <span className="text-emerald-600 font-bold">Net Working Days / Emp</span>
                                     <span className="font-black text-emerald-600 text-lg">
-                                        {(results.workingDaysPerEmployee - ((includeRamadan && results.basePharmacistsNeeded > 0) ? (results.ramadan.equivalentShifts / results.basePharmacistsNeeded) : 0)).toFixed(1)} Days
+                                        {(results.workingDaysInCycle - ((includeRamadan && results.basePharmacistsNeeded > 0) ? (results.ramadan.equivalentShifts / results.basePharmacistsNeeded) : 0)).toFixed(1)} Days
                                     </span>
                                 </li>
                             </ul>
@@ -429,6 +504,90 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
                                 </div>
                             </div>
                         )}
+
+                        {/* Strategic Recommendation Section */}
+                        <div className={`md:col-span-2 p-8 rounded-[2.5rem] border-2 transition-all duration-700 ${results.strategy.isUnderstaffed ? 'bg-amber-50 border-amber-200 shadow-amber-200/20' : 'bg-emerald-50 border-emerald-200 shadow-emerald-200/20'}`}>
+                            <div className="flex flex-col md:flex-row justify-between gap-6">
+                                <div className="space-y-4 flex-1">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${results.strategy.isUnderstaffed ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white'}`}>
+                                            <TrendingUp className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-2xl font-black text-slate-900 leading-none">Strategic Recommendation</h4>
+                                            <p className="text-slate-500 text-sm font-bold mt-1 uppercase tracking-widest">تحليل العجز والتوصيات الاستراتيجية</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="bg-white/60 p-5 rounded-3xl border border-white">
+                                            <p className="text-xs font-black text-slate-400 uppercase mb-2">Staffing Gap | فجوة التوظيف</p>
+                                            <div className="flex items-end gap-2">
+                                                <span className={`text-4xl font-black ${results.strategy.isUnderstaffed ? 'text-amber-600' : 'text-emerald-600'}`}>
+                                                    {results.staffingGap > 0 ? `-${results.staffingGap}` : `+${Math.abs(results.staffingGap)}`}
+                                                </span>
+                                                <span className="text-sm font-bold text-slate-400 mb-2">Pharmacists</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white/60 p-5 rounded-3xl border border-white">
+                                            <p className="text-xs font-black text-slate-400 uppercase mb-2">Target Cycle | الدورة المستهدفة</p>
+                                            <div className="flex items-end gap-2">
+                                                <span className={`text-4xl font-black ${leaveCycleMonths < results.strategy.recommendedCycleMonths ? 'text-red-500' : 'text-emerald-500'}`}>
+                                                    {leaveCycleMonths}
+                                                </span>
+                                                <span className="text-sm font-bold text-slate-400 mb-2">Months | شهر</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-white/60 p-5 rounded-3xl border border-white">
+                                            <p className="text-xs font-black text-slate-400 uppercase mb-2">Min. Cycle Required | الحد الأدنى</p>
+                                            <div className="flex items-end gap-2">
+                                                <span className="text-4xl font-black text-indigo-600">{results.strategy.recommendedCycleMonths}</span>
+                                                <span className="text-sm font-bold text-slate-400 mb-2">Months | شهر</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 space-y-4">
+                                    <div className="bg-white p-6 rounded-3xl border shadow-sm h-full">
+                                        <h5 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                            <div className={`w-2 h-2 rounded-full ${leaveCycleMonths < results.strategy.recommendedCycleMonths ? 'bg-red-500' : 'bg-emerald-500'}`}></div>
+                                            Compliance Status | حالة الامتثال
+                                        </h5>
+
+                                        <div className="space-y-4">
+                                            {leaveCycleMonths < results.strategy.recommendedCycleMonths ? (
+                                                <div className="space-y-2">
+                                                    <p className="text-sm text-red-600 font-bold leading-relaxed">
+                                                        ⚠️ RISKY: Your target cycle is too short for your current headcount. This will lead to shift vacancies.
+                                                    </p>
+                                                    <p className="text-[13px] text-red-500 leading-relaxed font-medium dir-rtl text-right">
+                                                        خطر: الدورة المستهدفة قصيرة جداً مقارنة بعدد الموظفين الحالي. سيؤدي ذلك إلى عجز في الوردينات.
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-2">
+                                                    <p className="text-sm text-emerald-700 font-medium leading-relaxed">
+                                                        ✅ SECURE: Your target cycle is sufficient to cover all leaves without affecting daily operations.
+                                                    </p>
+                                                    <p className="text-[13px] text-emerald-600 leading-relaxed font-medium dir-rtl text-right">
+                                                        آمن: الدورة المستهدفة كافية لتغطية جميع الإجازات دون التأثير على سير العمل اليومي.
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 mt-2">
+                                                <p className="text-[11px] text-slate-500 font-bold">
+                                                    At <strong>{leaveCycleMonths} months</strong> cycle, you can allow a maximum of <strong>{(results.strategy.availableRelief * (leaveCycleMonths / 12)).toFixed(1)}</strong> staff member(s) on leave simultaneously.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
