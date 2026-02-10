@@ -279,8 +279,8 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
                                     <span className="font-bold text-slate-900">365 Days</span>
                                 </li>
                                 <li className="flex justify-between text-sm">
-                                    <span className="text-slate-500">Weekly Leaves (4/mo)</span>
-                                    <span className="font-bold text-red-500">-48 Days</span>
+                                    <span className="text-slate-500">Weekly Leaves (1/Week)</span>
+                                    <span className="font-bold text-red-500">-52 Days</span>
                                 </li>
                                 <li className="flex justify-between text-sm">
                                     <span className={includeAnnualLeave ? "text-slate-500" : "text-slate-500 opacity-50"}>Annual Leave (Deferred)</span>
@@ -314,15 +314,27 @@ export const WorkforcePage: React.FC<{ onBack?: () => void }> = ({ onBack }) => 
                         <div className="bg-indigo-50 p-6 rounded-[2.5rem] border-2 border-indigo-100 shadow-sm shadow-indigo-100/50">
                             <div className="flex items-center gap-3 mb-4">
                                 <TrendingUp className="w-5 h-5 text-indigo-500" />
-                                <h4 className="font-bold text-indigo-900">Manager Insights</h4>
+                                <h4 className="font-bold text-indigo-900">Manager Insights | رؤى المدير</h4>
                             </div>
-                            <p className="text-indigo-700/80 text-sm leading-relaxed mb-4">
-                                To maintain full operations across all regions, you require a total workforce of <strong>{results.totalPharmacistsNeeded} pharmacists</strong>.
-                                This includes a relief team of <strong>{results.reliefForceSize}</strong> professionals to cover all leave entitlements.
-                            </p>
-                            <div className="flex items-center gap-2 text-indigo-600 text-xs font-bold uppercase tracking-widest">
+                            <div className="space-y-4">
+                                <p className="text-indigo-700/80 text-sm leading-relaxed">
+                                    To maintain full operations across all regions, you require a total workforce of <strong>{results.totalPharmacistsNeeded} pharmacists</strong>.
+                                    This includes a relief team of <strong>{results.reliefForceSize}</strong> professionals to cover all leave entitlements.
+                                </p>
+
+                                <div className="p-4 bg-white/50 rounded-2xl border border-indigo-200/50">
+                                    <h5 className="text-xs font-black text-indigo-600 uppercase tracking-tighter mb-2">Staffing Logic | منطق التوظيف</h5>
+                                    <p className="text-[13px] text-indigo-900/70 leading-relaxed mb-2">
+                                        <strong>13-Month Cycle:</strong> Since staff work 12 months to earn 1 month of leave, the system applies a relief factor (~1.29x). Effectively, <strong>1 relief pharmacist</strong> is required for every <strong>~3.5 core staff members</strong> to ensure zero downtime.
+                                    </p>
+                                    <p className="text-[13px] text-indigo-900/70 leading-relaxed dir-rtl text-right font-medium">
+                                        <strong>دورة الـ 13 شهراً:</strong> بما أن الموظف يعمل 12 شهراً ليستحق شهر إجازة، يطبق النظام معامل إحلال (1.29). فعلياً، تحتاج إلى <strong>صيدلي تغطة / جوكر واحد</strong> لكل <strong>3.5 موظف أساسي</strong> لضمان استمرارية التشغيل أثناء الإجازات.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 text-indigo-600 text-xs font-bold uppercase tracking-widest mt-4">
                                 <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
-                                <span>System Optimized</span>
+                                <span>System Optimized | نظام مُحسن</span>
                             </div>
                         </div>
 

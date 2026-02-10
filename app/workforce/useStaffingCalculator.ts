@@ -22,7 +22,7 @@ export const useStaffingCalculator = (initialRegions: Region[]) => {
 
     // Constants
     const DAYS_IN_YEAR = 365;
-    const LEAVES_WEEKLY = 4 * 12; // 48
+    const LEAVES_WEEKLY = 52; // 1 day per week for 52 weeks
     const LEAVES_ANNUAL = 30;
     const LEAVES_PUBLIC_HOLIDAYS = 14;
 
